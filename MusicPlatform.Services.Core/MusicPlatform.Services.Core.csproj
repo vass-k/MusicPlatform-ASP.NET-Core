@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MusicPlatform.Data.Models\MusicPlatform.Data.Models.csproj" />
+    <ProjectReference Include="..\MusicPlatform.Data\MusicPlatform.Data.csproj" />
+    <ProjectReference Include="..\MusicPlatform.GCommon\MusicPlatform.GCommon.csproj" />
+    <ProjectReference Include="..\MusicPlatform.Services.AutoMapping\MusicPlatform.Services.AutoMapping.csproj" />
+    <ProjectReference Include="..\MusicPlatform.Services.Common\MusicPlatform.Services.Common.csproj" />
+    <ProjectReference Include="..\MusicPlatform.Web.ViewModels\MusicPlatform.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
