@@ -2,7 +2,54 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- ***** Welcome Area Start ***** -->
+<div class="welcome-area" id="welcome">
+
+    <!-- ***** Header Text Start ***** -->
+    <div class="header-text">
+        <div class="container">
+            <div class="row">
+                <div class="left-text col-lg-6 col-md-12 col-sm-12 col-xs-12"
+                     data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
+                    <h1>Discover and Share <em>Music</em></h1>
+                    <p>Your platform for emerging artists and music lovers. Upload your tracks, connect with fans, and discover your next favorite song.</p>
+                    <a href="#about" class="main-button-slider">GET STARTED</a>
+                    <a href="#top-tracks" class="secondary-button-slider scroll-to-section">EXPLORE</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<div class="left-image-decor"></div>
+
+<div class="right-image-decor"></div>
+
+<!-- ***** Top Tracks Section Start ***** -->
+<section class="top-tracks-section" id="top-tracks">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="center-heading">
+                    <h2>Top 10 <em>Tracks</em></h2>
+                    <p>Discover what's trending on MusicPlatform right now</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <ol class="track-list">
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <li>
+                            <div class="track-number">@i.ToString("D2")</div>
+                            <div class="track-name">Placeholder Track Name - Artist @i</div>
+                            <div class="track-play-button">
+                                <i class="fa fa-play"></i>
+                            </div>
+                        </li>
+                    }
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
