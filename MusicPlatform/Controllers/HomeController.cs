@@ -1,8 +1,11 @@
 namespace MusicPlatform.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+
     using MusicPlatform.Web.ViewModels;
+
     using System.Diagnostics;
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
