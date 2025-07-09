@@ -1,0 +1,238 @@
+﻿@{
+    ViewData["Title"] = "Discover Tracks";
+    Layout = "_Layout";
+}
+
+<!-- Custom CSS for the Track Index Page -->
+<!-- For production, move this to your site's main CSS file -->
+<style>
+    body {
+        background-color: #f2f2f2; /* A light grey background to make cards pop */
+    }
+
+    #tracks-section {
+        padding: 100px 0;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .section-heading h2 {
+        font-size: 42px;
+        font-weight: 700;
+        color: #1e1e1e;
+    }
+
+    .section-heading h2 em {
+        font-style: normal;
+        color: #ff5500; /* Use our theme's primary orange */
+    }
+
+    .track-grid {
+        display: grid;
+        /* This creates a responsive grid that shows as many columns as fit */
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .track-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        overflow: hidden; /* Ensures the image respects the border-radius */
+        transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    }
+
+    .track-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .track-artwork-container {
+        position: relative;
+    }
+
+    .track-artwork {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .play-button-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 60px;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        pointer-events: none; /* Let clicks go through to the artwork link if needed */
+    }
+
+    .track-card:hover .play-button-overlay {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .track-details {
+        padding: 15px;
+    }
+
+    .track-progress-bar {
+        height: 4px;
+        background-color: #e5e5e5;
+        border-radius: 2px;
+        margin: 10px 0;
+    }
+
+    .track-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e1e1e;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track-artist {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 15px;
+    }
+
+    .track-artist a, .track-title a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .track-artist a:hover, .track-title a:hover {
+        color: #ff5500;
+    }
+
+    .track-meta {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 0.85em;
+        color: #aaa;
+    }
+
+    .track-meta span i {
+        margin-right: 5px; /* Space between icon and number */
+    }
+
+    .load-more-container {
+        text-align: center;
+        margin-top: 60px;
+    }
+</style>
+
+<div id="tracks-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h2>Discover <em>New Tracks</em></h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- This is where the track cards will be dynamically loaded -->
+        <div class="track-grid">
+            <!-- Hardcoded Placeholder Track Card 1 -->
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#">
+                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
+                        <div class="play-button-overlay">
+                            <i class="fa fa-play-circle"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Midnight City Drive</a></h4>
+                    <p class="track-artist"><a href="#">Synthwave Dreamer</a></p>
+                    <div class="track-progress-bar"></div>
+                    <div class="track-meta">
+                        <span><i class="fa fa-play"></i>1,402</span>
+                        <span><i class="fa fa-heart"></i>251</span>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Track Card -->
+            <!-- Hardcoded Placeholder Track Card 2 -->
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#">
+                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
+                        <div class="play-button-overlay">
+                            <i class="fa fa-play-circle"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Lo-Fi Morning Coffee</a></h4>
+                    <p class="track-artist"><a href="#">Chillhop Beats</a></p>
+                    <div class="track-progress-bar"></div>
+                    <div class="track-meta">
+                        <span><i class="fa fa-play"></i>12,850</span>
+                        <span><i class="fa fa-heart"></i>1,109</span>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Track Card -->
+            <!-- Hardcoded Placeholder Track Card 3 -->
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#">
+                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
+                        <div class="play-button-overlay">
+                            <i class="fa fa-play-circle"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Data Stream (Remix)</a></h4>
+                    <p class="track-artist"><a href="#">DJ Codec</a></p>
+                    <div class="track-progress-bar"></div>
+                    <div class="track-meta">
+                        <span><i class="fa fa-play"></i>8,321</span>
+                        <span><i class="fa fa-heart"></i>754</span>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Track Card -->
+            <!-- Hardcoded Placeholder Track Card 4 -->
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#">
+                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
+                        <div class="play-button-overlay">
+                            <i class="fa fa-play-circle"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Acoustic Sunset</a></h4>
+                    <p class="track-artist"><a href="#">The Wanderer</a></p>
+                    <div class="track-progress-bar"></div>
+                    <div class="track-meta">
+                        <span><i class="fa fa-play"></i>998</span>
+                        <span><i class="fa fa-heart"></i>88</span>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Track Card -->
+        </div>
+
+        <div class="load-more-container">
+            <!-- We reuse the button style from the main template for consistency -->
+            <a href="#" class="main-button">Load More</a>
+        </div>
+    </div>
+</div>

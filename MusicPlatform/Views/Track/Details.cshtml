@@ -1,0 +1,352 @@
+﻿@{
+    ViewData["Title"] = "Midnight City Drive"; // Placeholder title
+    Layout = "_Layout";
+}
+
+<!-- Custom CSS for the Track Details Page -->
+<style>
+    body {
+        background-color: #fff;
+    }
+
+    .track-hero {
+        padding: 40px;
+        color: #fff;
+        border-radius: 8px;
+        margin-top: 80px;
+        margin-bottom: 40px;
+        /* A nice gradient using our theme's colors */
+        background: linear-gradient(135deg, #f1556a 0%, #f4813f 100%);
+        text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    }
+
+        .track-hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .track-hero h3 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+    /* Custom Player Styles */
+    .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    #play-pause-btn {
+        font-size: 50px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+        #play-pause-btn:hover {
+            transform: scale(1.1);
+        }
+
+    .progress-bar-container {
+        flex-grow: 1;
+        height: 8px;
+        background-color: rgba(255,255,255,0.3);
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .progress-bar-filled {
+        height: 100%;
+        width: 0%; /* Will be updated by JavaScript */
+        background-color: #fff;
+        border-radius: 4px;
+    }
+
+    .time-display {
+        font-size: 0.9rem;
+        min-width: 90px;
+        text-align: center;
+    }
+
+    /* Main two-column layout */
+    .track-layout {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 40px;
+    }
+
+    .artist-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
+
+    .artist-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+
+    .artist-info h4 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .artist-info .main-button {
+        margin-left: auto; /* Pushes the button to the far right */
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .action-button-group {
+        margin-bottom: 30px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .action-btn {
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+        .action-btn:hover {
+            background-color: #f2f2f2;
+            border-color: #ccc;
+        }
+
+        .action-btn i {
+            margin-right: 8px;
+        }
+
+    .track-description {
+        line-height: 1.7;
+        color: #555;
+    }
+
+    /* Sidebar Styles */
+    .track-sidebar .sidebar-module {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
+
+    .sidebar-module h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        color: #555;
+    }
+
+        .stats-grid div i {
+            margin-right: 8px;
+            color: #aaa;
+        }
+
+    /* Comment Section */
+    .comment-section {
+        margin-top: 40px;
+    }
+
+        .comment-section h3 {
+            margin-bottom: 20px;
+        }
+
+    .comment-form textarea {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        height: 100px;
+        margin-bottom: 15px;
+    }
+
+    .comment-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .comment-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+    }
+
+    .comment-body {
+        flex-grow: 1;
+    }
+
+    .comment-user {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .comment-text {
+        color: #333;
+    }
+</style>
+
+<div class="container">
+    <div class="track-hero">
+        <h1>Midnight City Drive</h1>
+        <h3>by <a href="#" style="color: white; text-decoration: underline;">Synthwave Dreamer</a></h3>
+
+        <!-- Custom Audio Player -->
+        <div class="player-controls">
+            <i id="play-pause-btn" class="fa fa-play-circle"></i>
+            <div class="time-display"><span id="current-time">0:00</span></div>
+            <div id="progress-bar-container" class="progress-bar-container">
+                <div id="progress-bar-filled" class="progress-bar-filled"></div>
+            </div>
+            <div class="time-display"><span id="duration">0:00</span></div>
+        </div>
+        <!-- Hidden actual audio element -->
+        <audio id="track-audio" src="YOUR_AUDIO_FILE.mp3"></audio>
+    </div>
+
+    <div class="track-layout">
+        <!-- Main Content Column -->
+        <div class="track-main-content">
+            <div class="action-button-group">
+                <a href="#" class="action-btn"><i class="fa fa-heart"></i> Like</a>
+                <a href="#" class="action-btn"><i class="fa fa-plus"></i> Add to Playlist</a>
+                <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
+            </div>
+
+            <div class="artist-info">
+                <img src="~/images/musicplatform-hero.jpg" alt="Artist Avatar" class="artist-avatar">
+                <h4>Synthwave Dreamer</h4>
+                <a href="#" class="main-button">Follow</a>
+            </div>
+
+            <p class="track-description">
+                This is a placeholder description for the track "Midnight City Drive". It's a journey through a neon-lit metropolis of the future, inspired by classic 80s sci-fi and the open road.
+                <br><br>
+                Credits: All synths and production by Synthwave Dreamer.
+            </p>
+
+            <div class="comment-section">
+                <h3>Comments</h3>
+                <div class="comment-form">
+                    <textarea placeholder="Write a comment..."></textarea>
+                    <button class="main-button">Post Comment</button>
+                </div>
+                <hr style="margin: 30px 0;">
+                <div class="comment-list">
+                    <!-- Placeholder Comment -->
+                    <div class="comment-item">
+                        <img src="~/images/musicplatform-hero.jpg" alt="User Avatar" class="comment-avatar">
+                        <div class="comment-body">
+                            <span class="comment-user">Listener123</span>
+                            <p class="comment-text">Amazing track! Perfect for a late-night drive.</p>
+                        </div>
+                    </div>
+                    <!-- Placeholder Comment -->
+                    <div class="comment-item">
+                        <img src="~/images/musicplatform-hero.jpg" alt="User Avatar" class="comment-avatar">
+                        <div class="comment-body">
+                            <span class="comment-user">MusicFan_88</span>
+                            <p class="comment-text">These synth sounds are incredible. Great work!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar Column -->
+        <aside class="track-sidebar">
+            <div class="sidebar-module">
+                <h4>Track Stats</h4>
+                <div class="stats-grid">
+                    <div><i class="fa fa-play"></i> 1,402 Plays</div>
+                    <div><i class="fa fa-heart"></i> 251 Likes</div>
+                    <div><i class="fa fa-cloud-download"></i> 50 Downloads</div>
+                    <div><i class="fa fa-calendar"></i> Released: 2 weeks ago</div>
+                </div>
+            </div>
+            <div class="sidebar-module">
+                <h4>More from this Artist</h4>
+                <!-- You would loop and render a smaller partial view here -->
+                <p>Coming Soon...</p>
+            </div>
+        </aside>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Basic JavaScript for custom audio player functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const audio = document.getElementById('track-audio');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const progressBar = document.getElementById('progress-bar-filled');
+            const progressContainer = document.getElementById('progress-bar-container');
+            const currentTimeEl = document.getElementById('current-time');
+            const durationEl = document.getElementById('duration');
+
+            // Toggle play/pause
+            playPauseBtn.addEventListener('click', () => {
+                const isPlaying = audio.paused;
+                if (isPlaying) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            });
+
+            // Update icon on play/pause
+            audio.onplay = () => playPauseBtn.className = 'fa fa-pause-circle';
+            audio.onpause = () => playPauseBtn.className = 'fa fa-play-circle';
+
+            // Update progress bar as audio plays
+            audio.addEventListener('timeupdate', () => {
+                const progressPercent = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            });
+
+            // Set duration once audio metadata is loaded
+            audio.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audio.duration);
+            });
+
+            // Allow seeking by clicking on progress bar
+            progressContainer.addEventListener('click', (e) => {
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                audio.currentTime = (clickX / width) * duration;
+            });
+
+            // Helper function to format time in M:SS format
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+        });
+    </script>
+}
