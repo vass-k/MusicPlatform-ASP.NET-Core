@@ -1,0 +1,269 @@
+﻿@{
+    ViewData["Title"] = "Electronic Music";
+    Layout = "_Layout";
+}
+
+<style>
+    body {
+        background-color: #f2f2f2;
+    }
+
+    .genre-page-container {
+        padding: 80px 0;
+    }
+
+    .genre-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+        .genre-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+            .genre-header h1 em {
+                font-style: normal;
+                color: #ff5500;
+            }
+
+        .genre-header p {
+            font-size: 1.1rem;
+            color: #888;
+            max-width: 700px;
+            margin: 15px auto 0 auto;
+        }
+
+    .genre-section {
+        margin-bottom: 60px;
+    }
+
+    .genre-section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .track-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .track-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        overflow: hidden;
+        transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    }
+
+        .track-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+    .track-artwork-container {
+        position: relative;
+    }
+
+    .track-artwork {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .play-button-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 60px;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .track-card:hover .play-button-overlay {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .track-details {
+        padding: 15px;
+    }
+
+    .track-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e1e1e;
+        margin-bottom: 5px;
+    }
+
+    .track-artist {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 15px;
+    }
+
+        .track-artist a, .track-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+            .track-artist a:hover, .track-title a:hover {
+                color: #ff5500;
+            }
+
+    .track-meta {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 0.85em;
+        color: #aaa;
+    }
+
+        .track-meta span i {
+            margin-right: 5px;
+        }
+
+
+    .artist-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .artist-card {
+        text-align: center;
+    }
+
+    .artist-card-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .artist-card-avatar:hover {
+            transform: scale(1.05);
+        }
+
+    .artist-card-name a {
+        font-weight: 600;
+        color: #333;
+        text-decoration: none;
+    }
+
+        .artist-card-name a:hover {
+            color: #ff5500;
+        }
+
+    .related-genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .genre-tag {
+        padding: 10px 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        color: #555;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .genre-tag:hover {
+            background-color: #ff5500;
+            color: #fff;
+            border-color: #ff5500;
+        }
+</style>
+
+<div class="container genre-page-container">
+    <div class="genre-header">
+        <h1>Exploring <em>Electronic</em></h1>
+        <p>From ambient soundscapes to high-energy dance anthems, the world of electronic music is vast and constantly evolving. Discover tracks from artists pushing the boundaries of sound.</p>
+    </div>
+
+    <div class="genre-section">
+        <h2 class="genre-section-title">Featured Electronic Tracks</h2>
+        <div class="track-grid">
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork"><div class="play-button-overlay"><i class="fa fa-play-circle"></i></div></a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Data Stream (Remix)</a></h4>
+                    <p class="track-artist"><a href="#">DJ Codec</a></p>
+                    <div class="track-meta"><span><i class="fa fa-play"></i>8,321</span><span><i class="fa fa-heart"></i>754</span></div>
+                </div>
+            </div>
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork"><div class="play-button-overlay"><i class="fa fa-play-circle"></i></div></a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Neon Pulse</a></h4>
+                    <p class="track-artist"><a href="#">Futurecop!</a></p>
+                    <div class="track-meta"><span><i class="fa fa-play"></i>22,194</span><span><i class="fa fa-heart"></i>2,301</span></div>
+                </div>
+            </div>
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork"><div class="play-button-overlay"><i class="fa fa-play-circle"></i></div></a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title"><a href="#">Sub-Zero</a></h4>
+                    <p class="track-artist"><a href="#">Cryo Chamber</a></p>
+                    <div class="track-meta"><span><i class="fa fa-play"></i>5,400</span><span><i class="fa fa-heart"></i>411</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="genre-section">
+        <h2 class="genre-section-title">Top Artists</h2>
+        <div class="artist-grid">
+            <div class="artist-card">
+                <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Artist Avatar" class="artist-card-avatar"></a>
+                <h4 class="artist-card-name"><a href="#">DJ Codec</a></h4>
+            </div>
+            <div class="artist-card">
+                <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Artist Avatar" class="artist-card-avatar"></a>
+                <h4 class="artist-card-name"><a href="#">Synthwave Dreamer</a></h4>
+            </div>
+            <div class="artist-card">
+                <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Artist Avatar" class="artist-card-avatar"></a>
+                <h4 class="artist-card-name"><a href="#">Futurecop!</a></h4>
+            </div>
+            <div class="artist-card">
+                <a href="#"><img src="~/images/musicplatform-hero.jpg" alt="Artist Avatar" class="artist-card-avatar"></a>
+                <h4 class="artist-card-name"><a href="#">Cryo Chamber</a></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="genre-section">
+        <h2 class="genre-section-title">Related Genres</h2>
+        <div class="related-genres">
+            <a href="#" class="genre-tag">Synthwave</a>
+            <a href="#" class="genre-tag">Techno</a>
+            <a href="#" class="genre-tag">Ambient</a>
+            <a href="#" class="genre-tag">House</a>
+            <a href="#" class="genre-tag">Drum & Bass</a>
+            <a href="#" class="genre-tag">Trance</a>
+        </div>
+    </div>
+</div>

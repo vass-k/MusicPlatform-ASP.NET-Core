@@ -1,0 +1,212 @@
+﻿@{
+    ViewData["Title"] = "Late Night Drives"; // Placeholder
+    Layout = "_Layout";
+}
+
+<style>
+    body {
+        background-color: #f7f7f7;
+    }
+
+    .playlist-details-container {
+        padding: 80px 0;
+    }
+
+    .playlist-hero {
+        display: flex;
+        gap: 30px;
+        align-items: flex-end;
+        margin-bottom: 40px;
+    }
+
+    .playlist-artwork {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        flex-shrink: 0;
+    }
+
+    .playlist-info h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #1e1e1e;
+    }
+
+    .playlist-info p {
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+    .playlist-info .meta-info {
+        font-size: 0.9rem;
+        color: #888;
+        margin-top: 15px;
+    }
+
+    .playlist-info .meta-info span:not(:last-child)::after {
+        content: "•";
+        margin: 0 8px;
+    }
+
+    .playlist-actions {
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .playlist-track-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .playlist-track-item {
+        display: grid;
+        grid-template-columns: 40px 50px 1fr auto;
+        gap: 15px;
+        align-items: center;
+        padding: 10px;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+    }
+
+    .track-number, .track-list-artwork-container, .track-list-info, .track-duration {
+        display: flex;
+        align-items: center;
+    }
+
+    .track-number {
+        color: #888;
+        justify-content: center;
+    }
+
+    .playlist-track-item .play-icon {
+        display: none;
+        font-size: 20px;
+        color: #ff5500;
+        cursor: pointer;
+    }
+
+    .track-list-artwork {
+        width: 45px;
+        height: 45px;
+        border-radius: 4px;
+    }
+
+    .track-list-info .title {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .track-list-info .artist {
+        font-size: 0.9rem;
+        color: #777;
+    }
+
+    .track-list-info a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .track-duration {
+        color: #888;
+        font-size: 0.9rem;
+        justify-content: flex-end;
+    }
+</style>
+
+<div class="container playlist-details-container">
+    <div class="playlist-hero">
+        <img src="~/images/preview.png" alt="Playlist Artwork" class="playlist-artwork" />
+        <div class="playlist-info">
+            <p>PLAYLIST</p>
+            <h1>Late Night Drives</h1>
+            <p class="meta-info">
+                <span>Created by <a href="#" style="font-weight: 600; color: #555;">Synthwave Dreamer</a></span>
+                <span>4 tracks</span>
+                <span>15 min 42 sec</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="playlist-actions">
+        <a href="#" class="main-button-slider">
+            <i class="fa fa-play"></i> Play
+        </a>
+        <a href="#" class="action-btn"><i class="fa fa-heart"></i> Like</a>
+        <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
+    </div>
+
+    <ul class="playlist-track-list">
+        <li class="playlist-track-item">
+            <div class="track-number">
+                <span>1</span>
+                <i class="fa fa-play-circle play-icon"></i>
+            </div>
+            <div class="track-list-artwork-container">
+                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
+            </div>
+            <div class="track-list-info">
+                <div>
+                    <div class="title"><a href="#">Midnight City Drive</a></div>
+                    <div class="artist"><a href="#">Synthwave Dreamer</a></div>
+                </div>
+            </div>
+            <div class="track-duration">4:12</div>
+        </li>
+
+        <li class="playlist-track-item">
+            <div class="track-number">
+                <span>2</span>
+                <i class="fa fa-play-circle play-icon"></i>
+            </div>
+            <div class="track-list-artwork-container">
+                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
+            </div>
+            <div class="track-list-info">
+                <div>
+                    <div class="title"><a href="#">Data Stream (Remix)</a></div>
+                    <div class="artist"><a href="#">DJ Codec</a></div>
+                </div>
+            </div>
+            <div class="track-duration">3:55</div>
+        </li>
+
+        <li class="playlist-track-item">
+            <div class="track-number">
+                <span>3</span>
+                <i class="fa fa-play-circle play-icon"></i>
+            </div>
+            <div class="track-list-artwork-container">
+                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
+            </div>
+            <div class="track-list-info">
+                <div>
+                    <div class="title"><a href="#">Neon Pulse</a></div>
+                    <div class="artist"><a href="#">Futurecop!</a></div>
+                </div>
+            </div>
+            <div class="track-duration">4:30</div>
+        </li>
+
+        <li class="playlist-track-item">
+            <div class="track-number">
+                <span>4</span>
+                <i class="fa fa-play-circle play-icon"></i>
+            </div>
+            <div class="track-list-artwork-container">
+                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
+            </div>
+            <div class="track-list-info">
+                <div>
+                    <div class="title"><a href="#">Acoustic Sunset</a></div>
+                    <div class="artist"><a href="#">The Wanderer</a></div>
+                </div>
+            </div>
+            <div class="track-duration">3:05</div>
+        </li>
+    </ul>
+</div>
