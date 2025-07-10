@@ -42,6 +42,10 @@
         public int Plays { get; set; } = 0;
 
         [Required]
+        [Comment("The date and time when the track was uploaded to the platform.")]
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+
+        [Required]
         [ForeignKey(nameof(Uploader))]
         [Comment("The foreign key of the user who uploaded the track.")]
         public string UploaderId { get; set; } = null!;
@@ -61,10 +65,16 @@
         [Comment("Timestamp when the track was soft deleted.")]
         public DateTime? DeletedOn { get; set; }
 
+        [Comment("The favorite tracks of the user.")]
         public virtual ICollection<UserFavorite> UserFavorites { get; set; }
             = new HashSet<UserFavorite>();
 
+        [Comment("The tracks in a user's playlist/s.")]
         public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; }
             = new HashSet<PlaylistTrack>();
+
+        [Comment("The user's comments on tracks.")]
+        public virtual ICollection<Comment> Comments { get; set; }
+            = new HashSet<Comment>();
     }
 }

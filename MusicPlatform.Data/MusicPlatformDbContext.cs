@@ -25,6 +25,8 @@
 
         public virtual DbSet<UserFavorite> UserFavorites { get; set; } = null!;
 
+        public virtual DbSet<Comment> Comments { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -28,5 +28,11 @@
             public const int DescriptionMinLength = 10;
             public const int DescriptionMaxLength = 500;
         }
+
+        public static class Comment
+        {
+            public const int ContentMinLength = 2;
+            public const int ContentMaxLength = 1000;
+        }
     }
 }

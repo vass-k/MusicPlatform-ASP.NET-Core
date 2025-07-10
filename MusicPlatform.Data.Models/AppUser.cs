@@ -17,5 +17,9 @@
         [Comment("A collection of the user's favorite tracks.")]
         public virtual ICollection<UserFavorite> FavoriteTracks { get; set; }
             = new HashSet<UserFavorite>();
+
+        [Comment("A collection of comments posted by the user.")]
+        public virtual ICollection<Comment> Comments { get; set; }
+            = new HashSet<Comment>();
     }
 }
