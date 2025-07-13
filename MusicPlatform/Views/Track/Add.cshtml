@@ -1,0 +1,184 @@
+﻿@{
+    ViewData["Title"] = "Upload Track";
+    Layout = "_Layout";
+}
+
+<!-- FilePond CSS for the uploaders -->
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+
+
+<!-- Custom CSS for the Upload Page -->
+<style>
+    .upload-page-container {
+        padding: 100px 25px;
+        background-color: #f9f9f9;
+    }
+
+    .upload-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .upload-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+            .upload-header h1 em {
+                font-style: normal;
+                color: #ff5500; /* Theme Orange */
+            }
+
+    .upload-layout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* 2/3 for the form, 1/3 for the image */
+        gap: 40px;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            text-align: center
+        }
+
+        .form-group .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+            .form-group .form-control:focus {
+                border-color: #ff5500;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(255, 85, 0, 0.15);
+            }
+
+    textarea.form-control {
+        height: 120px;
+        resize: vertical;
+    }
+
+    .upload-actions {
+        margin-top: 30px;
+    }
+
+    /* Custom FilePond Styles to match our theme */
+    .filepond--root {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .filepond--drop-label {
+        color: #555;
+    }
+
+    .filepond--panel-root {
+        background-color: #fff;
+        border-radius: 8px;
+        border: 2px dashed #ccc;
+    }
+
+    /* Style for when a file is being dragged over the drop zone */
+    .filepond--item-panel {
+        background-color: #ff5500; /* Theme Orange */
+    }
+
+    .filepond--file-action-button {
+        background-color: rgba(0,0,0,0.5);
+    }
+</style>
+
+<div class="container upload-page-container">
+    <div class="upload-header">
+        <h1>Upload <em>Your Track</em></h1>
+    </div>
+
+    <div class="upload-layout-grid">
+        <!-- Left Column: Main form and audio upload -->
+        <div class="main-upload-form">
+            <!-- This input will be transformed by FilePond -->
+            <input type="file" id="audio-upload" name="audio-upload" />
+
+            <div class="form-group" style="margin-top: 30px;">
+                <label for="track-title">Title</label>
+                <input type="text" id="track-title" class="form-control" placeholder="e.g., Midnight City Drive">
+            </div>
+
+            <div class="form-group">
+                <label for="track-description">Description</label>
+                <textarea id="track-description" class="form-control" placeholder="Describe your track, add credits, etc."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="track-tags">Tags</label>
+                <input type="text" id="track-tags" class="form-control" placeholder="e.g., Synthwave, Electronic, 80s (comma-separated)">
+            </div>
+        </div>
+
+        <!-- Right Column: Image upload -->
+        <div class="side-upload-form">
+            <div class="form-group">
+                <label>Track Artwork</label>
+                <!-- This input will also be transformed by FilePond -->
+                <input type="file" id="image-upload" name="image-upload" accept="image/png, image/jpeg, image/gif" />
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-actions" style="text-align: center;">
+        <a href="#" class="main-button-slider">Save Track</a>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- FilePond and its plugins -->
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+    <script>
+        // Register the FilePond plugins
+        FilePond.registerPlugin(
+            FilePondPluginFileValidateType,
+            FilePondPluginImageExifOrientation,
+            FilePondPluginImagePreview,
+            FilePondPluginImageCrop,
+            FilePondPluginImageResize
+        );
+
+        // Initialize the audio uploader
+        const audioPond = FilePond.create(document.querySelector('#audio-upload'), {
+            labelIdle: `Drag & Drop your Audio File or <span class="filepond--label-action">Browse</span>`,
+            acceptedFileTypes: ['audio/mp3', 'audio/wav', 'audio/ogg'],
+            labelFileTypeNotAllowed: 'Invalid file type, please upload an MP3, WAV, or OGG'
+        });
+
+        // Initialize the image uploader
+        const imagePond = FilePond.create(document.querySelector('#image-upload'), {
+            labelIdle: `Drag & Drop your Artwork or <span class="filepond--label-action">Browse</span>`,
+            imagePreviewHeight: 230,
+            imageCropAspectRatio: '1:1',
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight: 500,
+            stylePanelLayout: 'compact circle',
+            styleLoadIndicatorPosition: 'center bottom',
+            styleProgressIndicatorPosition: 'right bottom',
+            styleButtonRemoveItemPosition: 'left bottom',
+            styleButtonProcessItemPosition: 'right bottom',
+        });
+    </script>
+}
