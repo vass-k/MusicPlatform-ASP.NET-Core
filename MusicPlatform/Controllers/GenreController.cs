@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace MusicPlatform.Web.Controllers
+﻿namespace MusicPlatform.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+
     public class GenreController : Controller
     {
         public IActionResult Index()

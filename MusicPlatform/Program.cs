@@ -5,6 +5,8 @@ namespace MusicPlatform.Web
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository;
     using MusicPlatform.Data.Repository.Interfaces;
+    using MusicPlatform.Services.Core;
+    using MusicPlatform.Services.Core.Interfaces;
 
     public class Program
     {
@@ -33,6 +35,8 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
+            builder.Services.AddScoped<ITrackService, TrackService>();
 
             builder.Services.AddControllersWithViews();
 

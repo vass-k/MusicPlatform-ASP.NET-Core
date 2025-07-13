@@ -1,4 +1,7 @@
-﻿@{
+﻿@using MusicPlatform.Web.ViewModels.Track
+@model IEnumerable<MusicPlatform.Web.ViewModels.Track.TrackIndexViewModel>
+
+@{
     ViewData["Title"] = "Discover Tracks";
     Layout = "_Layout";
 }
@@ -19,16 +22,16 @@
         margin-bottom: 60px;
     }
 
-    .section-heading h2 {
-        font-size: 42px;
-        font-weight: 700;
-        color: #1e1e1e;
-    }
+        .section-heading h2 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
 
-    .section-heading h2 em {
-        font-style: normal;
-        color: #ff5500; /* Use our theme's primary orange */
-    }
+            .section-heading h2 em {
+                font-style: normal;
+                color: #ff5500; /* Use our theme's primary orange */
+            }
 
     .track-grid {
         display: grid;
@@ -45,10 +48,10 @@
         transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
     }
 
-    .track-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    }
+        .track-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
 
     .track-artwork-container {
         position: relative;
@@ -105,14 +108,14 @@
         margin-bottom: 15px;
     }
 
-    .track-artist a, .track-title a {
-        text-decoration: none;
-        color: inherit;
-    }
+        .track-artist a, .track-title a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-    .track-artist a:hover, .track-title a:hover {
-        color: #ff5500;
-    }
+            .track-artist a:hover, .track-title a:hover {
+                color: #ff5500;
+            }
 
     .track-meta {
         display: flex;
@@ -122,9 +125,9 @@
         color: #aaa;
     }
 
-    .track-meta span i {
-        margin-right: 5px; /* Space between icon and number */
-    }
+        .track-meta span i {
+            margin-right: 5px; /* Space between icon and number */
+        }
 
     .load-more-container {
         text-align: center;
@@ -144,90 +147,48 @@
 
         <!-- This is where the track cards will be dynamically loaded -->
         <div class="track-grid">
-            <!-- Hardcoded Placeholder Track Card 1 -->
-            <div class="track-card">
-                <div class="track-artwork-container">
-                    <a href="#">
-                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
-                        <div class="play-button-overlay">
-                            <i class="fa fa-play-circle"></i>
+            @if (Model.Any())
+            {
+                @foreach (TrackIndexViewModel track in Model)
+                {
+                    <!-- Single Dynamic Track Card -->
+                    <div class="track-card">
+                        <div class="track-artwork-container">
+                            <!-- This link now points to the track's details page -->
+                            <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
+                                <!-- TODO: Once ImageUrl is in the ViewModel, replace the src -->
+                                <img src="~/images/musicplatform-hero.jpg" alt="Artwork for @track.Title" class="track-artwork">
+                                <div class="play-button-overlay">
+                                    <i class="fa fa-play-circle"></i>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-                <div class="track-details">
-                    <h4 class="track-title"><a href="#">Midnight City Drive</a></h4>
-                    <p class="track-artist"><a href="#">Synthwave Dreamer</a></p>
-                    <div class="track-progress-bar"></div>
-                    <div class="track-meta">
-                        <span><i class="fa fa-play"></i>1,402</span>
-                        <span><i class="fa fa-heart"></i>251</span>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Track Card -->
-            <!-- Hardcoded Placeholder Track Card 2 -->
-            <div class="track-card">
-                <div class="track-artwork-container">
-                    <a href="#">
-                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
-                        <div class="play-button-overlay">
-                            <i class="fa fa-play-circle"></i>
+                        <div class="track-details">
+                            <h4 class="track-title">
+                                <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">@track.Title</a>
+                            </h4>
+                            <p class="track-artist">
+                                <!-- TODO: This could link to an artist's page in the future -->
+                                <a href="#">@track.ArtistName</a>
+                            </p>
+                            <div class="track-progress-bar"></div>
+                            <div class="track-meta">
+                                <!-- Using ToString("N0") formats numbers with commas (e.g., 1,402) -->
+                                <span><i class="fa fa-play"></i>@track.Plays.ToString("N0")</span>
+                                <span><i class="fa fa-heart"></i>@track.FavoritesCount.ToString("N0")</span>
+                            </div>
                         </div>
-                    </a>
-                </div>
-                <div class="track-details">
-                    <h4 class="track-title"><a href="#">Lo-Fi Morning Coffee</a></h4>
-                    <p class="track-artist"><a href="#">Chillhop Beats</a></p>
-                    <div class="track-progress-bar"></div>
-                    <div class="track-meta">
-                        <span><i class="fa fa-play"></i>12,850</span>
-                        <span><i class="fa fa-heart"></i>1,109</span>
                     </div>
+                    <!-- End of Track Card -->
+                }
+            }
+            else
+            {
+                <!-- This message is shown if there are no tracks in the database -->
+                <div class="col-lg-12">
+                    <p class="text-center">No tracks have been uploaded yet. Be the first!</p>
                 </div>
-            </div>
-            <!-- End of Track Card -->
-            <!-- Hardcoded Placeholder Track Card 3 -->
-            <div class="track-card">
-                <div class="track-artwork-container">
-                    <a href="#">
-                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
-                        <div class="play-button-overlay">
-                            <i class="fa fa-play-circle"></i>
-                        </div>
-                    </a>
-                </div>
-                <div class="track-details">
-                    <h4 class="track-title"><a href="#">Data Stream (Remix)</a></h4>
-                    <p class="track-artist"><a href="#">DJ Codec</a></p>
-                    <div class="track-progress-bar"></div>
-                    <div class="track-meta">
-                        <span><i class="fa fa-play"></i>8,321</span>
-                        <span><i class="fa fa-heart"></i>754</span>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Track Card -->
-            <!-- Hardcoded Placeholder Track Card 4 -->
-            <div class="track-card">
-                <div class="track-artwork-container">
-                    <a href="#">
-                        <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-artwork">
-                        <div class="play-button-overlay">
-                            <i class="fa fa-play-circle"></i>
-                        </div>
-                    </a>
-                </div>
-                <div class="track-details">
-                    <h4 class="track-title"><a href="#">Acoustic Sunset</a></h4>
-                    <p class="track-artist"><a href="#">The Wanderer</a></p>
-                    <div class="track-progress-bar"></div>
-                    <div class="track-meta">
-                        <span><i class="fa fa-play"></i>998</span>
-                        <span><i class="fa fa-heart"></i>88</span>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Track Card -->
+            }
         </div>
 
         <div class="load-more-container">

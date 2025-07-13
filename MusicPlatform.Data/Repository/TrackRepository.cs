@@ -27,5 +27,12 @@
                 .Take(count)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Track>> GetAllWithFavoritesAsync()
+        {
+            return await this.DbSet
+                .Include(t => t.UserFavorites)
+                .ToListAsync();
+        }
     }
 }

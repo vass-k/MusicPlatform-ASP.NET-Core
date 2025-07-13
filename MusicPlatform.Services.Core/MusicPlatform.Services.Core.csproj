@@ -15,8 +15,4 @@
     <ProjectReference Include="..\MusicPlatform.Web.ViewModels\MusicPlatform.Web.ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
 </Project>
