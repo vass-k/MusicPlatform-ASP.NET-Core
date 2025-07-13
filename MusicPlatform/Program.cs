@@ -1,9 +1,10 @@
 namespace MusicPlatform.Web
 {
     using Microsoft.EntityFrameworkCore;
-
     using MusicPlatform.Data;
     using MusicPlatform.Data.Models;
+    using MusicPlatform.Data.Repository;
+    using MusicPlatform.Data.Repository.Interfaces;
 
     public class Program
     {
@@ -26,7 +27,12 @@ namespace MusicPlatform.Web
             {
                 options.SignIn.RequireConfirmedAccount = false;
             })
-                .AddEntityFrameworkStores<MusicPlatformDbContext>();
+            .AddEntityFrameworkStores<MusicPlatformDbContext>();
+
+            builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+            builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+            builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
             builder.Services.AddControllersWithViews();
 
