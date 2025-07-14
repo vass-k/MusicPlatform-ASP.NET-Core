@@ -1,54 +1,197 @@
 ﻿@model MusicPlatform.Web.ViewModels.Track.TrackAddViewModel
 
 @{
-    ViewData["Title"] = "Upload New Track";
+    ViewData["Title"] = "Upload Track";
+    Layout = "_Layout";
 }
 
-<div class="container" style="padding-top: 100px; padding-bottom: 100px;">
-    <h2>@ViewData["Title"]</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-6">
-            <!-- IMPORTANT: Add enctype for file uploads -->
-            <form asp-action="Add" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<!-- FilePond CSS for the uploaders -->
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 
-                <div class="form-group mb-3">
+
+<!-- Custom CSS for the Upload Page -->
+<style>
+    .upload-page-container {
+        padding: 100px 25px;
+        background-color: #f9f9f9;
+    }
+
+    .upload-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .upload-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+            .upload-header h1 em {
+                font-style: normal;
+                color: #ff5500; /* Theme Orange */
+            }
+
+    .upload-layout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* 2/3 for the form, 1/3 for the image */
+        gap: 40px;
+        max-width: 1100px;
+        margin: 0 auto; /* Center the grid */
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .form-group .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+            .form-group .form-control:focus {
+                border-color: #ff5500;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(255, 85, 0, 0.15);
+            }
+
+    .upload-actions {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    /* Make validation messages look good */
+    .text-danger {
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+
+    /* Custom FilePond Styles to match our theme */
+    .filepond--root {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .filepond--drop-label {
+        color: #555;
+    }
+
+    .filepond--panel-root {
+        background-color: #fff;
+        border-radius: 8px;
+        border: 2px dashed #ccc;
+    }
+
+    .filepond--item-panel {
+        background-color: #ff5500;
+    }
+
+    .filepond--file-action-button {
+        background-color: rgba(0,0,0,0.5);
+    }
+</style>
+
+<div class="container upload-page-container">
+    <div class="upload-header">
+        <h1>Upload <em>Your Track</em></h1>
+    </div>
+
+    <!-- The <form> tag now wraps everything -->
+    <form asp-action="Add" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="upload-layout-grid">
+            <!-- Left Column: Main form and audio upload -->
+            <div class="main-upload-form">
+
+                <div class="form-group">
+                    <label asp-for="AudioFile" class="control-label"></label>
+                    <!-- This input is bound to the ViewModel but will be enhanced by FilePond -->
+                    <input asp-for="AudioFile" type="file" />
+                    <span asp-validation-for="AudioFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
                     <label asp-for="Title" class="control-label"></label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group">
                     <label asp-for="ArtistName" class="control-label"></label>
                     <input asp-for="ArtistName" class="form-control" />
                     <span asp-validation-for="ArtistName" class="text-danger"></span>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group">
                     <label asp-for="GenreId" class="control-label"></label>
                     <select asp-for="GenreId" class="form-control" asp-items="@Model.Genres">
                         <option value="">-- Select a Genre --</option>
                     </select>
                     <span asp-validation-for="GenreId" class="text-danger"></span>
                 </div>
+            </div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="AudioFile" class="control-label"></label>
-                    <input asp-for="AudioFile" class="form-control" type="file" accept="audio/*">
-                    <span asp-validation-for="AudioFile" class="text-danger"></span>
-                </div>
-
-                <div class="form-group mb-4">
+            <!-- Right Column: Image upload -->
+            <div class="side-upload-form">
+                <div class="form-group">
                     <label asp-for="ImageFile" class="control-label"></label>
-                    <input asp-for="ImageFile" class="form-control" type="file" accept="image/*">
+                    <!-- This input is also bound and will be enhanced by FilePond -->
+                    <input asp-for="ImageFile" type="file" />
                     <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
-
-                <div class="form-group">
-                    <input type="submit" value="Upload Track" class="btn btn-primary" />
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <div class="upload-actions">
+            <button type="submit" class="main-button">Upload Track</button>
+        </div>
+    </form>
 </div>
+
+@section Scripts {
+    <!-- FilePond and its plugins -->
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+    <script>
+        // Register the plugins
+        FilePond.registerPlugin(
+            FilePondPluginFileValidateType,
+            FilePondPluginImagePreview
+        );
+
+        // Get the ASP.NET generated input elements
+        const audioInputElement = document.querySelector('input[name="AudioFile"]');
+        const imageInputElement = document.querySelector('input[name="ImageFile"]');
+
+        // Initialize the audio uploader
+        const audioPond = FilePond.create(audioInputElement, {
+            labelIdle: `Drag & Drop your Audio File or <span class="filepond--label-action">Browse</span>`,
+            acceptedFileTypes: ['audio/mpeg', 'audio/mp3', 'audio/wav'],
+            labelFileTypeNotAllowed: 'Invalid file type, please upload MP3 or WAV',
+            storeAsFile: true 
+        });
+
+        // Initialize the image uploader
+        const imagePond = FilePond.create(imageInputElement, {
+            labelIdle: `Drag & Drop your Artwork or <span class="filepond--label-action">Browse</span>`,
+            acceptedFileTypes: ['image/jpeg', 'image/png'],
+            labelFileTypeNotAllowed: 'Invalid file type, please upload JPG or PNG',
+            storeAsFile: true
+        });
+    </script>
+}
