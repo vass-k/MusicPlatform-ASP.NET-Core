@@ -8,6 +8,8 @@
 
         public string ArtistName { get; set; } = null!;
 
+        public string? ImageUrl { get; set; }
+
         public int Plays { get; set; }
 
         public int FavoritesCount { get; set; }

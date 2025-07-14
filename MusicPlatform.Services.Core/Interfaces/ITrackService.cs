@@ -5,5 +5,9 @@
     public interface ITrackService
     {
         Task<IEnumerable<TrackIndexViewModel>> GetAllTracksForIndexAsync();
+
+        Task<TrackAddViewModel> GetTrackAddViewModelAsync();
+
+        Task AddTrackAsync(TrackAddViewModel model, string uploaderId);
     }
 }

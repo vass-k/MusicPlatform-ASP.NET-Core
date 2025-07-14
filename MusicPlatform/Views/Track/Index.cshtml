@@ -49,7 +49,6 @@
     }
 
         .track-card:hover {
-            transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
 
@@ -78,7 +77,6 @@
 
     .track-card:hover .play-button-overlay {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1.1);
     }
 
     .track-details {
@@ -156,8 +154,7 @@
                         <div class="track-artwork-container">
                             <!-- This link now points to the track's details page -->
                             <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
-                                <!-- TODO: Once ImageUrl is in the ViewModel, replace the src -->
-                                <img src="~/images/musicplatform-hero.jpg" alt="Artwork for @track.Title" class="track-artwork">
+                                <img src="@track.ImageUrl" alt="Artwork for @track.Title" class="track-artwork">
                                 <div class="play-button-overlay">
                                     <i class="fa fa-play-circle"></i>
                                 </div>

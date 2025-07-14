@@ -9,5 +9,7 @@
         Task<IEnumerable<Track>> GetMostPlayedTracksAsync(int count);
 
         Task<IEnumerable<Track>> GetAllWithFavoritesAsync();
+
+        IQueryable<Track> GetAllAsQueryable();
     }
 }

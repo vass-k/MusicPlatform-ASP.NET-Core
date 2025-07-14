@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.27.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MusicPlatform.Data.Models\MusicPlatform.Data.Models.csproj" />
     <ProjectReference Include="..\MusicPlatform.Data\MusicPlatform.Data.csproj" />
     <ProjectReference Include="..\MusicPlatform.GCommon\MusicPlatform.GCommon.csproj" />

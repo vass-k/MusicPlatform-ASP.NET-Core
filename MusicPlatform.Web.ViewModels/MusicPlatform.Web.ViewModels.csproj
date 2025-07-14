@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+    <ItemGroup>
+	    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\MusicPlatform.Data.Models\MusicPlatform.Data.Models.csproj" />
     <ProjectReference Include="..\MusicPlatform.GCommon\MusicPlatform.GCommon.csproj" />
     <ProjectReference Include="..\MusicPlatform.Services.AutoMapping\MusicPlatform.Services.AutoMapping.csproj" />

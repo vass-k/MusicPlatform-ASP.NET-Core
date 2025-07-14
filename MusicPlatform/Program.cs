@@ -1,10 +1,12 @@
 namespace MusicPlatform.Web
 {
     using Microsoft.EntityFrameworkCore;
+
     using MusicPlatform.Data;
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository;
     using MusicPlatform.Data.Repository.Interfaces;
+    using MusicPlatform.GCommon;
     using MusicPlatform.Services.Core;
     using MusicPlatform.Services.Core.Interfaces;
 
@@ -37,6 +39,9 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
             builder.Services.AddScoped<ITrackService, TrackService>();
+            builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
             builder.Services.AddControllersWithViews();
 
