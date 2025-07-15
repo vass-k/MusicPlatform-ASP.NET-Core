@@ -58,6 +58,7 @@
                                     {
                                         <!-- Show these links if the user IS logged in -->
                                         <li><a asp-controller="Profile" asp-action="Index" asp-route-username="@UserManager.GetUserName(User)">My Profile</a></li>
+                                        <li><a asp-controller="Track" asp-action="Add">Upload</a></li>
                                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
                                         <li>
                                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

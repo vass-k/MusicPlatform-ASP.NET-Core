@@ -247,25 +247,33 @@ header
 
 .header-area {
     position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
     z-index: 100;
     transition: all .5s ease 0s;
+    padding: 15px 0; /* Add some padding to the top and bottom */
 }
 
     .header-area .main-nav {
-        min-height: 0;
-        background: transparent;
         display: flex;
-        justify-content: center;
+        align-items: center;
     }
 
+        .header-area .main-nav .logo {
+            flex-shrink: 0; /* Prevents the logo from shrinking on smaller screens */
+        }
+
+            .header-area .main-nav .logo img {
+                height: 85px; /* Control the height of your logo */
+                width: 85px;
+            }
+
+        /* This is the key: The nav list will now have auto margins, centering it perfectly */
         .header-area .main-nav .nav {
+            margin: 0 auto; /* This centers the nav list in the available space */
             float: none;
-            margin: 0;
-            padding: 5px 10px; /* Reduced vertical padding */
+            padding: 5px 10px;
             border-radius: 50px;
             background-color: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(10px);
@@ -278,16 +286,8 @@ header
             display: none !important;
         }
 
-    /* On scroll, the 'header-sticky' class is added by JS. We use it to make the header less transparent. */
     .header-area.header-sticky .main-nav .nav {
         background-color: rgba(255, 255, 255, 0.85);
-    }
-
-    .header-area .main-nav .logo {
-        line-height: 60px; /* Adjust line-height to match new, shorter nav */
-        margin-right: 30px;
-        padding: 0 15px;
-        color: #1e1e1e;
     }
 
     .header-area .main-nav .nav li {
@@ -295,8 +295,8 @@ header
     }
 
         .header-area .main-nav .nav li a {
-            height: 50px; /* Shorter height */
-            line-height: 50px; /* Align text vertically */
+            height: 50px;
+            line-height: 50px;
             padding: 0 20px;
             color: #333;
             font-weight: 600;
@@ -304,10 +304,9 @@ header
             transition: color 0.3s ease, background-color 0.3s ease;
         }
 
-            /* Hover and Active states */
             .header-area .main-nav .nav li a:hover,
             .header-area .main-nav .nav li a.active {
-                color: #ff5500; /* Theme Orange! */
+                color: #ff5500;
                 background-color: rgba(255, 255, 255, 0.5);
             }
 
