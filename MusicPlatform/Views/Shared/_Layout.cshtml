@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using MusicPlatform.Data.Models
+
+@* Inject the services needed for checking login status and user details *@
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@{
+    // This C# logic gets the name of the current controller to help with active link highlighting.
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Home";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,7 +23,7 @@
     <link rel="stylesheet" href="~/css/templatemo.css">
     <link rel="stylesheet" href="~/css/owl-carousel.css">
 </head>
-<body>
+<body class="@(currentController == "Home" ? "is-homepage" : "is-subpage")">
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -21,18 +33,46 @@
         </div>
     </div>
     <!-- ***** Preloader End ***** -->
-    <!-- TEMPLATE HEADER IS NOW HERE -->
+    <!-- ***** Header Area Start - UPDATED AND FUNCTIONAL ***** -->
     <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <nav class="main-nav">
-                        <a href="/" class="logo">MusicPlatform</a>
+                        <!-- Logo -->
+                        <a href="/" class="logo">
+                            <img src="~/images/logo.png" alt="MusicPlatform Logo" />
+                        </a>
+
+                        <!-- Navigation -->
                         <ul class="nav">
-                            <li class="scroll-to-section"><a href="#welcome" class="menu-item">Home</a></li>
-                            <li class="scroll-to-section"><a href="#about" class="menu-item">Music</a></li>
-                            <li class="scroll-to-section"><a href="#testimonials" class="menu-item">Genres</a></li>
-                            <li class="scroll-to-section"><a href="#contact-us" class="menu-item">Contact Us</a></li>
+                            <li><a href="/" class="@(currentController == "Home" ? "active" : "")">Home</a></li>
+                            <li><a asp-controller="Track" asp-action="Index" class="@(currentController == "Track" ? "active" : "")">Tracks</a></li>
+                            <li><a asp-controller="Genre" asp-action="Index" class="@(currentController == "Genre" ? "active" : "")">Genres</a></li>
+
+                            <!-- This is the new dynamic dropdown menu -->
+                            <li class="submenu">
+                                <a href="javascript:;">Profile</a>
+                                <ul>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <!-- Show these links if the user IS logged in -->
+                                        <li><a asp-controller="Profile" asp-action="Index" asp-route-username="@UserManager.GetUserName(User)">My Profile</a></li>
+                                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
+                                        <li>
+                                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                <button type="submit" class="logout-button">Logout</button>
+                                            </form>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <!-- Show these links if the user IS NOT logged in -->
+                                        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                                        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                                    }
+                                </ul>
+                            </li>
                         </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
@@ -47,7 +87,7 @@
         @RenderBody()
     </main>
 
-    <!-- TEMPLATE FOOTER IS NOW HERE -->
+    <!-- Footer remains the same -->
     <footer class="site-footer">
         <div class="container">
             <div class="footer-top">
@@ -70,7 +110,7 @@
         </div>
     </footer>
 
-    <!-- Template JS Files -->
+    <!-- JS Files remain the same -->
     <script src="~/js/jquery-2.1.0.min.js"></script>
     <script src="~/js/popper.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
