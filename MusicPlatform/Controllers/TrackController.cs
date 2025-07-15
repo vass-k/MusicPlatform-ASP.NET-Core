@@ -1,6 +1,8 @@
 ﻿namespace MusicPlatform.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Track;
@@ -15,6 +17,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             try

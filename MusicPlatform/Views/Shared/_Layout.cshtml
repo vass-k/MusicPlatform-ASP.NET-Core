@@ -30,8 +30,8 @@
                         <a href="/" class="logo">MusicPlatform</a>
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="#welcome" class="menu-item">Home</a></li>
-                            <li class="scroll-to-section"><a href="#about" class="menu-item">About</a></li>
-                            <li class="scroll-to-section"><a href="#testimonials" class="menu-item">Testimonials</a></li>
+                            <li class="scroll-to-section"><a href="#about" class="menu-item">Music</a></li>
+                            <li class="scroll-to-section"><a href="#testimonials" class="menu-item">Genres</a></li>
                             <li class="scroll-to-section"><a href="#contact-us" class="menu-item">Contact Us</a></li>
                         </ul>
                         <a class='menu-trigger'>
@@ -43,8 +43,9 @@
         </div>
     </header>
 
-    <!-- This renders the content of the specific page (e.g., Index.cshtml) -->
-    @RenderBody()
+    <main class="main-content">
+        @RenderBody()
+    </main>
 
     <!-- TEMPLATE FOOTER IS NOW HERE -->
     <footer class="site-footer">
