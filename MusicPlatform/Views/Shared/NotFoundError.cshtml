@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "404 - Not Found";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/error-pages.css" asp-append-version="true" />
+
+<div class="error-container">
+    <h1 class="error-code">404</h1>
+    <p class="error-message">Page Not Found</p>
+    <p class="error-subtext">
+        Sorry, the page you are looking for does not exist or may have been moved.
+    </p>
+    <a asp-controller="Home" asp-action="Index" class="main-button">Return to Home</a>
+</div>

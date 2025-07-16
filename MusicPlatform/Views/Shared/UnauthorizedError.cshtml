@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/error-pages.css" asp-append-version="true" />
+
+<div class="error-container">
+    <div class="error-code">
+        <i class="fa fa-lock"></i>
+    </div>
+    <p class="error-message">Access Denied</p>
+    <p class="error-subtext">
+        You do not have the necessary permissions to access this page. Please ensure you are logged in with the correct account before trying again.
+    </p>
+    <a asp-controller="Home" asp-action="Index" class="main-button">Return to Home</a>
+</div>
