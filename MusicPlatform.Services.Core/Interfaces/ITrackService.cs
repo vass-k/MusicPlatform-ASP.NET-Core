@@ -9,5 +9,7 @@
         Task<TrackAddViewModel> GetTrackAddViewModelAsync();
 
         Task AddTrackAsync(TrackAddViewModel model, string uploaderId);
+
+        Task<TrackDetailsViewModel?> GetTrackDetailsAsync(Guid publicId);
     }
 }

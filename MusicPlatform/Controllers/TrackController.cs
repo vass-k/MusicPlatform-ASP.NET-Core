@@ -34,9 +34,32 @@
         }
 
         [HttpGet]
-        public IActionResult Details()
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(Guid id)
         {
-            return View();
+            if (id == Guid.Empty)
+            {
+                return this.RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                TrackDetailsViewModel? trackDetails = await this.trackService.GetTrackDetailsAsync(id);
+
+                if (trackDetails == null)
+                {
+                    // TODO: A proper 404 Not Found response.
+                    return this.RedirectToAction(nameof(Index));
+                }
+
+                return this.View(trackDetails);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+
+                return this.RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpGet]

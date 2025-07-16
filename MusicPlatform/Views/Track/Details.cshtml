@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Midnight City Drive"; // Placeholder title
+﻿@model MusicPlatform.Web.ViewModels.Track.TrackDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Title; // Set the page title dynamically
     Layout = "_Layout";
 }
 
@@ -223,21 +225,21 @@
 <div class="container track-details-container">
     <div class="track-details-header">
         <div id="artwork-container" class="artwork-container">
-            <img src="~/images/musicplatform-hero.jpg" alt="Track Artwork" class="track-details-artwork">
+            <img src="@Model.ImageUrl" alt="Artwork for @Model.Title" class="track-details-artwork">
             <div id="play-pause-overlay" class="play-button-overlay">
                 <i id="play-pause-icon" class="fa fa-play-circle"></i>
             </div>
         </div>
         <div class="track-details-info">
             <div>
-                <h1>Midnight City Drive</h1>
-                <h3>by <a href="#">Synthwave Dreamer</a></h3>
+                <h1>@Model.Title</h1>
+                <h3>by <a href="#">@Model.ArtistName</a></h3>
                 <div id="progress-bar-container" class="progress-bar-container">
                     <div id="progress-bar-filled" class="progress-bar-filled"></div>
                 </div>
                 <div class="time-info">
                     <span id="current-time">0:00</span>
-                    <span id="duration">0:00</span>
+                    <span id="duration">@(TimeSpan.FromSeconds(Model.DurationInSeconds).ToString(@"m\:ss"))</span>
                 </div>
             </div>
             <div class="action-button-group">
@@ -246,8 +248,8 @@
                 <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
             </div>
         </div>
-        <!-- Hidden actual audio element for this page's playback -->
-        <audio id="track-audio" src="~/music/placeholder-track.mp3" preload="metadata"></audio>
+
+        <audio id="track-audio" src="@Model.AudioUrl" preload="metadata"></audio>
     </div>
 
     <div class="track-layout">
@@ -261,32 +263,39 @@
                 </div>
                 <hr style="margin: 30px 0;">
                 <div class="comment-list">
-                    <!-- Placeholder Comment -->
-                    <div class="comment-item">
-                        <img src="~/images/musicplatform-hero.jpg" alt="User Avatar" class="comment-avatar">
-                        <div class="comment-body">
-                            <span class="comment-user">Listener123</span>
-                            <p class="comment-text">Amazing track! Perfect for a late-night drive.</p>
-                        </div>
-                    </div>
+                    @if (Model.Comments.Any())
+                    {
+                        <!-- Loop through the comments from the model -->
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <div class="comment-item">
+                                <img src="~/@comment.AuthorAvatarUrl" alt="User Avatar" class="comment-avatar">
+                                <div class="comment-body">
+                                    <span class="comment-user">@comment.AuthorUsername</span>
+                                    <p class="comment-text">@comment.Content</p>
+                                    <!-- We could add the PostedOn property here later -->
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Be the first to comment on this track!</p>
+                    }
                 </div>
             </div>
         </div>
 
-        <!-- Sidebar Column -->
         <aside class="track-sidebar">
             <div class="sidebar-module">
                 <h4>Track Stats</h4>
                 <div class="stats-grid">
-                    <div><i class="fa fa-play"></i> 1,402 Plays</div>
-                    <div><i class="fa fa-heart"></i> 251 Likes</div>
-                    <div><i class="fa fa-calendar"></i> Released: 2 weeks ago</div>
+                    <!-- Use stats from the model, formatted with N0 for commas -->
+                    <div><i class="fa fa-play"></i> @Model.Plays.ToString("N0") Plays</div>
+                    <div><i class="fa fa-heart"></i> @Model.FavoritesCount.ToString("N0") Likes</div>
+                    <div><i class="fa fa-calendar"></i> @Model.ReleasedDate</div>
                 </div>
             </div>
-            @* <div class="sidebar-module">
-                <h4>More from this Artist</h4>
-                <p>Coming Soon...</p>
-            </div> *@
         </aside>
     </div>
 </div>

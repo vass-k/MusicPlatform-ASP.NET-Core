@@ -4,7 +4,7 @@
     {
         public const string IsDeletedPropertyName = "IsDeleted";
 
-        public const string DefaultTrackImageUrl = "images/musicplatform-hero.jpg";
+        public const string DefaultTrackImageUrl = "images/default-track-image.png";
 
         public static class FileValidationConstants
         {
