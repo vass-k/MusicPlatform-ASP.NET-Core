@@ -1,0 +1,10 @@
+﻿@model MusicPlatform.Web.ViewModels.Comment.CommentViewModel
+
+<div class="comment-item">
+    <img src="~/@Model.AuthorAvatarUrl" alt="User Avatar for @Model.AuthorUsername" class="comment-avatar">
+    <div class="comment-body">
+        <span class="comment-user">@Model.AuthorUsername</span>
+        <p class="comment-text">@Model.Content</p>
+    </div>
+</div>
+

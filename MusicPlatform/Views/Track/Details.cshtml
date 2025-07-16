@@ -257,25 +257,31 @@
         <div class="track-main-content">
             <div class="comment-section">
                 <h3>Comments</h3>
-                <div class="comment-form">
-                    <textarea placeholder="Write a comment..."></textarea>
-                    <button class="main-button">Post Comment</button>
-                </div>
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <!-- The form is only shown to logged-in users -->
+                    <form id="comment-form" asp-controller="Comment" asp-action="Add" method="post">
+                        <!-- This hidden input is crucial for telling the controller which track we're on -->
+                        <input type="hidden" name="TrackPublicId" value="@Model.PublicId" />
+                        <textarea name="Content" placeholder="Write a comment..."></textarea>
+                        <button type="submit" class="main-button">Post Comment</button>
+                        <!-- Add a div to display AJAX errors -->
+                        <div id="comment-error" class="text-danger mt-2"></div>
+                    </form>
+                }
+                else
+                {
+                    <p>You must be <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">logged in</a> to post a comment.</p>
+                }
+
                 <hr style="margin: 30px 0;">
                 <div class="comment-list">
                     @if (Model.Comments.Any())
                     {
-                        <!-- Loop through the comments from the model -->
                         @foreach (var comment in Model.Comments)
                         {
-                            <div class="comment-item">
-                                <img src="~/@comment.AuthorAvatarUrl" alt="User Avatar" class="comment-avatar">
-                                <div class="comment-body">
-                                    <span class="comment-user">@comment.AuthorUsername</span>
-                                    <p class="comment-text">@comment.Content</p>
-                                    <!-- We could add the PostedOn property here later -->
-                                </div>
-                            </div>
+                            <partial name="_CommentPartial" model="comment" />
                         }
                     }
                     else
@@ -364,4 +370,5 @@
             }
         });
     </script>
+    <script src="~/js/add-comment.js"></script>
 }

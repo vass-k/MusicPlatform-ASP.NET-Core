@@ -40,6 +40,7 @@ namespace MusicPlatform.Web
 
             builder.Services.AddScoped<ITrackService, TrackService>();
             builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
 
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
