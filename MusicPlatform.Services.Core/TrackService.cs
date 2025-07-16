@@ -106,6 +106,7 @@
                     PublicId = t.PublicId,
                     Title = t.Title,
                     ArtistName = t.ArtistName,
+                    UploaderName = t.Uploader.UserName!,
                     ImageUrl = t.ImageUrl,
                     AudioUrl = t.AudioUrl,
                     Plays = t.Plays,

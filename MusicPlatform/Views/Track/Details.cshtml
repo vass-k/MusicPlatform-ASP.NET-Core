@@ -70,37 +70,57 @@
         min-height: 250px; /* Match the artwork height to allow vertical alignment */
     }
 
+        .track-details-info h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 10px 0 5px 0;
+            color: #1e1e1e;
+        }
+
+        .track-details-info h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+            .track-details-info h3 a {
+                color: #555;
+                text-decoration: none;
+            }
+
+                .track-details-info h3 a:hover {
+                    color: #ff5500;
+                    text-decoration: underline;
+                }
+
+    .bottom-action-bar {
+        display: flex; /* Makes items align horizontally */
+        justify-content: space-between; /* Pushes children to opposite ends */
+        align-items: center; /* Vertically aligns children in the middle */
+        margin-top: auto; /* The magic line that pushes the whole bar to the bottom */
+    }
+
+    /* We don't need to align the button group itself anymore */
     .action-button-group {
         display: flex;
         gap: 10px;
-        margin-top: auto; /* 3. Pushes this group to the bottom */
-        align-self: flex-end; /* 4. Aligns this group to the right */
     }
 
-    /* --- CSS CHANGES END HERE --- */
-
-    .track-details-info h1 {
-        font-size: 2.8rem;
-        font-weight: 700;
-        margin: 10px 0 5px 0;
-        color: #1e1e1e;
+    /* New class for the uploader info text */
+    .uploader-info {
+        font-size: 0.9rem;
+        color: #888;
     }
 
-    .track-details-info h3 {
-        font-size: 1.3rem;
-        font-weight: 500;
-        color: #666;
-        margin-bottom: 25px;
-    }
-
-        .track-details-info h3 a {
-            color: #555;
+        .uploader-info a {
+            color: #666;
+            font-weight: 500;
             text-decoration: none;
         }
 
-            .track-details-info h3 a:hover {
+            .uploader-info a:hover {
                 color: #ff5500;
-                text-decoration: underline;
             }
 
     .progress-bar-container {
@@ -242,10 +262,16 @@
                     <span id="duration">@(TimeSpan.FromSeconds(Model.DurationInSeconds).ToString(@"m\:ss"))</span>
                 </div>
             </div>
-            <div class="action-button-group">
-                <a href="#" class="action-btn"><i class="fa fa-heart"></i> Like</a>
-                <a href="#" class="action-btn"><i class="fa fa-plus"></i> Add to Playlist</a>
-                <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
+            <div class="bottom-action-bar">
+                <div class="uploader-info">
+                    Uploaded by <a href="#">@Model.UploaderName</a>
+                </div>
+
+                <div class="action-button-group">
+                    <a href="#" class="action-btn"><i class="fa fa-heart"></i> Like</a>
+                    <a href="#" class="action-btn"><i class="fa fa-plus"></i> Add to Playlist</a>
+                    <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
+                </div>
             </div>
         </div>
 
@@ -362,7 +388,7 @@
                     audio.currentTime = (clickX / width) * audio.duration;
                 }
             });
-            
+
             function formatTime(seconds) {
                 const minutes = Math.floor(seconds / 60);
                 const secs = Math.floor(seconds % 60);
