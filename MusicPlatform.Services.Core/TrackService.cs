@@ -6,7 +6,6 @@
 
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository.Interfaces;
-    using MusicPlatform.GCommon;
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Comment;
@@ -35,8 +34,6 @@
 
         public async Task<PagedResult<TrackIndexViewModel>> GetAllTracksForIndexAsync(int pageNumber, int pageSize)
         {
-            // First, get the total count of tracks to calculate total pages.
-            // This is a separate, efficient database query.
             var totalCount = await this.trackRepository
                 .GetAllAsQueryable()
                 .AsNoTracking()
@@ -66,7 +63,7 @@
             {
                 if (string.IsNullOrEmpty(track.ImageUrl))
                 {
-                    track.ImageUrl = ApplicationConstants.DefaultTrackImageUrl;
+                    track.ImageUrl = DefaultTrackImageUrl;
                 }
             }
 

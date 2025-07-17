@@ -23,10 +23,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> Index(int page = 1)
         {
-            if (page < 1)
-            {
-                page = 1;
-            }
+            if (page < 1) page = 1;
 
             try
             {
@@ -80,6 +77,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(FileValidationConstants.MaxRequestBodySize)]
         public async Task<IActionResult> Add(TrackAddViewModel model)
         {
             if (!this.ModelState.IsValid)
