@@ -1,10 +1,11 @@
 ﻿namespace MusicPlatform.Services.Core.Interfaces
 {
+    using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Track;
 
     public interface ITrackService
     {
-        Task<IEnumerable<TrackIndexViewModel>> GetAllTracksForIndexAsync();
+        Task<PagedResult<TrackIndexViewModel>> GetAllTracksForIndexAsync(int pageNumber, int pageSize);
 
         Task<TrackAddViewModel> GetTrackAddViewModelAsync();
 

@@ -7,9 +7,12 @@
     using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Track;
 
+    using static GCommon.ApplicationConstants;
+
     public class TrackController : BaseController
     {
         private readonly ITrackService trackService;
+        private const int ItemsPerPage = ItemsPerPageConstant;
 
         public TrackController(ITrackService trackService)
         {
@@ -18,14 +21,19 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            if (page < 1)
+            {
+                page = 1;
+            }
+
             try
             {
-                IEnumerable<TrackIndexViewModel> allTracks = await this.trackService
-                    .GetAllTracksForIndexAsync();
+                var pagedResult = await this.trackService
+                    .GetAllTracksForIndexAsync(page, ItemsPerPage);
 
-                return this.View(allTracks);
+                return this.View(pagedResult);
             }
             catch (Exception)
             {

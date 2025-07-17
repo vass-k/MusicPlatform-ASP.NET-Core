@@ -1,5 +1,5 @@
 ﻿@using MusicPlatform.Web.ViewModels.Track
-@model IEnumerable<MusicPlatform.Web.ViewModels.Track.TrackIndexViewModel>
+@model PagedResult<MusicPlatform.Web.ViewModels.Track.TrackIndexViewModel>
 
 @{
     ViewData["Title"] = "Discover Tracks";
@@ -136,9 +136,38 @@
             margin-right: 5px; /* Space between icon and number */
         }
 
-    .load-more-container {
-        text-align: center;
-        margin-top: 60px;
+        .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+    }
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        gap: 5px;
+    }
+    .page-item .page-link {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+        color: #333;
+        border-radius: 5px;
+        transition: all 0.2s ease;
+    }
+    .page-item.active .page-link {
+        background-color: #ff5500;
+        color: #fff;
+        border-color: #ff5500;
+    }
+    .page-item.disabled .page-link {
+        color: #aaa;
+        pointer-events: none;
+        background-color: #f7f7f7;
+    }
+    .page-item:not(.disabled) .page-link:hover {
+        background-color: #f0f0f0;
     }
 </style>
 
@@ -154,9 +183,10 @@
 
         <!-- This is where the track cards will be dynamically loaded -->
         <div class="track-grid">
-            @if (Model.Any())
+            @if (Model.Items.Any())
             {
-                @foreach (TrackIndexViewModel track in Model)
+                // Loop over Model.Items now, not Model itself
+                @foreach (var track in Model.Items)
                 {
                     <!-- Single Dynamic Track Card -->
                     <div class="track-card">
@@ -197,9 +227,28 @@
             }
         </div>
 
-        <div class="load-more-container">
-            <!-- We reuse the button style from the main template for consistency -->
-            <a href="#" class="main-button">Load More</a>
+        <div class="pagination-container">
+            <nav aria-label="Track pages">
+                <ul class="pagination">
+                    <!-- Previous Button -->
+                    <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                        <a class="page-link" asp-controller="Track" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                    </li>
+
+                    <!-- Page Number Buttons -->
+                    @for (var i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" asp-controller="Track" asp-action="Index" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+
+                    <!-- Next Button -->
+                    <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                        <a class="page-link" asp-controller="Track" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

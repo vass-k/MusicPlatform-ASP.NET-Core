@@ -6,7 +6,9 @@
 
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository.Interfaces;
+    using MusicPlatform.GCommon;
     using MusicPlatform.Services.Core.Interfaces;
+    using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Comment;
     using MusicPlatform.Web.ViewModels.Track;
 
@@ -31,13 +33,25 @@
             this.cloudinaryService = cloudinaryService;
         }
 
-        public async Task<IEnumerable<TrackIndexViewModel>> GetAllTracksForIndexAsync()
+        public async Task<PagedResult<TrackIndexViewModel>> GetAllTracksForIndexAsync(int pageNumber, int pageSize)
         {
+            // First, get the total count of tracks to calculate total pages.
+            // This is a separate, efficient database query.
+            var totalCount = await this.trackRepository
+                .GetAllAsQueryable()
+                .AsNoTracking()
+                .CountAsync();
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
             List<TrackIndexViewModel> trackViewModels = await this.trackRepository
                 .GetAllAsQueryable()
                 .AsNoTracking()
-                .Include(t => t.UserFavorites)
-                .Select(t => new TrackIndexViewModel
+                .OrderByDescending(t => t.CreatedOn)
+                .ThenBy(t => t.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(t => new TrackIndexViewModel()
                 {
                     PublicId = t.PublicId,
                     Title = t.Title,
@@ -52,11 +66,18 @@
             {
                 if (string.IsNullOrEmpty(track.ImageUrl))
                 {
-                    track.ImageUrl = DefaultTrackImageUrl;
+                    track.ImageUrl = ApplicationConstants.DefaultTrackImageUrl;
                 }
             }
 
-            return trackViewModels;
+            PagedResult<TrackIndexViewModel> pagedResult = new PagedResult<TrackIndexViewModel>
+            {
+                Items = trackViewModels,
+                PageNumber = pageNumber,
+                TotalPages = totalPages
+            };
+
+            return pagedResult;
         }
 
         public async Task<TrackAddViewModel> GetTrackAddViewModelAsync()

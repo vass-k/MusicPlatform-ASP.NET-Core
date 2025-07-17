@@ -6,6 +6,8 @@
 
         public const string DefaultTrackImageUrl = "images/default-track-image.png";
 
+        public const int ItemsPerPageConstant = 10;
+
         public static class FileValidationConstants
         {
             public const int MaxAudioFileSize = 50 * 1024 * 1024; // 50 MB for audio
