@@ -4,6 +4,6 @@
 
     public interface IProfileService
     {
-        Task<ProfileViewModel?> GetUserProfileAsync(string username, int pageNumber, int pageSize, string? currentUserId);
+        Task<ProfileViewModel?> GetUserProfileAsync(string username, string activeTab, int pageNumber, int ItemsPerPage, string? currentUserId);
     }
 }

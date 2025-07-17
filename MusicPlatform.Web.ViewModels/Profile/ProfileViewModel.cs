@@ -6,6 +6,10 @@
 
         public bool IsCurrentUserProfile { get; set; }
 
-        public PagedResult<ProfileTrackViewModel> UploadedTracks { get; set; } = null!;
+        public string ActiveTab { get; set; } = "Tracks";
+
+        public PagedResult<ProfileTrackViewModel>? UploadedTracks { get; set; }
+
+        public IEnumerable<ProfilePlaylistViewModel>? Playlists { get; set; }
     }
 }

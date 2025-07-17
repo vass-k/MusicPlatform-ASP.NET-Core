@@ -19,7 +19,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string username, int page = 1)
+        public async Task<IActionResult> Index(string username, string tab = "Tracks", int page = 1)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -29,7 +29,7 @@
             if (page < 1) page = 1;
 
             var currentUserId = this.GetUserId();
-            var model = await this.profileService.GetUserProfileAsync(username, page, ItemsPerPage, currentUserId);
+            var model = await this.profileService.GetUserProfileAsync(username, tab, page, ItemsPerPage, currentUserId);
 
             if (model == null)
             {

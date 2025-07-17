@@ -1,10 +1,12 @@
 ﻿namespace MusicPlatform.Services.Core
 {
     using Microsoft.EntityFrameworkCore;
+
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository.Interfaces;
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels.Playlist;
+
     using static MusicPlatform.GCommon.ApplicationConstants;
 
     public class PlaylistService : IPlaylistService
