@@ -37,10 +37,12 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             builder.Services.AddScoped<ITrackService, TrackService>();
             builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
 
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 

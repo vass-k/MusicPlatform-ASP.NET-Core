@@ -264,7 +264,10 @@
             </div>
             <div class="bottom-action-bar">
                 <div class="uploader-info">
-                    Uploaded by <a href="#">@Model.UploaderName</a>
+                    Uploaded by 
+                    <a asp-controller="Profile" asp-action="Index" asp-route-username="@Model.UploaderName">
+                        @Model.UploaderName
+                    </a>
                 </div>
 
                 <div class="action-button-group">

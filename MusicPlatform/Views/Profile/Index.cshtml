@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Synthwave Dreamer's Profile"; // Placeholder
+﻿@using MusicPlatform.Web.ViewModels.Profile
+@model ProfileViewModel
+
+@{
+    ViewData["Title"] = Model.Username + "'s Profile";
     Layout = "_Layout";
 }
 
@@ -40,16 +43,6 @@
         font-size: 2.5rem;
         font-weight: 700;
     }
-
-    .profile-meta {
-        margin-bottom: 20px;
-        opacity: 0.8;
-    }
-
-        .profile-meta span:not(:last-child)::after {
-            content: "•";
-            margin: 0 10px;
-        }
 
     .profile-actions .main-button {
         background-color: #ff5500;
@@ -121,14 +114,6 @@
         cursor: pointer;
     }
 
-    .playlist-track-item:hover .track-number {
-        display: none;
-    }
-
-    .playlist-track-item:hover .play-icon {
-        display: inline-block;
-    }
-
     .track-list-artwork {
         width: 45px;
         height: 45px;
@@ -172,71 +157,156 @@
         .view-all-link:hover {
             text-decoration: underline;
         }
+
+    .track-actions {
+        justify-self: flex-end; /* Aligns to the right in the grid */
+    }
+
+    .track-play-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        color: #555;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .track-play-btn:hover {
+            background-color: #ff5500;
+            color: #fff;
+            border-color: #ff5500;
+        }
+
+    .no-tracks-message {
+        text-align: center;
+        padding: 40px;
+        color: #777;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+        margin-bottom: 80px;
+    }
+
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        gap: 5px;
+    }
+
+    .page-item .page-link {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+        color: #333;
+        border-radius: 5px;
+        transition: all 0.2s ease;
+    }
+
+    .page-item.active .page-link {
+        background-color: #ff5500;
+        color: #fff;
+        border-color: #ff5500;
+    }
+
+    .page-item.disabled .page-link {
+        color: #aaa;
+        pointer-events: none;
+        background-color: #f7f7f7;
+    }
+
+    .page-item:not(.disabled) .page-link:hover {
+        background-color: #f0f0f0;
+    }
 </style>
 
 <div class="container profile-page-container">
     <div class="profile-header">
         <img src="~/images/musicplatform-hero.jpg" alt="User Avatar" class="profile-avatar" />
         <div class="profile-info">
-            <h1>Synthwave Dreamer</h1>
-            <div class="profile-meta">
-                <span>15 Followers</span>
-                <span>23 Following</span>
-                <span>Joined July 2025</span>
-            </div>
+            <h1>@Model.Username</h1>
             <div class="profile-actions">
-                <a href="#" class="main-button">Follow</a>
-                <!-- This "Edit Profile" button should only be shown if the logged-in user is viewing their own page -->
-                <!-- <a href="#" class="action-btn"><i class="fa fa-pencil"></i> Edit Profile</a> -->
+                @if (Model.IsCurrentUserProfile)
+                {
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="action-btn"><i class="fa fa-pencil"></i> Account Settings</a>
+                }
             </div>
         </div>
     </div>
 
     <nav class="profile-nav">
-        <a href="#">Tracks</a>
+        <!-- The "active" class will be managed by a future tab-switching implementation -->
+        <a href="#" class="active">Tracks</a>
         <a href="#">Playlists</a>
-        <a href="#" class="active">Favorites</a>
+        <a href="#">Favorites</a>
     </nav>
 
     <div class="tab-content">
-        <div id="favorites-section">
-            <ul class="playlist-track-list">
-                <li class="playlist-track-item">
-                    <div class="track-number"><span>1</span><i class="fa fa-play-circle play-icon"></i></div>
-                    <div class="track-list-artwork-container"><img src="~/images/musicplatform-hero.jpg" class="track-list-artwork" /></div>
-                    <div class="track-list-info">
-                        <div>
-                            <div class="title"><a href="#">Clarity</a></div>
-                            <div class="artist"><a href="#">Vaporwave Visions</a></div>
-                        </div>
-                    </div>
-                    <div class="track-duration">3:45</div>
-                </li>
-                <li class="playlist-track-item">
-                    <div class="track-number"><span>2</span><i class="fa fa-play-circle play-icon"></i></div>
-                    <div class="track-list-artwork-container"><img src="~/images/musicplatform-hero.jpg" class="track-list-artwork" /></div>
-                    <div class="track-list-info">
-                        <div>
-                            <div class="title"><a href="#">Redline</a></div>
-                            <div class="artist"><a href="#">Power Glove</a></div>
-                        </div>
-                    </div>
-                    <div class="track-duration">5:01</div>
-                </li>
-                <li class="playlist-track-item">
-                    <div class="track-number"><span>3</span><i class="fa fa-play-circle play-icon"></i></div>
-                    <div class="track-list-artwork-container"><img src="~/images/musicplatform-hero.jpg" class="track-list-artwork" /></div>
-                    <div class="track-list-info">
-                        <div>
-                            <div class="title"><a href="#">Streetlight Sonata</a></div>
-                            <div class="artist"><a href="#">Lo-Fi Legend</a></div>
-                        </div>
-                    </div>
-                    <div class="track-duration">2:58</div>
-                </li>
-            </ul>
+        <div id="tracks-section">
+            @if (Model.UploadedTracks.Items.Any())
+            {
+                <ul class="playlist-track-list">
+                    @foreach (var track in Model.UploadedTracks.Items)
+                    {
+                        <li class="playlist-track-item">
+                            <div class="track-number">
+                                <span>@(Model.UploadedTracks.Items.ToList().IndexOf(track) + 1 + (Model.UploadedTracks.PageNumber - 1) * 10)</span>
+                                <i class="fa fa-play-circle play-icon"></i>
+                            </div>
+                            <div class="track-list-artwork-container">
+                                <img src="@track.ImageUrl" class="track-list-artwork" />
+                            </div>
+                            <div class="track-list-info">
+                                <div>
+                                    <div class="title"><a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">@track.Title</a></div>
+                                    <div class="artist"><a href="#">@track.ArtistName</a></div>
+                                </div>
+                            </div>
+                            <!-- Replaced Duration with a Play Button -->
+                            <div class="track-actions">
+                                <a href="#" class="track-play-btn" aria-label="Play @track.Title">
+                                    <i class="fa fa-play"></i>
+                                </a>
+                            </div>
+                        </li>
+                    }
+                </ul>
 
-            <a href="#" class="view-all-link">View all favorites →</a>
+                <div class="pagination-container">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item @(!Model.UploadedTracks.HasPreviousPage ? "disabled" : "")">
+                                <a class="page-link" asp-controller="Profile" asp-action="Index" asp-route-username="@Model.Username" asp-route-page="@(Model.UploadedTracks.PageNumber - 1)">Previous</a>
+                            </li>
+                            @for (var i = 1; i <= Model.UploadedTracks.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.UploadedTracks.PageNumber ? "active" : "")">
+                                    <a class="page-link" asp-controller="Profile" asp-action="Index" asp-route-username="@Model.Username" asp-route-page="@i">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(!Model.UploadedTracks.HasNextPage ? "disabled" : "")">
+                                <a class="page-link" asp-controller="Profile" asp-action="Index" asp-route-username="@Model.Username" asp-route-page="@(Model.UploadedTracks.PageNumber + 1)">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+            else
+            {
+                <div class="no-tracks-message">
+                    <p>This user hasn't uploaded any tracks yet.</p>
+                </div>
+            }
         </div>
     </div>
 </div>
