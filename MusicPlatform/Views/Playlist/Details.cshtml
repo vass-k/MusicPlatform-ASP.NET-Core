@@ -1,6 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Late Night Drives"; // Placeholder
-    Layout = "_Layout";
+﻿@model MusicPlatform.Web.ViewModels.Playlist.PlaylistDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
 }
 
 <style>
@@ -123,11 +124,11 @@
         <img src="~/images/preview.png" alt="Playlist Artwork" class="playlist-artwork" />
         <div class="playlist-info">
             <p>PLAYLIST</p>
-            <h1>Late Night Drives</h1>
+            <h1>@Model.Name</h1>
             <p class="meta-info">
-                <span>Created by <a href="#" style="font-weight: 600; color: #555;">Synthwave Dreamer</a></span>
-                <span>4 tracks</span>
-                <span>15 min 42 sec</span>
+                <span>Created by <a asp-controller="Profile" asp-action="Index" asp-route-username="@Model.CreatorUsername" style="font-weight: 600; color: #555;">@Model.CreatorUsername</a></span>
+                <span>@Model.Tracks.Count() tracks</span>
+                <span>@(TimeSpan.FromSeconds(Model.TotalDurationSec).ToString(@"m' min 'ss' sec'"))</span>
             </p>
         </div>
     </div>
@@ -140,73 +141,34 @@
         <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
     </div>
 
-    <ul class="playlist-track-list">
-        <li class="playlist-track-item">
-            <div class="track-number">
-                <span>1</span>
-                <i class="fa fa-play-circle play-icon"></i>
-            </div>
-            <div class="track-list-artwork-container">
-                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
-            </div>
-            <div class="track-list-info">
-                <div>
-                    <div class="title"><a href="#">Midnight City Drive</a></div>
-                    <div class="artist"><a href="#">Synthwave Dreamer</a></div>
-                </div>
-            </div>
-            <div class="track-duration">4:12</div>
-        </li>
-
-        <li class="playlist-track-item">
-            <div class="track-number">
-                <span>2</span>
-                <i class="fa fa-play-circle play-icon"></i>
-            </div>
-            <div class="track-list-artwork-container">
-                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
-            </div>
-            <div class="track-list-info">
-                <div>
-                    <div class="title"><a href="#">Data Stream (Remix)</a></div>
-                    <div class="artist"><a href="#">DJ Codec</a></div>
-                </div>
-            </div>
-            <div class="track-duration">3:55</div>
-        </li>
-
-        <li class="playlist-track-item">
-            <div class="track-number">
-                <span>3</span>
-                <i class="fa fa-play-circle play-icon"></i>
-            </div>
-            <div class="track-list-artwork-container">
-                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
-            </div>
-            <div class="track-list-info">
-                <div>
-                    <div class="title"><a href="#">Neon Pulse</a></div>
-                    <div class="artist"><a href="#">Futurecop!</a></div>
-                </div>
-            </div>
-            <div class="track-duration">4:30</div>
-        </li>
-
-        <li class="playlist-track-item">
-            <div class="track-number">
-                <span>4</span>
-                <i class="fa fa-play-circle play-icon"></i>
-            </div>
-            <div class="track-list-artwork-container">
-                <img src="~/images/musicplatform-hero.jpg" alt="Track Art" class="track-list-artwork" />
-            </div>
-            <div class="track-list-info">
-                <div>
-                    <div class="title"><a href="#">Acoustic Sunset</a></div>
-                    <div class="artist"><a href="#">The Wanderer</a></div>
-                </div>
-            </div>
-            <div class="track-duration">3:05</div>
-        </li>
-    </ul>
+    @if (Model.Tracks.Any())
+    {
+        <ul class="playlist-track-list">
+            @foreach (var (track, index) in Model.Tracks.Select((value, i) => (value, i)))
+            {
+                <li class="playlist-track-item">
+                    <div class="track-number"><span>@(index + 1)</span><i class="fa fa-play-circle play-icon"></i></div>
+                    <div class="track-list-artwork-container"><img src="@track.ImageUrl" alt="Track Art" class="track-list-artwork" /></div>
+                    <div class="track-list-info">
+                        <div>
+                            <div class="title"><a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">@track.Title</a></div>
+                            <div class="artist"><a href="#">@track.ArtistName</a></div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="text-center" style="padding: 40px;">
+            <h3>This playlist is empty.</h3>
+            @if (Model.IsOwnedByCurrentUser)
+            {
+                <p>Go on and add some tracks!</p>
+                <br/>
+                <a asp-controller="Track" asp-action="Index" class="main-button">Discover Tracks</a>
+            }
+        </div>
+    }
 </div>

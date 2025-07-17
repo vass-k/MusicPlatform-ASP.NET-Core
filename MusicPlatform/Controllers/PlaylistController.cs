@@ -1,17 +1,63 @@
 ﻿namespace MusicPlatform.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    public class PlaylistController : Controller
+    using MusicPlatform.Services.Core.Interfaces;
+    using MusicPlatform.Web.ViewModels.Playlist;
+    using static MusicPlatform.Web.ViewModels.ValidationMessages.Playlist;
+    public class PlaylistController : BaseController
     {
-        public IActionResult Index()
+        private readonly IPlaylistService playlistService;
+
+        public PlaylistController(IPlaylistService playlistService)
+        {
+            this.playlistService = playlistService;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Add()
         {
             return View();
         }
 
-        public IActionResult Details()
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(PlaylistCreateViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                Guid newPlaylistId = await this.playlistService.CreatePlaylistAsync(model, userId);
+                return RedirectToAction(nameof(Details), new { id = newPlaylistId });
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, ServiceCreateError);
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            if (id == Guid.Empty) return BadRequest();
+
+            var userId = this.GetUserId();
+            var model = await this.playlistService.GetPlaylistDetailsAsync(id, userId);
+
+            if (model == null) return NotFound();
+
+            return View(model);
         }
     }
 }

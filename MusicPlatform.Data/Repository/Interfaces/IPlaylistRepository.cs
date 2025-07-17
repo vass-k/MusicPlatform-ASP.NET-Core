@@ -8,6 +8,7 @@
     public interface IPlaylistRepository : IBaseRepository<Playlist, int>
     {
         Task<Playlist?> GetPlaylistWithTracksAsync(Guid publicId);
-    }
 
+        IQueryable<Playlist> GetAllAsQueryable();
+    }
 }

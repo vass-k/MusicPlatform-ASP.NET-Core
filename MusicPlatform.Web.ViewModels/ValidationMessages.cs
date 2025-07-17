@@ -17,5 +17,14 @@
             public const string ServiceCreateError =
                 "Fatal error occurred while adding your track! Please try again later!";
         }
+
+        public static class Playlist
+        {
+            public const string PlaylistNameRequired = "Playlist name is required.";
+            public const string PlaylistNameLength = "Playlist name must be between {2} and {1} characters.";
+            public const string PlaylistDescriptionLength = "Description must not exceed {1} characters.";
+            public const string ServiceCreateError =
+                "Fatal error occurred while creating your playlist! Please try again later!";
+        }
     }
 }
