@@ -18,11 +18,5 @@
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(p => p.PublicId == publicId);
         }
-
-        public IQueryable<Playlist> GetAllAsQueryable()
-        {
-            return this.DbSet
-                .AsQueryable();
-        }
     }
 }

@@ -34,11 +34,5 @@
                 .Include(t => t.UserFavorites)
                 .ToListAsync();
         }
-
-        public IQueryable<Track> GetAllAsQueryable()
-        {
-            return this.DbSet
-                .AsQueryable();
-        }
     }
 }

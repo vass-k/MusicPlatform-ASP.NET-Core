@@ -56,6 +56,11 @@
             return await this.DbSet.ToArrayAsync();
         }
 
+        public IQueryable<TEntity> GetAllAsQueryable()
+        {
+            return this.DbSet.AsQueryable();
+        }
+
         public ValueTask<TEntity?> GetByIdAsync(TKey id)
         {
             return this.DbSet.FindAsync(id);

@@ -12,6 +12,8 @@
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 
+        IQueryable<TEntity> GetAllAsQueryable();
+
         Task<int> CountAsync();
 
         Task AddAsync(TEntity entity);
