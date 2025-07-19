@@ -1,11 +1,10 @@
 ﻿@model MusicPlatform.Web.ViewModels.Track.TrackDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Title; // Set the page title dynamically
+    ViewData["Title"] = Model.Title;
     Layout = "_Layout";
 }
 
-<!-- Custom CSS for the REFACTORED Track Details Page -->
 <style>
     body {
         background-color: #f7f7f7;
@@ -61,8 +60,6 @@
             opacity: 1;
         }
 
-    /* --- CSS CHANGES START HERE --- */
-
     .track-details-info {
         flex-grow: 1;
         display: flex; /* 1. Make this a flex container */
@@ -101,13 +98,11 @@
         margin-top: auto; /* The magic line that pushes the whole bar to the bottom */
     }
 
-    /* We don't need to align the button group itself anymore */
     .action-button-group {
         display: flex;
         gap: 10px;
     }
 
-    /* New class for the uploader info text */
     .uploader-info {
         font-size: 0.9rem;
         color: #888;
@@ -171,21 +166,22 @@
             margin-right: 8px;
         }
 
-        .action-btn:hover i {
-            color: #ff5500;
-        }
-
     .comment-section h3 {
         margin-bottom: 20px;
     }
 
-    .comment-form textarea {
+    textarea {
         width: 100%;
         padding: 15px;
         border: 1px solid #ddd;
         border-radius: 5px;
         height: 100px;
-        margin-bottom: 15px;
+        resize: vertical;
+    }
+
+    .comment-form-actions {
+        margin-top: 15px;
+        text-align: left;
     }
 
     .comment-item {
@@ -264,7 +260,7 @@
             </div>
             <div class="bottom-action-bar">
                 <div class="uploader-info">
-                    Uploaded by 
+                    Uploaded by
                     <a asp-controller="Profile" asp-action="Index" asp-route-username="@Model.UploaderName">
                         @Model.UploaderName
                     </a>
@@ -289,13 +285,12 @@
 
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    <!-- The form is only shown to logged-in users -->
                     <form id="comment-form" asp-controller="Comment" asp-action="Add" method="post">
-                        <!-- This hidden input is crucial for telling the controller which track we're on -->
                         <input type="hidden" name="TrackPublicId" value="@Model.PublicId" />
                         <textarea name="Content" placeholder="Write a comment..."></textarea>
-                        <button type="submit" class="main-button">Post Comment</button>
-                        <!-- Add a div to display AJAX errors -->
+                        <div class="comment-form-actions">
+                            <button type="submit" class="main-button">Post Comment</button>
+                        </div>
                         <div id="comment-error" class="text-danger mt-2"></div>
                     </form>
                 }
@@ -325,7 +320,6 @@
             <div class="sidebar-module">
                 <h4>Track Stats</h4>
                 <div class="stats-grid">
-                    <!-- Use stats from the model, formatted with N0 for commas -->
                     <div><i class="fa fa-play"></i> @Model.Plays.ToString("N0") Plays</div>
                     <div><i class="fa fa-heart"></i> @Model.FavoritesCount.ToString("N0") Likes</div>
                     <div><i class="fa fa-calendar"></i> @Model.ReleasedDate</div>
