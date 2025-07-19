@@ -2,9 +2,12 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels.Playlist;
+
     using static MusicPlatform.Web.ViewModels.ValidationMessages.Playlist;
+
     public class PlaylistController : BaseController
     {
         private readonly IPlaylistService playlistService;
@@ -15,14 +18,12 @@
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(PlaylistCreateViewModel model)
         {
@@ -58,6 +59,54 @@
             if (model == null) return NotFound();
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            var model = await this.playlistService
+                .GetPlaylistForEditAsync(id, userId);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(PlaylistEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                bool success = await this.playlistService
+                    .UpdatePlaylistAsync(model, userId);
+
+                if (!success)
+                {
+                    return NotFound();
+                }
+
+                return RedirectToAction(nameof(Details), new { id = model.PublicId });
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, ServiceEditError);
+                return View(model);
+            }
         }
     }
 }

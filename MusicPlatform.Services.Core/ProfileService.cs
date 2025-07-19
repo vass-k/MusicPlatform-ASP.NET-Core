@@ -44,7 +44,8 @@
                     profileViewModel.Playlists = await this.playlistRepository
                         .GetAllAsQueryable()
                         .AsNoTracking()
-                        .Where(p => p.CreatorId == user.Id && p.IsPublic)
+                        .Where(p => p.CreatorId == user.Id &&
+                                    (p.IsPublic || p.CreatorId == currentUserId))
                         .OrderByDescending(p => p.Id)
                         .Select(p => new ProfilePlaylistViewModel()
                         {

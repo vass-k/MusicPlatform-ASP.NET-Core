@@ -60,5 +60,47 @@
 
             return playlistDetails;
         }
+
+        public async Task<PlaylistEditViewModel?> GetPlaylistForEditAsync(Guid publicId, string currentUserId)
+        {
+            var playlist = await this
+                .FindPlaylistByPublicIdAsync(publicId);
+
+            if (playlist == null || playlist.CreatorId != currentUserId)
+            {
+                return null;
+            }
+
+            return new PlaylistEditViewModel
+            {
+                PublicId = playlist.PublicId,
+                Name = playlist.Name,
+                Description = playlist.Description,
+                IsPublic = playlist.IsPublic
+            };
+        }
+
+        public async Task<bool> UpdatePlaylistAsync(PlaylistEditViewModel model, string currentUserId)
+        {
+            var playlist = await this
+                .FindPlaylistByPublicIdAsync(model.PublicId);
+
+            if (playlist == null || playlist.CreatorId != currentUserId)
+            {
+                return false;
+            }
+
+            playlist.Name = model.Name;
+            playlist.Description = model.Description;
+            playlist.IsPublic = model.IsPublic;
+
+            return await this.playlistRepository.UpdateAsync(playlist);
+        }
+
+        private async Task<Playlist?> FindPlaylistByPublicIdAsync(Guid publicId)
+        {
+            return await this.playlistRepository
+                .FirstOrDefaultAsync(p => p.PublicId == publicId);
+        }
     }
 }

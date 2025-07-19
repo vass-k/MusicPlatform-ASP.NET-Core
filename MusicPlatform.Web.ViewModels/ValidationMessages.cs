@@ -28,6 +28,9 @@
             public const string PlaylistDescriptionLength = "Description must not exceed {1} characters.";
             public const string ServiceCreateError =
                 "Fatal error occurred while creating your playlist! Please try again later!";
+
+            public const string ServiceEditError =
+                "Fatal error occurred while editing your playlist! Please try again later!";
         }
     }
 }

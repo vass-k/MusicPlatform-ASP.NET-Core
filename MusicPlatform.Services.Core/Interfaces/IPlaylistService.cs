@@ -7,5 +7,9 @@
         Task<Guid> CreatePlaylistAsync(PlaylistCreateViewModel model, string userId);
 
         Task<PlaylistDetailsViewModel?> GetPlaylistDetailsAsync(Guid playlistId, string? currentUserId);
+
+        Task<PlaylistEditViewModel?> GetPlaylistForEditAsync(Guid publicId, string currentUserId);
+
+        Task<bool> UpdatePlaylistAsync(PlaylistEditViewModel model, string currentUserId);
     }
 }
