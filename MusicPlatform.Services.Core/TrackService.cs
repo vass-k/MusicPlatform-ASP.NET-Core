@@ -152,7 +152,8 @@
 
         public async Task<TrackEditViewModel?> GetTrackForEditAsync(Guid publicId, string currentUserId)
         {
-            var track = await this.trackRepository.FirstOrDefaultAsync(t => t.PublicId == publicId);
+            var track = await this
+                .FindTrackByPublicIdAsync(publicId);
 
             if (track == null || track.UploaderId != currentUserId)
             {
@@ -171,7 +172,8 @@
 
         public async Task<bool> UpdateTrackAsync(TrackEditViewModel model, string currentUserId)
         {
-            var track = await this.trackRepository.FirstOrDefaultAsync(t => t.PublicId == model.PublicId);
+            var track = await this
+                .FindTrackByPublicIdAsync(model.PublicId);
 
             if (track == null || track.UploaderId != currentUserId)
             {
@@ -185,6 +187,39 @@
             return await this.trackRepository.UpdateAsync(track);
         }
 
+        public async Task<TrackDeleteViewModel?> GetTrackForDeleteAsync(Guid publicId, string currentUserId)
+        {
+            var track = await this
+                .FindTrackByPublicIdAsync(publicId);
+
+            if (track == null || track.UploaderId != currentUserId)
+            {
+                return null;
+            }
+
+            return new TrackDeleteViewModel
+            {
+                PublicId = track.PublicId,
+                Title = track.Title,
+                ArtistName = track.ArtistName,
+                ImageUrl = track.ImageUrl ?? DefaultTrackImageUrl
+            };
+        }
+
+        public async Task<bool> DeleteTrackAsync(Guid publicId, string currentUserId)
+        {
+            var track = await this
+                .FindTrackByPublicIdAsync(publicId);
+
+            if (track == null || track.UploaderId != currentUserId)
+            {
+                return false;
+            }
+
+            // TODO - rename DeleteAsync to SoftDeleteAsync
+            return await this.trackRepository.DeleteAsync(track);
+        }
+
         public async Task<IEnumerable<SelectListItem>> GetGenresForSelectAsync(int? selectedGenreId = null)
         {
             var genres = await this.genreRepository.GetAllAsync();
@@ -195,6 +230,12 @@
                 Value = g.Id.ToString(),
                 Selected = (selectedGenreId.HasValue && selectedGenreId.Value == g.Id)
             });
+        }
+
+        private async Task<Track?> FindTrackByPublicIdAsync(Guid publicId)
+        {
+            return await this.trackRepository
+                .FirstOrDefaultAsync(t => t.PublicId == publicId);
         }
 
         private void ValidateFile(IFormFile file, int maxSizeInBytes, string[] allowedExtensions)

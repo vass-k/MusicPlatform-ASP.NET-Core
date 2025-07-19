@@ -1,0 +1,135 @@
+﻿@model MusicPlatform.Web.ViewModels.Track.TrackDeleteViewModel
+
+@{
+    ViewData["Title"] = "Confirm Deletion";
+    Layout = "_Layout";
+}
+
+<style>
+    .delete-confirmation-container {
+        padding: 100px 0;
+        background-color: #f7f7f7;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .confirmation-panel {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .section-heading h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e1e1e;
+        margin-bottom: 30px;
+    }
+
+        .section-heading h2 em {
+            font-style: normal;
+            color: #dc3545;
+        }
+
+    .track-artwork-preview {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .track-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .track-artist {
+        color: #888;
+        margin-bottom: 25px;
+    }
+
+    .confirmation-text {
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .confirmation-actions {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    /* Custom themed buttons for this context */
+    .btn-secondary-themed, .btn-danger-themed {
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-secondary-themed {
+        background-color: #e9ecef;
+        border-color: #e9ecef;
+        color: #555;
+    }
+
+        .btn-secondary-themed:hover {
+            background-color: #d8dde2;
+            border-color: #d8dde2;
+            color: #333;
+        }
+
+    .btn-danger-themed {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
+
+        .btn-danger-themed:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+            color: #fff;
+        }
+</style>
+
+<div class="container delete-confirmation-container">
+    <div class="confirmation-panel">
+        <div class="section-heading">
+            <h2>Confirm <em>Deletion</em></h2>
+        </div>
+
+        <img src="@Model.ImageUrl" alt="Artwork for @Model.Title" class="track-artwork-preview" />
+
+        <h4 class="track-title">@Model.Title</h4>
+        <p class="track-artist">by @Model.ArtistName</p>
+
+        <p class="confirmation-text mt-4">
+            Are you sure you want to delete this track? This action cannot be undone.
+        </p>
+
+        <form asp-controller="Track" asp-action="Delete" method="post" class="mt-4">
+            <input type="hidden" asp-for="PublicId" />
+
+            <div class="confirmation-actions">
+                <a asp-controller="Track" asp-action="Details" asp-route-id="@Model.PublicId" class="btn-secondary-themed">Cancel</a>
+                <button type="submit" class="btn-danger-themed">Yes, Delete Track</button>
+            </div>
+        </form>
+    </div>
+</div>

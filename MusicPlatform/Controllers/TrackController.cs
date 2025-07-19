@@ -154,7 +154,6 @@
                 return View(model);
             }
 
-
             try
             {
                 bool success = await this.trackService.UpdateTrackAsync(model, userId);
@@ -171,6 +170,61 @@
 
                 model.Genres = await this.trackService.GetGenresForSelectAsync();
                 return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var userId = this.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                TrackDeleteViewModel? model = await this.trackService.GetTrackForDeleteAsync(id, userId);
+                if (model == null)
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                return this.View(model);
+            }
+            catch (Exception)
+            {
+                // Log error
+                return this.RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(TrackDeleteViewModel model)
+        {
+            var userId = this.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                bool success = await this.trackService
+                    .DeleteTrackAsync(model.PublicId, userId);
+
+                if (!success)
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                return this.RedirectToAction("Index", "Profile", new { username = this.User.Identity!.Name });
+            }
+            catch (Exception)
+            {
+                // Log error
+                return this.RedirectToAction("Index", "Home");
             }
         }
     }

@@ -90,6 +90,7 @@
                 this.DbSet.Attach(entity);
                 this.DbContext.Entry(entity).State = EntityState.Modified;
                 await this.DbContext.SaveChangesAsync();
+
                 return true;
             }
             catch (Exception)

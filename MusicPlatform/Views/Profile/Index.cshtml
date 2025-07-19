@@ -350,7 +350,7 @@
                                             <i class="fa fa-pencil"></i>
                                         </a>
 
-                                        <a href="#" class="track-play-btn track-action-delete" aria-label="Delete @track.Title" title="Delete">
+                                        <a asp-controller="Track" asp-action="Delete" asp-route-id="@track.PublicId" class="track-play-btn track-action-delete" aria-label="Delete @track.Title" title="Delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     }

@@ -19,6 +19,10 @@
 
         Task<bool> UpdateTrackAsync(TrackEditViewModel model, string currentUserId);
 
+        Task<TrackDeleteViewModel?> GetTrackForDeleteAsync(Guid publicId, string currentUserId);
+
+        Task<bool> DeleteTrackAsync(Guid publicId, string currentUserId);
+
         Task<IEnumerable<SelectListItem>> GetGenresForSelectAsync(int? selectedGenreId = null);
     }
 }
