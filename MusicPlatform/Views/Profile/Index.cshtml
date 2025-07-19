@@ -163,6 +163,9 @@
 
     .track-actions {
         justify-self: flex-end;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .track-play-btn {
@@ -182,6 +185,12 @@
             background-color: #ff5500;
             color: #fff;
             border-color: #ff5500;
+        }
+
+        .track-play-btn.track-action-delete:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
         }
 
     .track-list-artwork {
@@ -335,6 +344,16 @@
                                     </div>
                                 </div>
                                 <div class="track-actions">
+                                    @if (Model.IsCurrentUserProfile)
+                                    {
+                                        <a asp-controller="Track" asp-action="Edit" asp-route-id="@track.PublicId" class="track-play-btn" aria-label="Edit @track.Title" title="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+
+                                        <a href="#" class="track-play-btn track-action-delete" aria-label="Delete @track.Title" title="Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    }
                                     <a href="#" class="track-play-btn" aria-label="Play @track.Title">
                                         <i class="fa fa-play"></i>
                                     </a>

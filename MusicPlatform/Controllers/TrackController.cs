@@ -82,8 +82,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var freshModel = await this.trackService.GetTrackAddViewModelAsync();
-                model.Genres = freshModel.Genres;
+                model.Genres = await this.trackService.GetGenresForSelectAsync();
                 return this.View(model);
             }
 
@@ -116,6 +115,62 @@
                 var freshModel = await this.trackService.GetTrackAddViewModelAsync();
                 model.Genres = freshModel.Genres;
                 return this.View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                var model = await this.trackService.GetTrackForEditAsync(id, userId);
+                if (model == null)
+                {
+                    return NotFound();
+                }
+
+                return View(model);
+            }
+            catch
+            {
+                // Log error
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(TrackEditViewModel model)
+        {
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            if (!ModelState.IsValid)
+            {
+                model.Genres = await this.trackService.GetGenresForSelectAsync();
+                return View(model);
+            }
+
+
+            try
+            {
+                bool success = await this.trackService.UpdateTrackAsync(model, userId);
+                if (!success)
+                {
+                    return NotFound();
+                }
+
+                return RedirectToAction(nameof(Details), new { id = model.PublicId });
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, ValidationMessages.Track.ServiceEditError);
+
+                model.Genres = await this.trackService.GetGenresForSelectAsync();
+                return View(model);
             }
         }
     }

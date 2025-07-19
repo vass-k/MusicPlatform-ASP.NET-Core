@@ -16,6 +16,9 @@
 
             public const string ServiceCreateError =
                 "Fatal error occurred while adding your track! Please try again later!";
+
+            public const string ServiceEditError =
+                "Fatal error occurred while editing your track! Please try again later!";
         }
 
         public static class Playlist

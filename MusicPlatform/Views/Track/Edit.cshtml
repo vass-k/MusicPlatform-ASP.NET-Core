@@ -1,0 +1,118 @@
+﻿@model MusicPlatform.Web.ViewModels.Track.TrackEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Track";
+    Layout = "_Layout";
+}
+
+<!-- Custom CSS for the Edit Track Page -->
+<style>
+    .edit-track-container {
+        padding: 100px 0;
+        background-color: #f7f7f7; /* Light background to make the form panel stand out */
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .edit-track-form-panel {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    .section-heading {
+        margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e1e1e;
+        /* For long track titles, allow them to wrap */
+        word-break: break-word;
+    }
+    
+    .section-heading h2 em {
+        font-style: normal;
+        color: #ff5500; /* Theme Orange */
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        /* Ensure selects have the same height and look */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+        background-repeat: no-repeat;
+        background-position: right 15px top 50%;
+        background-size: .65em auto;
+        padding-right: 40px; /* Make space for the dropdown arrow */
+    }
+
+    .form-control:focus {
+        border-color: #ff5500;
+        box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.15);
+        outline: none;
+    }
+
+    .main-button {
+        width: 100%;
+        padding: 15px 25px;
+        font-size: 1rem;
+        letter-spacing: 1.5px;
+    }
+</style>
+
+<div class="container edit-track-container">
+    <div class="row justify-content-center w-100">
+        <div class="col-lg-7 col-md-9">
+            <div class="edit-track-form-panel">
+                <div class="section-heading text-center">
+                    <h2>Edit <em>@Model.Title</em></h2>
+                </div>
+                
+                <form asp-controller="Track" asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Hidden input for the ID is crucial -->
+                    <input type="hidden" asp-for="PublicId" />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ArtistName" class="form-label"></label>
+                        <input asp-for="ArtistName" class="form-control" />
+                        <span asp-validation-for="ArtistName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="GenreId" class="form-label"></label>
+                        <select asp-for="GenreId" class="form-control" asp-items="@Model.Genres">
+                        </select>
+                        <span asp-validation-for="GenreId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="main-button">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

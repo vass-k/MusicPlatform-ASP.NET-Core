@@ -135,7 +135,7 @@
         <h1>Upload <em>Your Track</em></h1>
     </div>
 
-    <form id="upload-form" asp-action="Add" method="post" enctype="multipart/form-data">
+    <form id="upload-form" asp-controller="Track" asp-action="Add" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
         <div class="upload-layout-grid">

@@ -79,11 +79,9 @@
 
         public async Task<TrackAddViewModel> GetTrackAddViewModelAsync()
         {
-            var genres = await this.genreRepository.GetAllAsync();
-
             return new TrackAddViewModel
             {
-                Genres = genres.Select(g => new SelectListItem(g.Name, g.Id.ToString()))
+                Genres = await this.GetGenresForSelectAsync()
             };
         }
 
@@ -150,6 +148,53 @@
             }
 
             return trackDetails;
+        }
+
+        public async Task<TrackEditViewModel?> GetTrackForEditAsync(Guid publicId, string currentUserId)
+        {
+            var track = await this.trackRepository.FirstOrDefaultAsync(t => t.PublicId == publicId);
+
+            if (track == null || track.UploaderId != currentUserId)
+            {
+                return null;
+            }
+
+            return new TrackEditViewModel
+            {
+                PublicId = track.PublicId,
+                Title = track.Title,
+                ArtistName = track.ArtistName,
+                GenreId = track.GenreId,
+                Genres = await this.GetGenresForSelectAsync(track.GenreId)
+            };
+        }
+
+        public async Task<bool> UpdateTrackAsync(TrackEditViewModel model, string currentUserId)
+        {
+            var track = await this.trackRepository.FirstOrDefaultAsync(t => t.PublicId == model.PublicId);
+
+            if (track == null || track.UploaderId != currentUserId)
+            {
+                return false;
+            }
+
+            track.Title = model.Title;
+            track.ArtistName = model.ArtistName;
+            track.GenreId = model.GenreId;
+
+            return await this.trackRepository.UpdateAsync(track);
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetGenresForSelectAsync(int? selectedGenreId = null)
+        {
+            var genres = await this.genreRepository.GetAllAsync();
+
+            return genres.Select(g => new SelectListItem
+            {
+                Text = g.Name,
+                Value = g.Id.ToString(),
+                Selected = (selectedGenreId.HasValue && selectedGenreId.Value == g.Id)
+            });
         }
 
         private void ValidateFile(IFormFile file, int maxSizeInBytes, string[] allowedExtensions)
