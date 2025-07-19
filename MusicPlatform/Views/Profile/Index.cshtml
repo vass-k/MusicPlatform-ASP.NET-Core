@@ -241,10 +241,17 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
+        .track-card .track-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
     .track-artwork-container {
         position: relative;
         width: 100%;
         aspect-ratio: 1 / 1;
+        display: block;
     }
 
     .track-artwork {
@@ -270,7 +277,7 @@
         pointer-events: none;
     }
 
-    a.track-card:hover .play-button-overlay {
+    .track-artwork-container:hover .play-button-overlay {
         opacity: 1;
     }
 
@@ -288,6 +295,11 @@
         text-overflow: ellipsis;
     }
 
+        .track-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
     .track-meta {
         display: flex;
         align-items: center;
@@ -300,18 +312,65 @@
             margin-right: 5px;
         }
 
-    .tab-content-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
+    .playlist-options {
+        position: static;
     }
 
-        .tab-content-header h3 {
-            font-size: 1.8rem;
-            font-weight: 600;
+    .playlist-options-btn.dropdown-toggle::after {
+        display: none;
+    }
+
+    .playlist-options-btn {
+        padding: 5px 10px;
+        color: #aaa;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .playlist-options-btn:hover {
+            background-color: #f0f0f0;
             color: #333;
-            margin: 0;
+        }
+
+    .playlist-dropdown-menu {
+        border-radius: 6px;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 5px 0;
+        min-width: 120px;
+    }
+
+        .playlist-dropdown-menu .dropdown-item {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+            .playlist-dropdown-menu .dropdown-item i {
+                margin-right: 10px;
+                width: 15px;
+                text-align: center;
+                color: #888;
+            }
+
+            .playlist-dropdown-menu .dropdown-item:hover {
+                background-color: #f5f5f5;
+                color: #ff5500;
+            }
+
+                .playlist-dropdown-menu .dropdown-item:hover i {
+                    color: #ff5500;
+                }
+
+    .dropdown-item-delete:hover {
+        background-color: #f8d7da;
+        color: #dc3545 !important;
+    }
+
+        .dropdown-item-delete:hover i {
+            color: #dc3545 !important;
         }
 
     .add-playlist-btn {
@@ -335,6 +394,20 @@
         .add-playlist-btn i {
             margin-right: 8px;
         }
+
+    .tab-content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+        .tab-content-header h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
 </style>
 
 <div class="container profile-page-container">
@@ -350,7 +423,6 @@
             </div>
         </div>
     </div>
-
     <nav class="profile-nav">
         <a asp-action="Index" asp-route-username="@Model.Username" asp-route-tab="Tracks" class="@(Model.ActiveTab == "Tracks" ? "active" : "")">Tracks</a>
         <a asp-action="Index" asp-route-username="@Model.Username" asp-route-tab="Playlists" class="@(Model.ActiveTab == "Playlists" ? "active" : "")">Playlists</a>
@@ -430,7 +502,6 @@
             <div id="playlists-section">
                 <div class="tab-content-header">
                     <h3>Playlists</h3>
-
                     @if (Model.IsCurrentUserProfile)
                     {
                         <a asp-controller="Playlist" asp-action="Add" class="add-playlist-btn">
@@ -444,17 +515,43 @@
                     <div class="track-grid">
                         @foreach (var playlist in Model.Playlists)
                         {
-                            <a asp-controller="Playlist" asp-action="Details" asp-route-id="@playlist.PublicId" class="track-card text-decoration-none">
-                                <div class="track-artwork-container">
+                            <div class="track-card">
+                                <a asp-controller="Playlist" asp-action="Details" asp-route-id="@playlist.PublicId" class="track-artwork-container">
                                     <img src="~/images/preview.png" alt="Playlist Artwork" class="track-artwork">
-                                </div>
+                                    <div class="play-button-overlay"><i class="fa fa-play-circle"></i></div>
+                                </a>
                                 <div class="track-details">
-                                    <h4 class="track-title">@playlist.Name</h4>
-                                    <div class="track-meta mt-2">
-                                        <span><i class="fa fa-music"></i> @playlist.TrackCount tracks</span>
+                                    <div>
+                                        <h4 class="track-title">
+                                            <a asp-controller="Playlist" asp-action="Details" asp-route-id="@playlist.PublicId">@playlist.Name</a>
+                                        </h4>
+                                        <div class="track-meta mt-2">
+                                            <span><i class="fa fa-music"></i> @playlist.TrackCount tracks</span>
+                                        </div>
                                     </div>
+
+                                    @if (Model.IsCurrentUserProfile)
+                                    {
+                                        <div class="dropdown playlist-options">
+                                            <a href="#" class="playlist-options-btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </a>
+                                            <ul class="dropdown-menu playlist-dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" asp-controller="Playlist" asp-action="Edit" asp-route-id="@playlist.PublicId">
+                                                        <i class="fa fa-pencil"></i> Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item dropdown-item-delete" asp-controller="Playlist" asp-action="Delete" asp-route-id="@playlist.PublicId">
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
                                 </div>
-                            </a>
+                            </div>
                         }
                     </div>
                 }
