@@ -4,7 +4,7 @@
     {
         public const string IsDeletedPropertyName = "IsDeleted";
 
-        public const string DefaultTrackImageUrl = "images/default-track-image.png";
+        public const string DefaultTrackImageUrl = "/images/default-track-image.png";
 
         public const int ItemsPerPageConstant = 10;
 

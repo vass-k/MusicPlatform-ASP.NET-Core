@@ -53,19 +53,11 @@
                     PublicId = t.PublicId,
                     Title = t.Title,
                     ArtistName = t.ArtistName,
-                    ImageUrl = t.ImageUrl,
+                    ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
                     Plays = t.Plays,
                     FavoritesCount = t.UserFavorites.Count
                 })
                 .ToListAsync();
-
-            foreach (var track in trackViewModels)
-            {
-                if (string.IsNullOrEmpty(track.ImageUrl))
-                {
-                    track.ImageUrl = DefaultTrackImageUrl;
-                }
-            }
 
             PagedResult<TrackIndexViewModel> pagedResult = new PagedResult<TrackIndexViewModel>
             {
@@ -123,7 +115,7 @@
                     Title = t.Title,
                     ArtistName = t.ArtistName,
                     UploaderName = t.Uploader.UserName!,
-                    ImageUrl = t.ImageUrl,
+                    ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
                     AudioUrl = t.AudioUrl,
                     Plays = t.Plays,
                     DurationInSeconds = t.DurationInSeconds,
@@ -141,11 +133,6 @@
                                 })
                 })
                 .FirstOrDefaultAsync();
-
-            if (trackDetails != null && string.IsNullOrEmpty(trackDetails.ImageUrl))
-            {
-                trackDetails.ImageUrl = DefaultTrackImageUrl;
-            }
 
             return trackDetails;
         }
