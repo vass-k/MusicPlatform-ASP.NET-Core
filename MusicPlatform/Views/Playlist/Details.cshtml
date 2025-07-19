@@ -36,9 +36,19 @@
         color: #1e1e1e;
     }
 
-    .playlist-info p {
+    .playlist-info p.playlist-label {
         font-size: 1.1rem;
         color: #666;
+        margin-bottom: 0; /* Adjusted margin */
+    }
+
+    .playlist-description {
+        font-size: 1rem;
+        color: #777;
+        margin-top: 5px;
+        margin-bottom: 15px; /* Add space between description and meta info */
+        max-width: 650px; /* Constrain line length for better readability */
+        line-height: 1.6;
     }
 
     .playlist-info .meta-info {
@@ -125,6 +135,12 @@
         <div class="playlist-info">
             <p>PLAYLIST</p>
             <h1>@Model.Name</h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p class="playlist-description">@Model.Description</p>
+            }
+
             <p class="meta-info">
                 <span>Created by <a asp-controller="Profile" asp-action="Index" asp-route-username="@Model.CreatorUsername" style="font-weight: 600; color: #555;">@Model.CreatorUsername</a></span>
                 <span>@Model.Tracks.Count() tracks</span>
