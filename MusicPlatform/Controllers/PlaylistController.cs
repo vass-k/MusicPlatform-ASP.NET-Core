@@ -108,5 +108,54 @@
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                var model = await this.playlistService
+                    .GetPlaylistForDeleteAsync(id, userId);
+                if (model == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                // Log error
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(PlaylistDeleteViewModel model)
+        {
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                bool success = await this.playlistService.DeletePlaylistAsync(model.PublicId, userId);
+                if (!success)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return RedirectToAction("Index", "Profile", new { username = this.User.Identity!.Name, tab = "Playlists" });
+            }
+            catch (Exception)
+            {
+                // Log error
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
     }
 }

@@ -97,6 +97,39 @@
             return await this.playlistRepository.UpdateAsync(playlist);
         }
 
+        public async Task<PlaylistDeleteViewModel?> GetPlaylistForDeleteAsync(Guid publicId, string currentUserId)
+        {
+            var playlist = await this.playlistRepository
+                .GetAllAsQueryable()
+                .Include(p => p.Creator)
+                .FirstOrDefaultAsync(p => p.PublicId == publicId);
+
+            if (playlist == null || playlist.CreatorId != currentUserId)
+            {
+                return null;
+            }
+
+            return new PlaylistDeleteViewModel
+            {
+                PublicId = playlist.PublicId,
+                Name = playlist.Name,
+                CreatorUsername = playlist.Creator.UserName!
+            };
+        }
+
+        public async Task<bool> DeletePlaylistAsync(Guid publicId, string currentUserId)
+        {
+            var playlist = await this
+                .FindPlaylistByPublicIdAsync(publicId);
+
+            if (playlist == null || playlist.CreatorId != currentUserId)
+            {
+                return false;
+            }
+
+            return await this.playlistRepository.DeleteAsync(playlist);
+        }
+
         private async Task<Playlist?> FindPlaylistByPublicIdAsync(Guid publicId)
         {
             return await this.playlistRepository

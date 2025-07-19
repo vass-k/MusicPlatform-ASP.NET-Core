@@ -11,5 +11,9 @@
         Task<PlaylistEditViewModel?> GetPlaylistForEditAsync(Guid publicId, string currentUserId);
 
         Task<bool> UpdatePlaylistAsync(PlaylistEditViewModel model, string currentUserId);
+
+        Task<PlaylistDeleteViewModel?> GetPlaylistForDeleteAsync(Guid publicId, string currentUserId);
+
+        Task<bool> DeletePlaylistAsync(Guid publicId, string currentUserId);
     }
 }
