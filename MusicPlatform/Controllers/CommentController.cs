@@ -1,6 +1,7 @@
 ﻿namespace MusicPlatform.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels.Comment;
 
@@ -36,7 +37,6 @@
             }
             catch (Exception e)
             {
-                // We are returning a generic error message for the AJAX call to handle.
                 return BadRequest(new { message = e.Message });
             }
         }

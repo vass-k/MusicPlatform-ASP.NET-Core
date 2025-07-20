@@ -8,6 +8,8 @@
     [Authorize]
     public abstract class BaseController : Controller
     {
+        protected const int ItemsPerPage = 12;
+
         protected bool IsUserAuthenticated()
         {
             bool retRes = false;

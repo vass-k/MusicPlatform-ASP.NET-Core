@@ -1,0 +1,230 @@
+﻿@model MusicPlatform.Web.ViewModels.Genre.GenreDetailsViewModel
+
+@{
+    ViewData["Title"] = @Model.GenreName + " Music";
+}
+
+<style>
+    body {
+        background-color: #f2f2f2;
+    }
+
+    #tracks-section {
+        padding: 100px 0;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+        .section-heading h2 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+            .section-heading h2 em {
+                font-style: normal;
+                color: #ff5500;
+            }
+
+    .track-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .track-card {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        overflow: hidden;
+        transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    }
+
+        .track-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+    .track-artwork-container {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+
+    .track-artwork {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .play-button-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 60px;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        pointer-events: none;
+    }
+
+    .track-card:hover .play-button-overlay {
+        opacity: 1;
+    }
+
+    .track-details {
+        padding: 15px;
+        flex-shrink: 0;
+    }
+
+    .track-progress-bar {
+        height: 4px;
+        background-color: #e5e5e5;
+        border-radius: 2px;
+        margin: 10px 0;
+    }
+
+    .track-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e1e1e;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track-artist {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 15px;
+    }
+
+        .track-artist a, .track-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+            .track-artist a:hover, .track-title a:hover {
+                color: #ff5500;
+            }
+
+    .track-meta {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 0.85em;
+        color: #aaa;
+    }
+
+        .track-meta span i {
+            margin-right: 5px;
+        }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+    }
+
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        gap: 5px;
+    }
+
+    .page-item .page-link {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+        color: #333;
+        border-radius: 5px;
+        transition: all 0.2s ease;
+    }
+
+    .page-item.active .page-link {
+        background-color: #ff5500;
+        color: #fff;
+        border-color: #ff5500;
+    }
+
+    .page-item.disabled .page-link {
+        color: #aaa;
+        pointer-events: none;
+        background-color: #f7f7f7;
+    }
+
+    .page-item:not(.disabled) .page-link:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<div class="container" style="padding: 80px 0;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-heading">
+                <h2>Exploring <em>@Model.GenreName</em></h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="track-grid">
+        @foreach (var track in Model.PagedTracks.Items)
+        {
+            <div class="track-card">
+                <div class="track-artwork-container">
+                    <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
+                        <img src="@track.ImageUrl" alt="Artwork for @track.Title" class="track-artwork">
+                        <div class="play-button-overlay">
+                            <i class="fa fa-play-circle"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="track-details">
+                    <h4 class="track-title">
+                        <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">@track.Title</a>
+                    </h4>
+                    <p class="track-artist">
+                        <a href="#">@track.ArtistName</a>
+                    </p>
+                    <div class="track-progress-bar"></div>
+                    <div class="track-meta">
+                        <span><i class="fa fa-play"></i>@track.Plays.ToString("N0")</span>
+                        <span><i class="fa fa-heart"></i>@track.FavoritesCount.ToString("N0")</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="pagination-container">
+        <nav aria-label="Track pages">
+            <ul class="pagination">
+                <li class="page-item @(!Model.PagedTracks.HasPreviousPage ? "disabled" : "")">
+                    <a class="page-link" asp-controller="Genre" asp-action="Details" asp-route-id="@ViewContext.RouteData.Values["id"]" asp-route-page="@(Model.PagedTracks.PageNumber - 1)">Previous</a>
+                </li>
+                @for (var i = 1; i <= Model.PagedTracks.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PagedTracks.PageNumber ? "active" : "")">
+                        <a class="page-link" asp-controller="Genre" asp-action="Details" asp-route-id="@ViewContext.RouteData.Values["id"]" asp-route-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(!Model.PagedTracks.HasNextPage ? "disabled" : "")">
+                    <a class="page-link" asp-controller="Genre" asp-action="Details" asp-route-id="@ViewContext.RouteData.Values["id"]" asp-route-page="@(Model.PagedTracks.PageNumber + 1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
