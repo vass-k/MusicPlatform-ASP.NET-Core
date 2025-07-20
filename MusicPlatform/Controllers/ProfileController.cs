@@ -5,12 +5,9 @@
 
     using MusicPlatform.Services.Core.Interfaces;
 
-    using static GCommon.ApplicationConstants;
-
     public class ProfileController : BaseController
     {
         private readonly IProfileService profileService;
-        private const int ItemsPerPage = ItemsPerPageConstant;
 
         public ProfileController(IProfileService profileService)
         {

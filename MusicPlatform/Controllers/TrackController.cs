@@ -12,7 +12,6 @@
     public class TrackController : BaseController
     {
         private readonly ITrackService trackService;
-        private const int ItemsPerPage = ItemsPerPageConstant;
 
         public TrackController(ITrackService trackService)
         {

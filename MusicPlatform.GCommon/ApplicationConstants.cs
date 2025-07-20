@@ -6,7 +6,7 @@
 
         public const string DefaultTrackImageUrl = "/images/default-track-image.png";
 
-        public const int ItemsPerPageConstant = 10;
+        public const int ItemsPerPageConstant = 12;
 
         public static class FileValidationConstants
         {

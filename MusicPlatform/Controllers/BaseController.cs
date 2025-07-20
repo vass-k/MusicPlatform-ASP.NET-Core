@@ -5,10 +5,12 @@
 
     using System.Security.Claims;
 
+    using static MusicPlatform.GCommon.ApplicationConstants;
+
     [Authorize]
     public abstract class BaseController : Controller
     {
-        protected const int ItemsPerPage = 12;
+        protected const int ItemsPerPage = ItemsPerPageConstant;
 
         protected bool IsUserAuthenticated()
         {
