@@ -103,7 +103,7 @@
             await this.trackRepository.AddAsync(newTrack);
         }
 
-        public async Task<TrackDetailsViewModel?> GetTrackDetailsAsync(Guid publicId)
+        public async Task<TrackDetailsViewModel?> GetTrackDetailsAsync(Guid publicId, string? currentUserId)
         {
             TrackDetailsViewModel? trackDetails = await this.trackRepository
                 .GetAllAsQueryable()
@@ -127,9 +127,11 @@
                                 .OrderByDescending(c => c.CreatedOn)
                                 .Select(c => new CommentViewModel()
                                 {
+                                    Id = c.Id,
                                     AuthorUsername = c.User.UserName!,
                                     Content = c.Content,
-                                    PostedOn = c.CreatedOn.ToString("MMMM dd, yyyy")
+                                    PostedOn = c.CreatedOn.ToString("MMMM dd, yyyy"),
+                                    IsOwnedByCurrentUser = (c.UserId == currentUserId)
                                 })
                 })
                 .FirstOrDefaultAsync();

@@ -32,5 +32,11 @@
             public const string ServiceEditError =
                 "Fatal error occurred while editing your playlist! Please try again later!";
         }
+
+        public static class Comment
+        {
+            public const string FatalErrorOccurred =
+                "Fatal error occurred while processing your comment! Please try again later!";
+        }
     }
 }

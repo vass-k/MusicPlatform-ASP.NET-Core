@@ -44,5 +44,18 @@
                 PostedOn = "Just now"
             };
         }
+
+        public async Task<bool> DeleteCommentAsync(int commentId, string currentUserId)
+        {
+            var comment = await this.commentRepository
+                .GetByIdAsync(commentId);
+
+            if (comment == null || comment.UserId != currentUserId)
+            {
+                return false;
+            }
+
+            return await this.commentRepository.DeleteAsync(comment);
+        }
     }
 }

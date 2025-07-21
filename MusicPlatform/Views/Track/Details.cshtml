@@ -209,6 +209,28 @@
         color: #333;
     }
 
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+
+    .comment-delete-btn {
+        background: none;
+        border: none;
+        color: #ccc;
+        cursor: pointer;
+        padding: 2px 5px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+        .comment-delete-btn:hover {
+            color: #fff;
+            background-color: #dc3545;
+        }
+
     .track-sidebar .sidebar-module {
         background-color: #fff;
         box-shadow: 0 4px 20px rgba(0,0,0,0.06);
@@ -278,7 +300,6 @@
     </div>
 
     <div class="track-layout">
-        <!-- Main Content Column -->
         <div class="track-main-content">
             <div class="comment-section">
                 <h3>Comments</h3>
@@ -316,7 +337,6 @@
                 </div>
             </div>
         </div>
-
         <aside class="track-sidebar">
             <div class="sidebar-module">
                 <h4>Track Stats</h4>
@@ -394,5 +414,5 @@
             }
         });
     </script>
-    <script src="~/js/add-comment.js"></script>
+    <script src="~/js/comment-actions.js"></script>
 }

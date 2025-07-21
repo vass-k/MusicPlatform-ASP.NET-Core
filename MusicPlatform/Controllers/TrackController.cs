@@ -48,7 +48,8 @@
 
             try
             {
-                TrackDetailsViewModel? trackDetails = await this.trackService.GetTrackDetailsAsync(id);
+                var currentUserId = this.GetUserId();
+                TrackDetailsViewModel? trackDetails = await this.trackService.GetTrackDetailsAsync(id, currentUserId);
 
                 if (trackDetails == null)
                 {

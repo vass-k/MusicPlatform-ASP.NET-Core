@@ -13,7 +13,7 @@
 
         Task AddTrackAsync(TrackAddViewModel model, string uploaderId);
 
-        Task<TrackDetailsViewModel?> GetTrackDetailsAsync(Guid publicId);
+        Task<TrackDetailsViewModel?> GetTrackDetailsAsync(Guid publicId, string? currentUserId);
 
         Task<TrackEditViewModel?> GetTrackForEditAsync(Guid publicId, string currentUserId);
 

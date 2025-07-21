@@ -1,10 +1,22 @@
 ﻿@model MusicPlatform.Web.ViewModels.Comment.CommentViewModel
 
-<div class="comment-item">
-    <img src="~/@Model.AuthorAvatarUrl" alt="User Avatar for @Model.AuthorUsername" class="comment-avatar">
+<div class="comment-item" data-comment-id="@Model.Id">
+    <a asp-controller="Profile" asp-action="Index" asp-route-username="@Model.AuthorUsername">
+        <img src="~/@Model.AuthorAvatarUrl" alt="Avatar for @Model.AuthorUsername" class="comment-avatar">
+    </a>
     <div class="comment-body">
-        <span class="comment-user">@Model.AuthorUsername</span>
+        <div class="comment-header">
+            <a asp-controller="Profile" asp-action="Index" asp-route-username="@Model.AuthorUsername" class="comment-user">
+                @Model.AuthorUsername
+            </a>
+
+            @if (Model.IsOwnedByCurrentUser)
+            {
+                <button class="comment-delete-btn" title="Delete Comment">
+                    <i class="fa fa-trash"></i>
+                </button>
+            }
+        </div>
         <p class="comment-text">@Model.Content</p>
     </div>
 </div>
-
