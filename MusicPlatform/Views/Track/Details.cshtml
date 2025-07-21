@@ -285,8 +285,9 @@
 
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    <form id="comment-form" asp-controller="Comment" asp-action="Add" method="post">
+                    <form id="comment-form" method="post">
                         <input type="hidden" name="TrackPublicId" value="@Model.PublicId" />
+                        @Html.AntiForgeryToken()
                         <textarea name="Content" placeholder="Write a comment..."></textarea>
                         <div class="comment-form-actions">
                             <button type="submit" class="main-button">Post Comment</button>

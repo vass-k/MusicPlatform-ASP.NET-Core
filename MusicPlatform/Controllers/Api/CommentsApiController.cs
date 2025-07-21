@@ -1,39 +1,36 @@
-﻿namespace MusicPlatform.Web.Controllers
+﻿namespace MusicPlatform.Web.Controllers.Api
 {
     using Microsoft.AspNetCore.Mvc;
 
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels.Comment;
 
-    public class CommentController : BaseController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CommentsApiController : BaseController
     {
         private readonly ICommentService commentService;
 
-        public CommentController(ICommentService commentService)
+        public CommentsApiController(ICommentService commentService)
         {
             this.commentService = commentService;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(AddCommentViewModel model)
+        public async Task<IActionResult> Add([FromForm] AddCommentViewModel model)
         {
-            string? userId = this.GetUserId();
+            string? userId = GetUserId();
             if (userId == null)
             {
                 return Unauthorized();
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                CommentViewModel newComment = await this.commentService.CreateCommentAsync(model, userId);
+                CommentViewModel newComment = await commentService.CreateCommentAsync(model, userId);
 
-                return PartialView("_CommentPartial", newComment);
+                return Ok(newComment);
             }
             catch (Exception e)
             {
