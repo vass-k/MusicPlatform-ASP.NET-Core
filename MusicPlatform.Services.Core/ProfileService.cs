@@ -2,11 +2,14 @@
 {
     using Microsoft.EntityFrameworkCore;
 
+    using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository.Interfaces;
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Profile;
+
     using static GCommon.ApplicationConstants;
+
     public class ProfileService : IProfileService
     {
         private readonly IUserRepository userRepository;
@@ -43,83 +46,102 @@
 
             switch (activeTab)
             {
-                case "Playlists":
-                    profileViewModel.Playlists = await this.playlistRepository
-                        .GetAllAsQueryable()
-                        .AsNoTracking()
-                        .Where(p => p.CreatorId == user.Id &&
-                                    (p.IsPublic || p.CreatorId == currentUserId))
-                        .OrderByDescending(p => p.Id)
-                        .Select(p => new ProfilePlaylistViewModel()
-                        {
-                            PublicId = p.PublicId,
-                            Name = p.Name,
-                            TrackCount = p.PlaylistTracks.Count()
-                        })
-                        .ToListAsync();
-                    break;
-
                 case "Tracks":
                 default:
-                    var tracksQuery = this.trackRepository
-                                          .GetAllAsQueryable()
-                                          .Where(t => t.UploaderId == user.Id);
+                    profileViewModel.UploadedTracks = await this
+                        .GetUserUploadedTracksAsync(user, pageNumber, pageSize);
+                    break;
 
-                    var totalTracks = await tracksQuery.CountAsync();
-                    var totalPages = (int)Math.Ceiling(totalTracks / (double)pageSize);
-
-                    var pagedTracks = await tracksQuery
-                        .OrderByDescending(t => t.CreatedOn)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(t => new ProfileTrackViewModel()
-                        {
-                            PublicId = t.PublicId,
-                            Title = t.Title,
-                            ArtistName = t.ArtistName,
-                            ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
-                        })
-                        .ToListAsync();
-
-                    profileViewModel.UploadedTracks = new PagedResult<ProfileTrackViewModel>
-                    {
-                        Items = pagedTracks,
-                        PageNumber = pageNumber,
-                        TotalPages = totalPages
-                    };
+                case "Playlists":
+                    profileViewModel.Playlists = await this
+                        .GetUserPlaylistsAsync(user, currentUserId);
                     break;
 
                 case "Favorites":
-                    var favoritesQuery = this.favoriteRepository
-                                             .GetAllAsQueryable()
-                                             .Where(f => f.UserId == user.Id)
-                                             .Select(f => f.Track);
-
-                    var totalFavorites = await favoritesQuery.CountAsync();
-                    var pagedFavorites = await favoritesQuery
-                        .OrderByDescending(t => t.CreatedOn)
-                        .ThenBy(t => t.Id)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(t => new ProfileTrackViewModel()
-                        {
-                            PublicId = t.PublicId,
-                            Title = t.Title,
-                            ArtistName = t.ArtistName,
-                            ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
-                        })
-                        .ToListAsync();
-
-                    profileViewModel.FavoriteTracks = new PagedResult<ProfileTrackViewModel>
-                    {
-                        Items = pagedFavorites,
-                        PageNumber = pageNumber,
-                        TotalPages = (int)Math.Ceiling(totalFavorites / (double)pageSize)
-                    };
+                    profileViewModel.FavoriteTracks = await this
+                        .GetUserFavoriteTracksAsync(user, pageNumber, pageSize);
                     break;
             }
 
             return profileViewModel;
+        }
+
+        private async Task<PagedResult<ProfileTrackViewModel>> GetUserUploadedTracksAsync(AppUser user, int pageNumber, int pageSize)
+        {
+            var tracksQuery = this.trackRepository.GetAllAsQueryable().Where(t => t.UploaderId == user.Id);
+            var totalTracks = await tracksQuery.CountAsync();
+
+            var pagedTracks = await tracksQuery
+                .OrderByDescending(t => t.CreatedOn)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(t => new ProfileTrackViewModel()
+                {
+                    PublicId = t.PublicId,
+                    Title = t.Title,
+                    ArtistName = t.ArtistName,
+                    ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                })
+                .ToListAsync();
+
+            var pagedResult = new PagedResult<ProfileTrackViewModel>
+            {
+                Items = pagedTracks,
+                PageNumber = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalTracks / (double)pageSize)
+            };
+
+            return pagedResult;
+        }
+
+        private async Task<IEnumerable<ProfilePlaylistViewModel>> GetUserPlaylistsAsync(AppUser user, string? currentUserId)
+        {
+            var UserPlaylists = await this.playlistRepository
+               .GetAllAsQueryable()
+               .AsNoTracking()
+               .Where(p => p.CreatorId == user.Id && (p.IsPublic || p.CreatorId == currentUserId))
+               .OrderByDescending(p => p.Id)
+               .Select(p => new ProfilePlaylistViewModel
+               {
+                   PublicId = p.PublicId,
+                   Name = p.Name,
+                   TrackCount = p.PlaylistTracks.Count()
+               })
+               .ToListAsync();
+
+            return UserPlaylists;
+        }
+
+        private async Task<PagedResult<ProfileTrackViewModel>> GetUserFavoriteTracksAsync(AppUser user, int pageNumber, int pageSize)
+        {
+            var favoritesQuery = this.favoriteRepository
+                                     .GetAllAsQueryable()
+                                     .Where(f => f.UserId == user.Id)
+                                     .Select(f => f.Track);
+
+            var totalFavorites = await favoritesQuery.CountAsync();
+            var pagedFavorites = await favoritesQuery
+                .OrderByDescending(t => t.CreatedOn)
+                .ThenBy(t => t.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(t => new ProfileTrackViewModel()
+                {
+                    PublicId = t.PublicId,
+                    Title = t.Title,
+                    ArtistName = t.ArtistName,
+                    ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                })
+                .ToListAsync();
+
+            var pagedResult = new PagedResult<ProfileTrackViewModel>
+            {
+                Items = pagedFavorites,
+                PageNumber = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalFavorites / (double)pageSize)
+            };
+
+            return pagedResult;
         }
     }
 }
