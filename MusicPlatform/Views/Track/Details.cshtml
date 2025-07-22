@@ -6,7 +6,7 @@
 }
 
 <style>
-    body {
+      body {
         background-color: #f7f7f7;
     }
 
@@ -271,6 +271,104 @@
             margin-right: 8px;
             color: #aaa;
         }
+
+    .music-modal .modal-dialog {
+        max-width: 420px;
+    }
+    .music-modal .modal-content {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        background: linear-gradient(180deg, #f9f9f9 0%, #ffffff 100%);
+    }
+    .music-modal .modal-header {
+        border-bottom: none;
+        padding: 0.8em 0.8em 0em 1.5em;
+    }
+    .music-modal .modal-header .btn-close {
+        box-shadow: none;
+        opacity: 0.5;
+    }
+    .music-modal .modal-header .btn-close:hover {
+        opacity: 0.8;
+    }
+    .music-modal .modal-body {
+        padding: 0.7em 2em 1.5em 2em;
+        text-align: center;
+    }
+    .music-modal .modal-icon {
+        width: 4rem;
+        color: #ff5500;
+        margin-bottom: 15px;
+    }
+    .music-modal h3 {
+        color: #1e1e1e;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5em;
+    }
+    .music-modal p {
+        color: #666;
+        font-size: 1rem;
+    }
+    .music-modal .modal-footer {
+        border-top: 1px solid #eee;
+        background-color: #f9f9f9;
+        justify-content: center;
+        padding: 1.5em 2em;
+    }
+    .music-modal .modal-secondary-btn {
+        background: #fff;
+        color: #555;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        padding: 10px 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.2s ease;
+    }
+    .music-modal .modal-secondary-btn:hover {
+        background: #fff;
+        color: #ff5500;
+        border-color: #ff5500;
+    }
+    #playlist-list-container {
+        text-align: left;
+        margin-top: 15px;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .music-modal .list-group {
+        border: none; 
+        padding: 0;
+    }
+    .music-modal .list-group-item {
+        background-color: transparent;
+        border: 1px solid #eee;
+        border-radius: 6px !important;
+        margin-bottom: 8px;
+        color: #555;
+        transition: all 0.2s ease;
+        padding: 12px 15px;
+    }
+    .music-modal .list-group-item:not(.disabled):hover {
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+    .music-modal .list-group-item.disabled {
+        background-color: #f9f9f9;
+        color: #aaa;
+    }
+    .music-modal .badge {
+        background-color: #28a745 !important; 
+        color: #fff !important;
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
 </style>
 
 <div class="container track-details-container">
@@ -399,21 +497,24 @@
         </aside>
     </div>
 
-    <div class="modal fade themed-modal" id="addToPlaylistModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade music-modal" id="addToPlaylistModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Add to Playlist</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div>
+                        <h3>Add to a Playlist</h3>
+                        <p>Select one of your playlists below, or create a new one.</p>
+                    </div>
                     <div id="playlist-list-container">
                         <div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>
                     </div>
                     <div id="playlist-modal-error" class="text-danger mt-2"></div>
                 </div>
                 <div class="modal-footer">
-                    <a asp-controller="Playlist" asp-action="Add" class="secondary-button">Create New Playlist</a>
+                    <a asp-controller="Playlist" asp-action="Add" class="modal-secondary-btn">Create New Playlist</a>
                 </div>
             </div>
         </div>
