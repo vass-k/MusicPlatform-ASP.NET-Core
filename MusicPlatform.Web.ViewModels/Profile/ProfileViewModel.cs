@@ -11,5 +11,7 @@
         public PagedResult<ProfileTrackViewModel>? UploadedTracks { get; set; }
 
         public IEnumerable<ProfilePlaylistViewModel>? Playlists { get; set; }
+
+        public PagedResult<ProfileTrackViewModel>? FavoriteTracks { get; set; }
     }
 }

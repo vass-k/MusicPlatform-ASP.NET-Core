@@ -12,15 +12,18 @@
         private readonly IUserRepository userRepository;
         private readonly ITrackRepository trackRepository;
         private readonly IPlaylistRepository playlistRepository;
+        private readonly IUserFavoriteRepository favoriteRepository;
 
         public ProfileService(
             IUserRepository userRepository,
             ITrackRepository trackRepository,
-            IPlaylistRepository playlistRepository)
+            IPlaylistRepository playlistRepository,
+            IUserFavoriteRepository favoriteRepository)
         {
             this.userRepository = userRepository;
             this.trackRepository = trackRepository;
             this.playlistRepository = playlistRepository;
+            this.favoriteRepository = favoriteRepository;
         }
 
         public async Task<ProfileViewModel?> GetUserProfileAsync(string username, string activeTab, int pageNumber, int pageSize, string? currentUserId)
@@ -83,6 +86,35 @@
                         Items = pagedTracks,
                         PageNumber = pageNumber,
                         TotalPages = totalPages
+                    };
+                    break;
+
+                case "Favorites":
+                    var favoritesQuery = this.favoriteRepository
+                                             .GetAllAsQueryable()
+                                             .Where(f => f.UserId == user.Id)
+                                             .Select(f => f.Track);
+
+                    var totalFavorites = await favoritesQuery.CountAsync();
+                    var pagedFavorites = await favoritesQuery
+                        .OrderByDescending(t => t.CreatedOn)
+                        .ThenBy(t => t.Id)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .Select(t => new ProfileTrackViewModel()
+                        {
+                            PublicId = t.PublicId,
+                            Title = t.Title,
+                            ArtistName = t.ArtistName,
+                            ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                        })
+                        .ToListAsync();
+
+                    profileViewModel.FavoriteTracks = new PagedResult<ProfileTrackViewModel>
+                    {
+                        Items = pagedFavorites,
+                        PageNumber = pageNumber,
+                        TotalPages = (int)Math.Ceiling(totalFavorites / (double)pageSize)
                     };
                     break;
             }
