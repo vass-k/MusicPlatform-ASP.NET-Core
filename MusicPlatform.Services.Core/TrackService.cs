@@ -86,7 +86,9 @@
             }
 
             string audioUrl = await this.cloudinaryService.UploadAudioAsync(model.AudioFile);
-            string? imageUrl = await this.cloudinaryService.UploadImageAsync(model.ImageFile);
+            string? imageUrl = model.ImageFile != null
+                ? await this.cloudinaryService.UploadImageAsync(model.ImageFile)
+                : null;
 
             Track newTrack = new Track()
             {

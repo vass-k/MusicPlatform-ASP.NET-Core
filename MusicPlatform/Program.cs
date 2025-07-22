@@ -39,6 +39,7 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserFavoriteRepository, UserFavoriteRepository>();
+            builder.Services.AddScoped<IPlaylistTrackRepository, PlaylistTrackRepository>();
 
             builder.Services.AddScoped<ITrackService, TrackService>();
             builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
@@ -47,6 +48,7 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<IPlaylistService, PlaylistService>();
             builder.Services.AddScoped<IGenreService, GenreService>();
             builder.Services.AddScoped<IFavoritesService, FavoritesService>();
+            builder.Services.AddScoped<IPlaylistTracksService, PlaylistTracksService>();
 
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 

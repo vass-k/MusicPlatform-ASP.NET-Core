@@ -317,7 +317,14 @@
                             <i class="fa fa-heart"></i>
                             <span id="like-text">@(Model.IsLikedByCurrentUser ? "Liked" : "Like")</span>
                         </a>
-                        <a href="#" class="action-btn"><i class="fa fa-plus"></i> Add to Playlist</a>
+
+                        <form id="playlist-track-form" method="post" class="d-none">
+                            @Html.AntiForgeryToken()
+                        </form>
+
+                        <a href="#" class="action-btn" id="add-to-playlist-btn" data-track-id="@Model.PublicId">
+                            <i class="fa fa-plus"></i> Add to Playlist
+                        </a>
                     }
                     else
                     {
@@ -391,6 +398,26 @@
             </div>
         </aside>
     </div>
+
+    <div class="modal fade themed-modal" id="addToPlaylistModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Add to Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="playlist-list-container">
+                        <div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>
+                    </div>
+                    <div id="playlist-modal-error" class="text-danger mt-2"></div>
+                </div>
+                <div class="modal-footer">
+                    <a asp-controller="Playlist" asp-action="Add" class="secondary-button">Create New Playlist</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -459,4 +486,5 @@
     </script>
     <script src="~/js/comment-actions.js"></script>
     <script src="~/js/like-track.js" asp-append-version="true"></script>
+    <script src="~/js/playlist-tracks.js" asp-append-version="true"></script>
 }
