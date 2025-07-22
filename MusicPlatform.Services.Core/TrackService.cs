@@ -120,6 +120,8 @@
                     Plays = t.Plays,
                     DurationInSeconds = t.DurationInSeconds,
                     FavoritesCount = t.UserFavorites.Count(),
+                    IsLikedByCurrentUser = t.UserFavorites
+                                                .Any(f => f.UserId == currentUserId),
 
                     ReleasedDate = t.CreatedOn.ToString("MMMM dd, yyyy"),
 

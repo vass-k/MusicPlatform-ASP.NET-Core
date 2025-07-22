@@ -24,6 +24,8 @@
 
         public string ReleasedDate { get; set; } = null!;
 
+        public bool IsLikedByCurrentUser { get; set; }
+
         public IEnumerable<CommentViewModel> Comments { get; set; }
             = new List<CommentViewModel>();
     }
