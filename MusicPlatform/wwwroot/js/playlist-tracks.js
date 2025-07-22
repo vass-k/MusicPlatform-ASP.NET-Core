@@ -150,13 +150,12 @@
     }
 
     async function handleFetchError(response) {
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred.' }));
-            throw new Error(errorData.message);
-        }
-
         if (response.status === 204) {
             return null;
+        }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'An unknown server error occurred.' }));
+            throw new Error(errorData.message);
         }
         return response.json();
     }

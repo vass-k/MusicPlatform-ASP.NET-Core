@@ -8,6 +8,6 @@
 
         Task AddTrackToPlaylistAsync(Guid trackPublicId, Guid playlistPublicId, string userId);
 
-        Task RemoveTrackFromPlaylistAsync(Guid trackPublicId, Guid playlistPublicId, string userId);
+        Task<bool> RemoveTrackFromPlaylistAsync(Guid trackPublicId, Guid playlistPublicId, string userId);
     }
 }

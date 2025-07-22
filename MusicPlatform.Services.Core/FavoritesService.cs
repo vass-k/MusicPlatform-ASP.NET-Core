@@ -44,13 +44,14 @@
                 .GetLikeCountAsync(track.Id);
         }
 
-        public async Task<int> UnlikeTrackAsync(Guid trackPublicId, string userId)
+        public async Task<bool> UnlikeTrackAsync(Guid trackPublicId, string userId)
         {
-            Track? track = await this.
-                FindTrackByPublicIdAsync(trackPublicId);
+            Track? track = await this
+                .FindTrackByPublicIdAsync(trackPublicId);
+
             if (track == null)
             {
-                throw new InvalidOperationException("Track not found.");
+                return false;
             }
 
             UserFavorite? favorite = await this
@@ -58,11 +59,11 @@
 
             if (favorite != null)
             {
-                await favoriteRepository.HardDeleteAsync(favorite);
+                return await favoriteRepository
+                    .HardDeleteAsync(favorite);
             }
 
-            return await this
-                .GetLikeCountAsync(track.Id);
+            return true;
         }
 
         private async Task<Track?> FindTrackByPublicIdAsync(Guid trackPublicId)

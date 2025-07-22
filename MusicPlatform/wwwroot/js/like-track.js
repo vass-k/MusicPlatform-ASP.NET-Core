@@ -40,13 +40,18 @@
             }
         })
             .then(response => {
+                if (response.status === 204) {
+                    return null;
+                }
                 if (!response.ok) {
                     return response.json().then(err => Promise.reject(err));
                 }
                 return response.json();
             })
             .then(data => {
-                likeCountDisplay.innerText = data.newLikeCount.toLocaleString();
+                if (data && data.newLikeCount !== undefined) {
+                    likeCountDisplay.innerText = data.newLikeCount.toLocaleString();
+                }
             })
             .catch(error => {
                 console.error('Error toggling like status:', error.message || 'An unknown error occurred.');

@@ -4,6 +4,6 @@
     {
         Task<int> LikeTrackAsync(Guid trackPublicId, string userId);
 
-        Task<int> UnlikeTrackAsync(Guid trackPublicId, string userId);
+        Task<bool> UnlikeTrackAsync(Guid trackPublicId, string userId);
     }
 }

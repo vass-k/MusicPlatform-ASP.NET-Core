@@ -42,21 +42,23 @@
         public async Task<IActionResult> Unlike(Guid id)
         {
             var userId = this.GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized(new { message = "You must be logged in to unlike a track." });
-            }
+            if (userId == null) return Unauthorized();
 
             try
             {
-                var newLikeCount = await this.favoritesService
+                bool success = await this.favoritesService
                     .UnlikeTrackAsync(id, userId);
 
-                return Ok(new { newLikeCount });
+                if (!success)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                return NotFound(new { message = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

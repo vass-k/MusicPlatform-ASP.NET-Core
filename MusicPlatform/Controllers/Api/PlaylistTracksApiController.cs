@@ -57,10 +57,15 @@
 
             try
             {
-                await this.playlistTracksService
+                bool success = await this.playlistTracksService
                     .RemoveTrackFromPlaylistAsync(model.TrackPublicId, model.PlaylistPublicId, userId);
 
-                return Ok(new { message = "Track removed successfully." });
+                if (!success)
+                {
+                    return NotFound(new { message = "The track or playlist was not found." });
+                }
+
+                return NoContent();
             }
             catch (Exception ex)
             {
