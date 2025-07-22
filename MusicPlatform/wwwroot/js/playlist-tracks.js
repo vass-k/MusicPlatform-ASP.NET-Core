@@ -21,13 +21,15 @@
             e.preventDefault();
             const trackId = removeButton.dataset.trackId;
             const playlistId = removeButton.dataset.playlistId;
-            removeTrackFromPlaylist(trackId, playlistId, removeButton);
+            removeTrackFromPlaylist(trackId, playlistId);
         }
     });
 
     function openModalAndFetchPlaylists() {
         const trackId = addToPlaylistBtn.dataset.trackId;
-        modal.show();
+        if (modal) {
+            modal.show();
+        }
         modalErrorDisplay.textContent = '';
         playlistListContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
 
@@ -40,6 +42,7 @@
     }
 
     function buildPlaylistListInModal(playlists, trackId) {
+        if (!playlistListContainer) return;
         if (playlists.length === 0) {
             playlistListContainer.innerHTML = '<p>You haven\'t created any playlists yet.</p>';
             return;
@@ -88,22 +91,30 @@
         })
             .then(handleFetchError)
             .then(() => {
-                modal.hide();
+                if (modal) {
+                    modal.hide();
+                }
                 alert(`Successfully added to ${playlistName}.`);
             })
             .catch(error => {
-                modalErrorDisplay.textContent = error.message || 'An unexpected error occurred.';
+                if (modalErrorDisplay) {
+                    modalErrorDisplay.textContent = error.message || 'An unexpected error occurred.';
+                }
             });
     }
 
-    function removeTrackFromPlaylist(trackId, playlistId, buttonElement) {
+    function removeTrackFromPlaylist(trackId, playlistId) {
         if (!confirm('Are you sure you want to remove this track from the playlist?')) {
             return;
         }
 
-        const token = document.querySelector('form#playlist-track-form input[name="__RequestVerificationToken"]').value;
+        const tokenInput = document.querySelector('form#playlist-track-form input[name="__RequestVerificationToken"]');
+        if (!tokenInput) {
+            console.error('Anti-forgery token not found.');
+            return;
+        }
+        const token = tokenInput.value;
 
-        // once again - optimistic UI update
         const rowToRemove = document.getElementById(`track-row-${trackId}`);
         if (rowToRemove) {
             rowToRemove.style.opacity = '0.5';
@@ -126,7 +137,7 @@
                     rowToRemove.remove();
                 }
 
-                if (modalElement.classList.contains('show')) {
+                if (modalElement && modalElement.classList.contains('show')) {
                     openModalAndFetchPlaylists();
                 }
             })
@@ -142,6 +153,10 @@
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred.' }));
             throw new Error(errorData.message);
+        }
+
+        if (response.status === 204) {
+            return null;
         }
         return response.json();
     }
