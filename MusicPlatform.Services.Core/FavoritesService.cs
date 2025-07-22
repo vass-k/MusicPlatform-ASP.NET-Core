@@ -19,15 +19,15 @@
 
         public async Task<int> LikeTrackAsync(Guid trackPublicId, string userId)
         {
-            var track = await trackRepository
-                .FirstOrDefaultAsync(t => t.PublicId == trackPublicId);
+            Track? track = await this.
+                FindTrackByPublicIdAsync(trackPublicId);
             if (track == null)
             {
                 throw new InvalidOperationException("Track not found.");
             }
 
-            var alreadyExists = await favoriteRepository
-                .FirstOrDefaultAsync(f => f.UserId == userId && f.TrackId == track.Id);
+            UserFavorite? alreadyExists = await this
+                .FindFavoriteAsync(track.Id, userId);
             if (alreadyExists == null)
             {
                 UserFavorite newFavorite = new UserFavorite
@@ -40,30 +40,48 @@
                     .AddAsync(newFavorite);
             }
 
-            return await trackRepository
-                .GetAllAsQueryable().Where(t => t.Id == track.Id).Select(t => t.UserFavorites.Count).FirstAsync();
+            return await this
+                .GetLikeCountAsync(track.Id);
         }
 
         public async Task<int> UnlikeTrackAsync(Guid trackPublicId, string userId)
         {
-            var track = await trackRepository
-                .FirstOrDefaultAsync(t => t.PublicId == trackPublicId);
+            Track? track = await this.
+                FindTrackByPublicIdAsync(trackPublicId);
             if (track == null)
             {
                 throw new InvalidOperationException("Track not found.");
             }
 
-            var favorite = await favoriteRepository
-                .FirstOrDefaultAsync(f => f.UserId == userId && f.TrackId == track.Id);
+            UserFavorite? favorite = await this
+                .FindFavoriteAsync(track.Id, userId);
 
             if (favorite != null)
             {
-                await favoriteRepository
-                    .HardDeleteAsync(favorite);
+                await favoriteRepository.HardDeleteAsync(favorite);
             }
 
-            return await trackRepository
-                .GetAllAsQueryable().Where(t => t.Id == track.Id).Select(t => t.UserFavorites.Count).FirstAsync();
+            return await this
+                .GetLikeCountAsync(track.Id);
+        }
+
+        private async Task<Track?> FindTrackByPublicIdAsync(Guid trackPublicId)
+        {
+            return await this.trackRepository
+                .FirstOrDefaultAsync(t => t.PublicId == trackPublicId);
+        }
+
+        private async Task<UserFavorite?> FindFavoriteAsync(int trackId, string userId)
+        {
+            return await this.favoriteRepository
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.TrackId == trackId);
+        }
+
+        private async Task<int> GetLikeCountAsync(int trackId)
+        {
+            return await this.favoriteRepository
+                .GetAllAsQueryable()
+                .CountAsync(f => f.TrackId == trackId);
         }
     }
 }

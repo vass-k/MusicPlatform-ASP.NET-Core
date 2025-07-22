@@ -172,6 +172,13 @@
         border-color: #ff5500;
     }
 
+    .action-btn.disabled {
+        color: #aaa;
+        background-color: #f7f7f7;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
     .comment-section h3 {
         margin-bottom: 20px;
     }
@@ -295,20 +302,38 @@
                 </div>
 
                 <div class="action-button-group">
-                    <form id="like-form" method="post" class="d-inline">
-                        @Html.AntiForgeryToken()
-                    </form>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <form id="like-form" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                        </form>
 
-                    <a href="#"
-                       class="action-btn @(Model.IsLikedByCurrentUser ? "liked" : "")"
-                       id="like-button"
-                       data-track-id="@Model.PublicId"
-                       data-like-url="/api/favorites/like/@Model.PublicId"
-                       data-unlike-url="/api/favorites/unlike/@Model.PublicId">
-                        <i class="fa fa-heart"></i>
-                        <span id="like-text">@(Model.IsLikedByCurrentUser ? "Liked" : "Like")</span>
-                    </a>
-                    <a href="#" class="action-btn"><i class="fa fa-plus"></i> Add to Playlist</a>
+                        <a href="#"
+                           class="action-btn @(Model.IsLikedByCurrentUser ? "liked" : "")"
+                           id="like-button"
+                           data-track-id="@Model.PublicId"
+                           data-like-url="/api/favorites/like/@Model.PublicId"
+                           data-unlike-url="/api/favorites/unlike/@Model.PublicId">
+                            <i class="fa fa-heart"></i>
+                            <span id="like-text">@(Model.IsLikedByCurrentUser ? "Liked" : "Like")</span>
+                        </a>
+                        <a href="#" class="action-btn"><i class="fa fa-plus"></i> Add to Playlist</a>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path"
+                           class="action-btn disabled"
+                           title="You must be logged in to like a track">
+                            <i class="fa fa-heart"></i>
+                            <span>Like</span>
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path"
+                           class="action-btn disabled"
+                           title="You must be logged in to add to a playlist">
+                            <i class="fa fa-plus"></i> Add to Playlist
+                        </a>
+                    }
+
                     <a href="#" class="action-btn"><i class="fa fa-share-square"></i> Share</a>
                 </div>
             </div>
