@@ -1,37 +1,45 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
     const addToPlaylistBtn = document.getElementById('add-to-playlist-btn');
-    if (!addToPlaylistBtn) return;
-
-    const trackId = addToPlaylistBtn.dataset.trackId;
     const modalElement = document.getElementById('addToPlaylistModal');
-    const modal = new bootstrap.Modal(modalElement);
+    let modal;
+    if (modalElement) {
+        modal = new bootstrap.Modal(modalElement);
+    }
     const playlistListContainer = document.getElementById('playlist-list-container');
     const modalErrorDisplay = document.getElementById('playlist-modal-error');
 
-    addToPlaylistBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        openModal();
+    if (addToPlaylistBtn) {
+        addToPlaylistBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModalAndFetchPlaylists();
+        });
+    }
+
+    document.body.addEventListener('click', function (e) {
+        const removeButton = e.target.closest('.remove-from-playlist-btn');
+        if (removeButton) {
+            e.preventDefault();
+            const trackId = removeButton.dataset.trackId;
+            const playlistId = removeButton.dataset.playlistId;
+            removeTrackFromPlaylist(trackId, playlistId, removeButton);
+        }
     });
 
-    function openModal() {
+    function openModalAndFetchPlaylists() {
+        const trackId = addToPlaylistBtn.dataset.trackId;
         modal.show();
         modalErrorDisplay.textContent = '';
-        playlistListContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+        playlistListContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
 
         fetch(`/api/playlist-tracks/user-playlists/${trackId}`)
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load playlists.');
-                return response.json();
-            })
-            .then(playlists => {
-                buildPlaylistList(playlists);
-            })
+            .then(handleFetchError)
+            .then(playlists => buildPlaylistListInModal(playlists, trackId))
             .catch(error => {
                 playlistListContainer.innerHTML = `<p class="text-danger">${error.message}</p>`;
             });
     }
 
-    function buildPlaylistList(playlists) {
+    function buildPlaylistListInModal(playlists, trackId) {
         if (playlists.length === 0) {
             playlistListContainer.innerHTML = '<p>You haven\'t created any playlists yet.</p>';
             return;
@@ -46,12 +54,16 @@
             item.textContent = p.playlistName;
 
             if (p.isTrackAlreadyInPlaylist) {
-                item.classList.add('disabled');
-                item.innerHTML += '<span class="badge bg-secondary">Added</span>';
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-sm btn-outline-danger remove-from-playlist-btn';
+                removeBtn.textContent = 'Remove';
+                removeBtn.dataset.trackId = trackId;
+                removeBtn.dataset.playlistId = p.playlistPublicId;
+                item.appendChild(removeBtn);
             } else {
                 item.style.cursor = 'pointer';
                 item.dataset.playlistId = p.playlistPublicId;
-                item.addEventListener('click', addTrackToPlaylist);
+                item.addEventListener('click', () => addTrackToPlaylist(trackId, p.playlistPublicId, p.playlistName));
             }
             list.appendChild(item);
         });
@@ -60,9 +72,7 @@
         playlistListContainer.appendChild(list);
     }
 
-    function addTrackToPlaylist(e) {
-        const playlistId = e.target.dataset.playlistId;
-        const playlistName = e.target.textContent;
+    function addTrackToPlaylist(trackId, playlistId, playlistName) {
         const token = document.querySelector('form#playlist-track-form input[name="__RequestVerificationToken"]').value;
 
         fetch('/api/playlist-tracks/add', {
@@ -76,16 +86,63 @@
                 playlistPublicId: playlistId
             })
         })
-            .then(response => {
-                if (!response.ok) return response.json().then(err => Promise.reject(err));
-                return response.json();
-            })
-            .then(data => {
+            .then(handleFetchError)
+            .then(() => {
                 modal.hide();
                 alert(`Successfully added to ${playlistName}.`);
             })
             .catch(error => {
                 modalErrorDisplay.textContent = error.message || 'An unexpected error occurred.';
             });
+    }
+
+    function removeTrackFromPlaylist(trackId, playlistId, buttonElement) {
+        if (!confirm('Are you sure you want to remove this track from the playlist?')) {
+            return;
+        }
+
+        const token = document.querySelector('form#playlist-track-form input[name="__RequestVerificationToken"]').value;
+
+        // once again - optimistic UI update
+        const rowToRemove = document.getElementById(`track-row-${trackId}`);
+        if (rowToRemove) {
+            rowToRemove.style.opacity = '0.5';
+        }
+
+        fetch('/api/playlist-tracks/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': token
+            },
+            body: JSON.stringify({
+                trackPublicId: trackId,
+                playlistPublicId: playlistId
+            })
+        })
+            .then(handleFetchError)
+            .then(() => {
+                if (rowToRemove) {
+                    rowToRemove.remove();
+                }
+
+                if (modalElement.classList.contains('show')) {
+                    openModalAndFetchPlaylists();
+                }
+            })
+            .catch(error => {
+                if (rowToRemove) {
+                    rowToRemove.style.opacity = '1';
+                }
+                alert(`Failed to remove track: ${error.message}`);
+            });
+    }
+
+    async function handleFetchError(response) {
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred.' }));
+            throw new Error(errorData.message);
+        }
+        return response.json();
     }
 });

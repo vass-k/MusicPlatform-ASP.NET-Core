@@ -7,5 +7,7 @@
         Task<IEnumerable<PlaylistSelectionViewModel>> GetUserPlaylistsAsync(Guid trackPublicId, string userId);
 
         Task AddTrackToPlaylistAsync(Guid trackPublicId, Guid playlistPublicId, string userId);
+
+        Task RemoveTrackFromPlaylistAsync(Guid trackPublicId, Guid playlistPublicId, string userId);
     }
 }

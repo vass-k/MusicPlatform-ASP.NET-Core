@@ -127,6 +127,24 @@
         font-size: 0.9rem;
         justify-content: flex-end;
     }
+
+    .track-play-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        color: #555;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .track-play-btn.track-action-delete:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
 </style>
 
 <div class="container playlist-details-container">
@@ -159,17 +177,31 @@
 
     @if (Model.Tracks.Any())
     {
-        <ul class="playlist-track-list">
+        <ul class="playlist-track-list" id="playlist-track-list-container">
             @foreach (var (track, index) in Model.Tracks.Select((value, i) => (value, i)))
             {
-                <li class="playlist-track-item">
-                    <div class="track-number"><span>@(index + 1)</span><i class="fa fa-play-circle play-icon"></i></div>
-                    <div class="track-list-artwork-container"><img src="@track.ImageUrl" alt="Track Art" class="track-list-artwork" /></div>
+                <li class="playlist-track-item" id="track-row-@track.PublicId">
+                    <div class="track-number"><span>@(index + 1)</span></div>
+                    <div class="track-list-artwork-container">
+                        <img src="@track.ImageUrl" alt="Track Art" class="track-list-artwork" />
+                    </div>
                     <div class="track-list-info">
                         <div>
                             <div class="title"><a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">@track.Title</a></div>
                             <div class="artist"><a href="#">@track.ArtistName</a></div>
                         </div>
+                    </div>
+
+                    <div class="track-actions">
+                        @if (Model.IsOwnedByCurrentUser)
+                        {
+                            <button class="track-play-btn track-action-delete remove-from-playlist-btn"
+                                    title="Remove from playlist"
+                                    data-track-id="@track.PublicId"
+                                    data-playlist-id="@ViewContext.RouteData.Values["id"]">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        }
                     </div>
                 </li>
             }
@@ -188,3 +220,11 @@
         </div>
     }
 </div>
+
+<form id="playlist-track-form" method="post" class="d-none">
+    @Html.AntiForgeryToken()
+</form>
+
+@section Scripts {
+    <script src="~/js/playlist-tracks.js" asp-append-version="true"></script>
+}

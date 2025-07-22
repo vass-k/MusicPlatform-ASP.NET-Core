@@ -83,6 +83,34 @@
             await playlistTrackRepository.AddAsync(newEntry);
         }
 
+        public async Task RemoveTrackFromPlaylistAsync(Guid trackPublicId, Guid playlistPublicId, string userId)
+        {
+            var playlist = await playlistRepository
+                .FirstOrDefaultAsync(p => p.PublicId == playlistPublicId);
+
+            var track = await this
+                .FindTrackByPublicIdAsync(trackPublicId);
+
+            if (playlist == null || track == null)
+            {
+                throw new InvalidOperationException("Playlist or Track not found.");
+            }
+
+            if (playlist.CreatorId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this playlist.");
+            }
+
+            var entryToRemove = await playlistTrackRepository
+                .FirstOrDefaultAsync(pt => pt.PlaylistId == playlist.Id
+                                        && pt.TrackId == track.Id);
+
+            if (entryToRemove != null)
+            {
+                await playlistTrackRepository.HardDeleteAsync(entryToRemove);
+            }
+        }
+
         private async Task<Track?> FindTrackByPublicIdAsync(Guid trackPublicId)
         {
             return await trackRepository

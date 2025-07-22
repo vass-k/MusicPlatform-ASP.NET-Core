@@ -47,5 +47,25 @@
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpPost("remove")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Remove([FromBody] AddTrackToPlaylistViewModel model)
+        {
+            var userId = this.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                await this.playlistTracksService
+                    .RemoveTrackFromPlaylistAsync(model.TrackPublicId, model.PlaylistPublicId, userId);
+
+                return Ok(new { message = "Track removed successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
