@@ -6,7 +6,6 @@
     using MusicPlatform.Web.ViewModels.Playlist;
 
     [ApiController]
-    [Route("api/playlist-tracks")]
     public class PlaylistTracksApiController : BaseApiController
     {
         private readonly IPlaylistTracksService playlistTracksService;
@@ -17,6 +16,8 @@
         }
 
         [HttpGet("user-playlists/{trackPublicId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PlaylistSelectionViewModel>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetUserPlaylistsForTrack(Guid trackPublicId)
         {
             var userId = this.GetUserId();
@@ -30,6 +31,9 @@
 
         [HttpPost("add")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Add([FromBody] AddTrackToPlaylistViewModel model)
         {
             var userId = this.GetUserId();
@@ -50,6 +54,10 @@
 
         [HttpPost("remove")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remove([FromBody] AddTrackToPlaylistViewModel model)
         {
             var userId = this.GetUserId();

@@ -420,9 +420,9 @@
                            class="action-btn @(Model.IsLikedByCurrentUser ? "liked" : "")"
                            id="like-button"
                            data-track-id="@Model.PublicId"
-                           data-like-url="/api/favorites/like/@Model.PublicId"
-                           data-unlike-url="/api/favorites/unlike/@Model.PublicId">
-                            <i class="fa fa-heart"></i>
+                           data-like-url="/api/favoritetracksapi/like/@Model.PublicId"  
+                           data-unlike-url="/api/favoritetracksapi/unlike/@Model.PublicId">
+                                <i class="fa fa-heart"></i>
                             <span id="like-text">@(Model.IsLikedByCurrentUser ? "Liked" : "Like")</span>
                         </a>
 

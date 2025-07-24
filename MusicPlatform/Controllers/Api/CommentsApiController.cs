@@ -8,7 +8,6 @@
     using static MusicPlatform.Web.ViewModels.ValidationMessages.Comment;
 
     [ApiController]
-    [Route("api/[controller]")]
     public class CommentsApiController : BaseApiController
     {
         private readonly ICommentService commentService;
@@ -20,6 +19,9 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommentViewModel))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Add([FromForm] AddCommentViewModel model)
         {
             string? userId = GetUserId();
@@ -42,6 +44,10 @@
 
         [HttpDelete("{id:int}")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             var userId = this.GetUserId();

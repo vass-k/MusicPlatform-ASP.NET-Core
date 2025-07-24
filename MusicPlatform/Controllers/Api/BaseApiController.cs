@@ -7,6 +7,7 @@
 
     [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public abstract class BaseApiController : ControllerBase
     {
         protected bool IsUserAuthenticated()

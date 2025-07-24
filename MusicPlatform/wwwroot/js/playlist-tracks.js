@@ -33,7 +33,7 @@
         modalErrorDisplay.textContent = '';
         playlistListContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
 
-        fetch(`/api/playlist-tracks/user-playlists/${trackId}`)
+        fetch(`/api/playlisttracksapi/user-playlists/${trackId}`)
             .then(handleFetchError)
             .then(playlists => buildPlaylistListInModal(playlists, trackId))
             .catch(error => {
@@ -78,7 +78,7 @@
     function addTrackToPlaylist(trackId, playlistId, playlistName) {
         const token = document.querySelector('form#playlist-track-form input[name="__RequestVerificationToken"]').value;
 
-        fetch('/api/playlist-tracks/add', {
+        fetch('/api/playlisttracksapi/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -120,7 +120,7 @@
             rowToRemove.style.opacity = '0.5';
         }
 
-        fetch('/api/playlist-tracks/remove', {
+        fetch('/api/playlisttracksapi/remove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

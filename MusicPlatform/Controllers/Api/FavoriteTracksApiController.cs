@@ -4,7 +4,6 @@
     using MusicPlatform.Services.Core.Interfaces;
 
     [ApiController]
-    [Route("api/favorites")]
     public class FavoriteTracksApiController : BaseApiController
     {
         private readonly IFavoritesService favoritesService;
@@ -16,6 +15,9 @@
 
         [HttpPost("like/{id:guid}")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Like(Guid id)
         {
             var userId = this.GetUserId();
@@ -39,6 +41,9 @@
 
         [HttpPost("unlike/{id:guid}")]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Unlike(Guid id)
         {
             var userId = this.GetUserId();
