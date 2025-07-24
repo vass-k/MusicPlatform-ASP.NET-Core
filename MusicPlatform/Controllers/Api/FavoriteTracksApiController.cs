@@ -5,7 +5,7 @@
 
     [ApiController]
     [Route("api/favorites")]
-    public class FavoriteTracksApiController : BaseController
+    public class FavoriteTracksApiController : BaseApiController
     {
         private readonly IFavoritesService favoritesService;
 

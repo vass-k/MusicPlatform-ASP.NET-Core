@@ -1,17 +1,14 @@
-﻿namespace MusicPlatform.Web.Controllers
+﻿namespace MusicPlatform.Web.Controllers.Api
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using MusicPlatform.Web.Infrastructure.Extensions;
 
-    using static MusicPlatform.GCommon.ApplicationConstants;
-
     [Authorize]
-    public abstract class BaseController : Controller
+    [ApiController]
+    public abstract class BaseApiController : ControllerBase
     {
-        protected const int ItemsPerPage = ItemsPerPageConstant;
-
         protected bool IsUserAuthenticated()
         {
             return this.User

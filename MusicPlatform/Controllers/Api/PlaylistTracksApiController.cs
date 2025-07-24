@@ -7,7 +7,7 @@
 
     [ApiController]
     [Route("api/playlist-tracks")]
-    public class PlaylistTracksApiController : BaseController
+    public class PlaylistTracksApiController : BaseApiController
     {
         private readonly IPlaylistTracksService playlistTracksService;
 
