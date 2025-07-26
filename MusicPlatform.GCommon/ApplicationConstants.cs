@@ -12,6 +12,9 @@
         public const string AdminRoleName = "Admin";
         public const string AdminAreaName = "Admin";
 
+        public const string CloudStorageAudioFolder = "music-platform/audio";
+        public const string CloudStorageImageFolder = "music-platform/images";
+
         public static class FileValidationConstants
         {
             public const int MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB for request body

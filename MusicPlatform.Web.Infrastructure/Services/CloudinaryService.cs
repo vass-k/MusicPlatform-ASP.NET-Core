@@ -1,4 +1,4 @@
-﻿namespace MusicPlatform.Services.Core
+﻿namespace MusicPlatform.Web.Infrastructure.Services
 {
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
@@ -6,14 +6,16 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
 
-    using MusicPlatform.GCommon;
-    using MusicPlatform.Services.Core.Interfaces;
+    using MusicPlatform.Services.Common.Interfaces;
+    using MusicPlatform.Web.Infrastructure.Configuration;
 
     using System.Threading.Tasks;
 
-    public class CloudinaryService : ICloudinaryService
+    using static MusicPlatform.GCommon.ApplicationConstants;
+
+    public class CloudinaryService : ICloudStorageService
     {
-        private readonly Cloudinary _cloudinary;
+        private readonly Cloudinary cloudinary;
 
         public CloudinaryService(IOptions<CloudinarySettings> config)
         {
@@ -22,7 +24,7 @@
                 config.Value.ApiKey,
                 config.Value.ApiSecret);
 
-            _cloudinary = new Cloudinary(account);
+            cloudinary = new Cloudinary(account);
         }
 
         public async Task<string> UploadAudioAsync(IFormFile audioFile)
@@ -30,10 +32,15 @@
             var uploadParams = new VideoUploadParams()
             {
                 File = new FileDescription(audioFile.FileName, audioFile.OpenReadStream()),
-                Folder = "music-platform/audio"
+                Folder = CloudStorageAudioFolder
             };
 
-            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            var uploadResult = await cloudinary.UploadAsync(uploadParams);
+
+            if (uploadResult.Error != null)
+            {
+                throw new InvalidOperationException($"Cloudinary audio upload failed: {uploadResult.Error.Message}");
+            }
 
             return uploadResult.SecureUrl.ToString();
         }
@@ -46,10 +53,16 @@
             {
                 File = new FileDescription(imageFile.FileName, imageFile.OpenReadStream()),
                 Transformation = new Transformation().Height(400).Width(400).Crop("fill").Gravity("face"),
-                Folder = "music-platform/images"
+                Folder = CloudStorageImageFolder
             };
 
-            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            var uploadResult = await cloudinary.UploadAsync(uploadParams);
+
+            if (uploadResult.Error != null)
+            {
+                throw new InvalidOperationException($"Cloudinary image upload failed: {uploadResult.Error.Message}");
+            }
+
             return uploadResult.SecureUrl.ToString();
         }
     }

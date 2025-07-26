@@ -1,4 +1,4 @@
-﻿namespace MusicPlatform.GCommon
+﻿namespace MusicPlatform.Web.Infrastructure.Configuration
 {
     public class CloudinarySettings
     {

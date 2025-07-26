@@ -3,19 +3,21 @@ namespace MusicPlatform.Web
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+
     using MusicPlatform.Data;
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository;
     using MusicPlatform.Data.Repository.Interfaces;
     using MusicPlatform.Data.Seeding;
     using MusicPlatform.Data.Seeding.Interfaces;
-    using MusicPlatform.GCommon;
+    using MusicPlatform.Services.Common.Interfaces;
     using MusicPlatform.Services.Core;
     using MusicPlatform.Services.Core.Admin;
     using MusicPlatform.Services.Core.Admin.Interfaces;
     using MusicPlatform.Services.Core.Interfaces;
+    using MusicPlatform.Web.Infrastructure.Configuration;
     using MusicPlatform.Web.Infrastructure.Extensions;
-
+    using MusicPlatform.Web.Infrastructure.Services;
 
     public class Program
     {
@@ -52,7 +54,7 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<IPlaylistTrackRepository, PlaylistTrackRepository>();
 
             builder.Services.AddScoped<ITrackService, TrackService>();
-            builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+            builder.Services.AddScoped<ICloudStorageService, CloudinaryService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
             builder.Services.AddScoped<IPlaylistService, PlaylistService>();

@@ -6,6 +6,7 @@
 
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository.Interfaces;
+    using MusicPlatform.Services.Common.Interfaces;
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Comment;
@@ -20,16 +21,16 @@
     {
         private readonly ITrackRepository trackRepository;
         private readonly IGenreRepository genreRepository;
-        private readonly ICloudinaryService cloudinaryService;
+        private readonly ICloudStorageService cloudStorageService;
 
         public TrackService(
             ITrackRepository trackRepository,
             IGenreRepository genreRepository,
-            ICloudinaryService cloudinaryService)
+            ICloudStorageService cloudStorageService)
         {
             this.trackRepository = trackRepository;
             this.genreRepository = genreRepository;
-            this.cloudinaryService = cloudinaryService;
+            this.cloudStorageService = cloudStorageService;
         }
 
         public async Task<PagedResult<TrackIndexViewModel>> GetAllTracksForIndexAsync(int pageNumber, int pageSize)
@@ -85,9 +86,9 @@
                 ValidateFile(model.ImageFile, FileValidationConstants.MaxImageFileSize, FileValidationConstants.AllowedImageExtensions);
             }
 
-            string audioUrl = await this.cloudinaryService.UploadAudioAsync(model.AudioFile);
+            string audioUrl = await this.cloudStorageService.UploadAudioAsync(model.AudioFile);
             string? imageUrl = model.ImageFile != null
-                ? await this.cloudinaryService.UploadImageAsync(model.ImageFile)
+                ? await this.cloudStorageService.UploadImageAsync(model.ImageFile)
                 : null;
 
             Track newTrack = new Track()

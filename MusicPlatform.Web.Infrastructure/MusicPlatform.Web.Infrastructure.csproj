@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.27.6" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
   </ItemGroup>
@@ -14,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MusicPlatform.Data\MusicPlatform.Data.csproj" />
     <ProjectReference Include="..\MusicPlatform.GCommon\MusicPlatform.GCommon.csproj" />
+    <ProjectReference Include="..\MusicPlatform.Services.Common\MusicPlatform.Services.Common.csproj" />
   </ItemGroup>
 
 </Project>
