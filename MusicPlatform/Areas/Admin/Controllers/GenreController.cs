@@ -2,8 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    [Area("Admin")]
-    public class GenreController : Controller
+    public class GenreController : BaseAdminController
     {
         public IActionResult Index()
         {
