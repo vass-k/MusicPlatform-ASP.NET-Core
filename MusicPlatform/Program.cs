@@ -1,14 +1,20 @@
 namespace MusicPlatform.Web
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
 
     using MusicPlatform.Data;
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository;
     using MusicPlatform.Data.Repository.Interfaces;
+    using MusicPlatform.Data.Seeding;
+    using MusicPlatform.Data.Seeding.Interfaces;
     using MusicPlatform.GCommon;
     using MusicPlatform.Services.Core;
     using MusicPlatform.Services.Core.Interfaces;
+    using MusicPlatform.Web.Infrastructure.Extensions;
+
 
     public class Program
     {
@@ -29,9 +35,12 @@ namespace MusicPlatform.Web
 
             builder.Services.AddDefaultIdentity<AppUser>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false;
+                ConfigureIdentity(builder.Configuration, options);
             })
-            .AddEntityFrameworkStores<MusicPlatformDbContext>();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<MusicPlatformDbContext>();
+
+            builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
 
             builder.Services.AddScoped<ITrackRepository, TrackRepository>();
             builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
@@ -75,6 +84,8 @@ namespace MusicPlatform.Web
 
             app.UseRouting();
 
+            app.SeedDefaultIdentity();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -87,6 +98,29 @@ namespace MusicPlatform.Web
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void ConfigureIdentity(IConfiguration configuration, IdentityOptions identityOptions)
+        {
+            identityOptions.SignIn.RequireConfirmedEmail =
+                configuration.GetValue<bool>("IdentityConfig:SignIn:RequireConfirmedEmail");
+            identityOptions.Password.RequiredLength =
+                configuration.GetValue<int>("IdentityConfig:Password:RequiredLength");
+            identityOptions.Password.RequireNonAlphanumeric =
+                configuration.GetValue<bool>("IdentityConfig:Password:RequireNonAlphanumeric");
+
+            identityOptions.Password.RequiredLength =
+                configuration.GetValue<int>($"IdentityConfig:Password:RequiredLength");
+            identityOptions.Password.RequireNonAlphanumeric =
+                configuration.GetValue<bool>($"IdentityConfig:Password:RequireNonAlphanumeric");
+            identityOptions.Password.RequireDigit =
+                configuration.GetValue<bool>($"IdentityConfig:Password:RequireDigit");
+            identityOptions.Password.RequireLowercase =
+                configuration.GetValue<bool>($"IdentityConfig:Password:RequireLowercase");
+            identityOptions.Password.RequireUppercase =
+                configuration.GetValue<bool>($"IdentityConfig:Password:RequireUppercase");
+            identityOptions.Password.RequiredUniqueChars =
+                configuration.GetValue<int>($"IdentityConfig:Password:RequiredUniqueChars");
         }
     }
 }

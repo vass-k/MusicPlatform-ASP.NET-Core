@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MusicPlatform.Data.Models
+@using static MusicPlatform.GCommon.ApplicationConstants
 
 @* Inject the services needed for checking login status and user details *@
 @inject SignInManager<AppUser> SignInManager
@@ -59,6 +60,10 @@
                                     {
                                         <!-- Show these links if the user IS logged in -->
                                         <li><a asp-controller="Profile" asp-action="Index" asp-route-username="@UserManager.GetUserName(User)">My Profile</a></li>
+                                        @if (User.IsInRole(AdminRoleName))
+                                        {
+                                            <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                        }
                                         <li><a asp-controller="Track" asp-action="Add">Upload</a></li>
                                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
                                         <li>

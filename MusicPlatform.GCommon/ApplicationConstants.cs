@@ -8,6 +8,9 @@
 
         public const int ItemsPerPageConstant = 12;
 
+        public const string UserRoleName = "User";
+        public const string AdminRoleName = "Admin";
+
         public static class FileValidationConstants
         {
             public const int MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB for request body
