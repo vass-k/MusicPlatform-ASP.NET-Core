@@ -1,39 +1,13 @@
-﻿@{
+﻿@model IEnumerable<MusicPlatform.Web.ViewModels.Genre.GenreIndexViewModel>
+
+@{
     ViewData["Title"] = "Manage Genres";
 }
 
 <style>
-    .admin-dashboard-body {
-        display: flex;
-        background-color: #f4f7fc;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .admin-sidebar {
-        width: 260px;
-        background-color: #1e1e1e;
-        color: #fff;
-        padding: 20px;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 10;
-    }
-
-    .admin-main-content {
-        margin-left: 260px;
-        padding: 40px;
-        width: calc(100% - 260px);
-        position: relative;
-        background-color: hsla(217,57%,97%,1);
-        background-image: radial-gradient(at 78% 33%, hsla(28,100%,74%,0.4) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%), radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%);
-    }
-
     .content-panel {
         background-color: rgba(255, 255, 255, 0.6);
         backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 12px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
@@ -47,7 +21,7 @@
         align-items: center;
         margin-bottom: 20px;
         padding-bottom: 15px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        border-bottom: 1px solid rgba(0,0,0,0.1);
     }
 
         .content-panel-header h3 {
@@ -56,11 +30,6 @@
             font-size: 1.3rem;
             color: #1e1e1e;
         }
-
-    .main-button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
 
     .themed-table {
         width: 100%;
@@ -110,130 +79,37 @@
         .table-actions a.delete:hover {
             color: #dc3545;
         }
-
-    .admin-sidebar-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-        .admin-sidebar-header h2 {
-            color: #fff;
-            font-family: 'Yeezy', 'Poppins', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-            .admin-sidebar-header h2 em {
-                font-style: normal;
-                color: #ff5500;
-            }
-
-    .admin-nav ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .admin-nav li a {
-        display: flex;
-        align-items: center;
-        padding: 15px 10px;
-        color: rgba(255, 255, 255, 0.7);
-        text-decoration: none;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-    }
-
-        .admin-nav li a:hover, .admin-nav li a.active {
-            background-color: #ff5500;
-            color: #fff;
-        }
-
-        .admin-nav li a i {
-            margin-right: 15px;
-            font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
-        }
 </style>
 
-<div class="admin-dashboard-body">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="admin-sidebar-header">
-            <h2><em>M</em>usic<em>P</em>latform</h2>
-        </div>
-        <nav class="admin-nav">
-            <ul>
-                <li><a href="#"><i class="fa fa-home"></i> Dashboard</a></li>
-                <li><a href="#"><i class="fa fa-music"></i> Manage Tracks</a></li>
-                <li><a href="#"><i class="fa fa-users"></i> Manage Users</a></li>
-                <li><a href="#" class="active"><i class="fa fa-list"></i> Manage Genres</a></li>
-                <li><a href="#"><i class="fa fa-flag"></i> Reports</a></li>
-            </ul>
-        </nav>
-    </aside>
+<h1>@ViewData["Title"]</h1>
+<p class="text-muted">Add, edit, or delete genres to categorize tracks on the platform.</p>
 
-    <main class="admin-main-content">
-        <h1>Manage Genres</h1>
-        <p class="text-muted">Add, edit, or delete genres to categorize tracks on the platform.</p>
+<div class="content-panel">
+    <div class="content-panel-header">
+        <h3>All Genres</h3>
+        <a asp-action="Add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Genre</a>
+    </div>
 
-        <div class="content-panel">
-            <div class="content-panel-header">
-                <h3>All Genres</h3>
-                <a href="#" class="main-button"><i class="fa fa-plus"></i> Add Genre</a>
-            </div>
-
-            <table class="themed-table">
-                <thead>
-                    <tr>
-                        <th>Genre Name</th>
-                        <th>Track Count</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Electronic</td>
-                        <td>152</td>
-                        <td class="table-actions">
-                            <a href="#" class="edit"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Synthwave</td>
-                        <td>88</td>
-                        <td class="table-actions">
-                            <a href="#" class="edit"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Lo-Fi</td>
-                        <td>210</td>
-                        <td class="table-actions">
-                            <a href="#" class="edit"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Rock</td>
-                        <td>95</td>
-                        <td class="table-actions">
-                            <a href="#" class="edit"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Ambient</td>
-                        <td>45</td>
-                        <td class="table-actions">
-                            <a href="#" class="edit"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
+    <table class="themed-table">
+        <thead>
+            <tr>
+                <th>Genre Name</th>
+                <th>Track Count</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var genre in Model)
+            {
+                <tr>
+                    <td>@genre.Name</td>
+                    <td>@genre.TrackCount</td>
+                    <td class="table-actions">
+                        <a asp-action="Edit" asp-route-id="@genre.PublicId" class="edit"><i class="fa fa-pencil"></i> Edit</a>
+                        <a asp-action="Delete" asp-route-id="@genre.PublicId" class="delete"><i class="fa fa-trash"></i> Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

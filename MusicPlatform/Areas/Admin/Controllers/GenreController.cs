@@ -2,11 +2,25 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
+    using MusicPlatform.Services.Core.Interfaces;
+    using MusicPlatform.Web.ViewModels.Genre;
+
     public class GenreController : BaseAdminController
     {
-        public IActionResult Index()
+        private readonly IGenreService genreService;
+
+        public GenreController(IGenreService genreService)
         {
-            return View();
+            this.genreService = genreService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            IEnumerable<GenreIndexViewModel> allGenres = await this.genreService
+                .GetAllGenresWithTrackCountAsync();
+
+            return View(allGenres);
         }
     }
 }
