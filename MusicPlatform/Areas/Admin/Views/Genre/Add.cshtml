@@ -5,9 +5,36 @@
 }
 
 <style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 10px;
+        }
+
+            .page-header h1 span {
+                background-color: #ff5500;
+                color: #fff;
+                padding: 2px 12px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+        .page-header p {
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
     .form-panel {
         background-color: rgba(255, 255, 255, 0.6);
         backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 12px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
@@ -29,14 +56,58 @@
         .form-control:focus {
             border-color: #ff5500;
             box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.15);
+            outline: none;
         }
+
+    .btn-primary-themed, .btn-secondary-themed {
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary-themed {
+        background-color: #ff5500;
+        border-color: #ff5500;
+        color: #fff;
+    }
+
+        .btn-primary-themed:hover {
+            background-color: #e64a00;
+            border-color: #e64a00;
+            color: #fff;
+        }
+
+    .btn-secondary-themed {
+        background-color: #e9ecef;
+        border-color: #e9ecef;
+        color: #555;
+    }
+
+        .btn-secondary-themed:hover {
+            background-color: #d8dde2;
+            border-color: #d8dde2;
+            color: #333;
+        }
+
+    .btn-primary-themed i {
+        margin-right: 8px;
+    }
 </style>
 
-<h1>@ViewData["Title"]</h1>
-<p class="text-muted mb-4">Create a new genre to help organize the music on the platform.</p>
+<div class="page-header">
+    <h1>Add a New <span>Genre</span></h1>
+    <p class="text-muted">Create a new genre to help organize the music on the platform.</p>
+</div>
 
-<div class="row">
-    <div class="col-md-6">
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
         <div class="form-panel">
             <form asp-action="Add" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -48,8 +119,8 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Create Genre</button>
-                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn-primary-themed"><i class="fa fa-plus"></i> Create Genre</button>
+                    <a asp-action="Index" class="btn-secondary-themed">Cancel</a>
                 </div>
             </form>
         </div>

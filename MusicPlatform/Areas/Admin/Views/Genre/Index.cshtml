@@ -5,9 +5,58 @@
 }
 
 <style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1e1e1e;
+        margin-bottom: 10px;
+    }
+
+    .page-header h1 span {
+        background-color: #ff5500;
+        color: #fff;
+        padding: 2px 12px;
+        border-radius: 8px;
+        display: inline-block;
+    }
+    
+    .page-header p {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .add-genre-btn {
+        padding: 10px 20px;
+        border-radius: 25px;
+        border: 1px solid #ddd;
+        color: #333;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+        .add-genre-btn:hover {
+            background-color: #ff5500;
+            color: #fff;
+            border-color: #ff5500;
+            text-decoration: none;
+        }
+
+        .add-genre-btn i {
+            margin-right: 8px;
+        }
+
     .content-panel {
         background-color: rgba(255, 255, 255, 0.6);
         backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 12px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
@@ -66,6 +115,7 @@
         text-decoration: none;
         margin-right: 15px;
         transition: color 0.2s ease;
+        font-weight: 500;
     }
 
         .table-actions a i {
@@ -79,15 +129,28 @@
         .table-actions a.delete:hover {
             color: #dc3545;
         }
+
+    .table-actions a.disabled {
+        pointer-events: none;
+        color: #ccc;
+    }
+
+    .badge {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
 </style>
 
-<h1>@ViewData["Title"]</h1>
-<p class="text-muted">Add, edit, or delete genres to categorize tracks on the platform.</p>
+<div class="page-header">
+    <h1>Manage <span>Genres</span></h1>
+    <p class="text-muted">Add, edit, or delete genres to categorize tracks on the platform.</p>
+</div>
 
 <div class="content-panel">
     <div class="content-panel-header">
         <h3>All Genres</h3>
-        <a asp-action="Add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Genre</a>
+        <a asp-action="Add" class="add-genre-btn"><i class="fa fa-plus"></i> Add Genre</a>
     </div>
 
     <table class="themed-table">
