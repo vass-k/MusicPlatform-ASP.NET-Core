@@ -8,10 +8,14 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+
 using MusicPlatform.Data.Models;
 using System.ComponentModel.DataAnnotations;
+
 using System.Text;
 using System.Text.Encodings.Web;
+
+using static MusicPlatform.GCommon.ApplicationConstants;
 
 namespace MusicPlatform.Web.Areas.Identity.Pages.Account
 {
@@ -19,6 +23,7 @@ namespace MusicPlatform.Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserStore<AppUser> _userStore;
         private readonly IUserEmailStore<AppUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
@@ -26,12 +31,14 @@ namespace MusicPlatform.Web.Areas.Identity.Pages.Account
 
         public RegisterModel(
             UserManager<AppUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IUserStore<AppUser> userStore,
             SignInManager<AppUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
@@ -115,6 +122,18 @@ namespace MusicPlatform.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    bool userRoleExists = await this._roleManager
+                        .RoleExistsAsync(UserRoleName);
+                    if (userRoleExists)
+                    {
+                        result = await _userManager
+                            .AddToRoleAsync(user, UserRoleName);
+                        if (!result.Succeeded)
+                        {
+                            throw new Exception($"User can't be registered, because {UserRoleName} role can't be found!");
+                        }
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
