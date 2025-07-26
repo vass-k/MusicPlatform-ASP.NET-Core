@@ -3,27 +3,24 @@
     using Microsoft.AspNetCore.Mvc;
 
     using MusicPlatform.Services.Core.Admin.Interfaces;
-    using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels.Genre;
 
     using static MusicPlatform.Web.ViewModels.ValidationMessages.Genre;
 
     public class GenreController : BaseAdminController
     {
-        private readonly IGenreService genreService;
         private readonly IGenreManagementService genreManagementService;
 
-        public GenreController(IGenreService genreService, IGenreManagementService genreManagementService)
+        public GenreController(IGenreManagementService genreManagementService)
         {
-            this.genreService = genreService;
             this.genreManagementService = genreManagementService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<GenreIndexViewModel> allGenres = await this.genreService
-                .GetAllGenresWithTrackCountAsync();
+            IEnumerable<GenreManagementIndexViewModel> allGenres = await this.genreManagementService
+                .GetAllGenresForManagementAsync();
 
             return View(allGenres);
         }
@@ -113,6 +110,37 @@
 
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteOrRestore(Guid id)
+        {
+            try
+            {
+                Tuple<bool, bool> opResult = await this.genreManagementService
+                    .DeleteOrRestoreGenreAsync(id);
+
+                bool success = opResult.Item1;
+                bool isRestored = opResult.Item2;
+
+                if (!success)
+                {
+                    // TODO: Add TempData error message.
+                }
+                else
+                {
+                    // TODO: Add TempData success message
+                    // string operation = isRestored ? "restored" : "deleted";
+                    // TempData[SuccessMessageKey] = $"Genre {operation} successfully!";
+                }
+            }
+            catch (Exception)
+            {
+                // Log error
+                // TODO: Add TempData error message
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

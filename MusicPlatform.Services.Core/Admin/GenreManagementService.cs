@@ -16,6 +16,25 @@
             this.genreRepository = genreRepository;
         }
 
+        public async Task<IEnumerable<GenreManagementIndexViewModel>> GetAllGenresForManagementAsync()
+        {
+            IEnumerable<GenreManagementIndexViewModel> allGenres = await this.genreRepository
+                .GetAllAsQueryable()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .OrderBy(g => g.Name)
+                .Select(g => new GenreManagementIndexViewModel
+                {
+                    PublicId = g.PublicId,
+                    Name = g.Name,
+                    TrackCount = g.Tracks.Count(),
+                    IsDeleted = g.IsDeleted
+                })
+                .ToListAsync();
+
+            return allGenres;
+        }
+
         public async Task<bool> AddGenreAsync(GenreManagementAddViewModel model)
         {
             Genre? existingGenre = await this.genreRepository
@@ -76,6 +95,36 @@
             genreToEdit.Name = model.Name;
 
             return await this.genreRepository.UpdateAsync(genreToEdit);
+        }
+
+        public async Task<Tuple<bool, bool>> DeleteOrRestoreGenreAsync(Guid publicId)
+        {
+            bool result = false;
+            bool isRestored = false;
+
+            // Use the repository and crucially call IgnoreQueryFilters() to find a soft-deleted entity.
+            Genre? genre = await this.genreRepository
+                .GetAllAsQueryable()
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(g => g.PublicId == publicId);
+
+            if (genre != null)
+            {
+                // Check the state BEFORE toggling it.
+                if (genre.IsDeleted)
+                {
+                    isRestored = true;
+                }
+
+                // Toggle the soft-delete flag.
+                genre.IsDeleted = !genre.IsDeleted;
+                genre.DeletedOn = genre.IsDeleted ? DateTime.UtcNow : null; // Update timestamp
+
+                // The UpdateAsync method from our BaseRepository will save the changes.
+                result = await this.genreRepository.UpdateAsync(genre);
+            }
+
+            return new Tuple<bool, bool>(result, isRestored);
         }
     }
 }

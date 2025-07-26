@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicPlatform.Web.ViewModels.Genre.GenreIndexViewModel>
+﻿@model IEnumerable<MusicPlatform.Web.ViewModels.Genre.GenreManagementIndexViewModel>
 
 @{
     ViewData["Title"] = "Manage Genres";
@@ -101,12 +101,30 @@
         <tbody>
             @foreach (var genre in Model)
             {
-                <tr>
-                    <td>@genre.Name</td>
+                <tr class="@(genre.IsDeleted ? "text-muted" : "")">
+                    <td>
+                        @genre.Name
+                        @if (genre.IsDeleted)
+                        {
+                            <span class="badge bg-danger ms-2">Deleted</span>
+                        }
+                    </td>
                     <td>@genre.TrackCount</td>
                     <td class="table-actions">
-                        <a asp-action="Edit" asp-route-id="@genre.PublicId" class="edit"><i class="fa fa-pencil"></i> Edit</a>
-                        <a asp-action="Delete" asp-route-id="@genre.PublicId" class="delete"><i class="fa fa-trash"></i> Delete</a>
+                        <a asp-action="Edit" asp-route-id="@genre.PublicId" class="edit @(genre.IsDeleted ? "disabled" : "")">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+            
+                        <a asp-action="DeleteOrRestore" asp-route-id="@genre.PublicId" class="@(genre.IsDeleted ? "text-success" : "delete")">
+                            @if (genre.IsDeleted)
+                            {
+                                <i class="fa fa-undo"></i> @:Restore
+                            }
+                            else
+                            {
+                                <i class="fa fa-trash"></i> @:Delete
+                            }
+                        </a>
                     </td>
                 </tr>
             }
