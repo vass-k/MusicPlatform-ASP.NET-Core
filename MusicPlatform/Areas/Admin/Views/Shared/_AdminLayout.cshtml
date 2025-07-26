@@ -103,7 +103,11 @@
             <ul>
                 <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> Dashboard</a></li>
                 <li><a href="#"><i class="fa fa-music"></i> Manage Tracks</a></li>
-                <li><a href="#"><i class="fa fa-users"></i> Manage Users</a></li>
+                <li>
+                    <a asp-area="Admin" asp-controller="UserManagement" asp-action="Index" class="nav-link">
+                        <i class="fa fa-users"></i> Manage Users
+                    </a>
+                </li>
                 <li><a asp-area="Admin" asp-controller="Genre" asp-action="Index"><i class="fa fa-list"></i> Manage Genres</a></li>
                 <li><a href="#"><i class="fa fa-flag"></i> Reports</a></li>
             </ul>

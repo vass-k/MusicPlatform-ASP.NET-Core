@@ -1,0 +1,130 @@
+﻿@using MusicPlatform.Web.ViewModels.Admin.UserManagement
+@using static MusicPlatform.GCommon.ApplicationConstants
+@model IEnumerable<UserManagementIndexViewModel>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<!-- We can use the styles from the Genre Index page -->
+<style>
+    .content-panel {
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 40px;
+    }
+
+    .content-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+        .content-panel-header h3 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #1e1e1e;
+        }
+
+    .themed-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .themed-table th, .themed-table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .themed-table thead {
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .themed-table th {
+            color: #666;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .themed-table tbody tr:not(:last-child) {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .themed-table td {
+            color: #333;
+            font-weight: 500;
+            vertical-align: middle;
+        }
+
+    .table-actions form {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
+
+<h1>@ViewData["Title"]</h1>
+<p class="text-muted">Manage user roles and permissions on the platform.</p>
+
+<div class="content-panel">
+    <div class="content-panel-header">
+        <h3>All Registered Users</h3>
+    </div>
+
+    <table class="themed-table">
+        <thead>
+            <tr>
+                <th>User Email</th>
+                <th>Current Roles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <span class="badge @(role == AdminRoleName ? "bg-success" : "bg-secondary")">@role</span>
+                        }
+                    </td>
+                    <td class="table-actions">
+                        @if (user.Roles.Contains(UserRoleName))
+                        {
+                            <!-- Show "Make Admin" button only if they are not already an admin -->
+                            <form method="post" asp-action="MakeAdmin" asp-controller="UserManagement" asp-area="Admin">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <button type="submit" class="btn btn-sm btn-primary">Make Admin</button>
+                            </form>
+                        }
+
+                        @if (user.Roles.Contains(AdminRoleName))
+                        {
+                            <!-- Show "Remove Admin" button only if they are an admin -->
+                            <form method="post" asp-action="RemoveAdmin" asp-controller="UserManagement" asp-area="Admin">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <button type="submit" class="btn btn-sm btn-warning">Remove Admin</button>
+                            </form>
+                        }
+
+                        <!-- Delete button for a future phase -->
+                        @* <form method="post" asp-action="DeleteUser" asp-controller="UserManagement" asp-area="Admin">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form> *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
