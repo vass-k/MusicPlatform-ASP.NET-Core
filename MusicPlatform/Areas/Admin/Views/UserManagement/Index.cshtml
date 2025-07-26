@@ -6,11 +6,37 @@
     ViewData["Title"] = "User Management";
 }
 
-<!-- We can use the styles from the Genre Index page -->
 <style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 10px;
+        }
+
+            .page-header h1 span {
+                background-color: #ff5500;
+                color: #fff;
+                padding: 2px 12px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+        .page-header p {
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
     .content-panel {
         background-color: rgba(255, 255, 255, 0.6);
         backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 12px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
@@ -42,6 +68,7 @@
         .themed-table th, .themed-table td {
             padding: 15px;
             text-align: left;
+            vertical-align: middle;
         }
 
         .themed-table thead {
@@ -62,17 +89,62 @@
         .themed-table td {
             color: #333;
             font-weight: 500;
-            vertical-align: middle;
         }
 
     .table-actions form {
         display: inline-block;
         margin-right: 5px;
     }
+
+    .btn-action {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 5px;
+        border: none;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-make-admin {
+        background-color: #ff5500;
+        color: #fff;
+    }
+
+    .btn-remove-admin {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+        .btn-remove-admin:hover {
+            background-color: #e0a800;
+        }
+
+    .role-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .role-badge-admin {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .role-badge-user {
+        background-color: #e9ecef;
+        color: #495057;
+    }
 </style>
 
-<h1>@ViewData["Title"]</h1>
-<p class="text-muted">Manage user roles and permissions on the platform.</p>
+<div class="page-header">
+    <h1>User <span>Management</span></h1>
+    <p class="text-muted">Manage user roles and permissions on the platform.</p>
+</div>
 
 <div class="content-panel">
     <div class="content-panel-header">
@@ -95,33 +167,26 @@
                     <td>
                         @foreach (var role in user.Roles)
                         {
-                            <span class="badge @(role == AdminRoleName ? "bg-success" : "bg-secondary")">@role</span>
+                            <span class="role-badge @(role == AdminRoleName ? "role-badge-admin" : "role-badge-user")">@role</span>
                         }
                     </td>
                     <td class="table-actions">
                         @if (user.Roles.Contains(UserRoleName))
                         {
-                            <!-- Show "Make Admin" button only if they are not already an admin -->
                             <form method="post" asp-controller="UserManagement" asp-action="MakeAdmin" asp-area="Admin">
                                 <input type="hidden" name="userId" value="@user.Id" />
-                                <button type="submit" class="btn btn-sm btn-primary">Make Admin</button>
+                                <button type="submit" class="btn-action btn-make-admin">Make Admin</button>
                             </form>
                         }
 
-                        @if (user.Roles.Contains(AdminRoleName))
+                        @* @if (user.Roles.Contains(AdminRoleName))
                         {
-                            <!-- Show "Remove Admin" button only if they are an admin -->
                             <form method="post" asp-controller="UserManagement" asp-action="RemoveAdmin" asp-area="Admin">
                                 <input type="hidden" name="userId" value="@user.Id" />
-                                <button type="submit" class="btn btn-sm btn-warning">Remove Admin</button>
+                                <!-- Using themed button -->
+                                <button type="submit" class="btn-action btn-remove-admin">Remove Admin</button>
                             </form>
-                        }
-
-                        <!-- Delete button for a future phase -->
-                        @* <form method="post" asp-action="DeleteUser" asp-controller="UserManagement" asp-area="Admin">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form> *@
+                        } *@
                     </td>
                 </tr>
             }
