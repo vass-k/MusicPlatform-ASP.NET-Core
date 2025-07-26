@@ -38,5 +38,16 @@
             public const string FatalErrorOccurred =
                 "Fatal error occurred while processing your comment! Please try again later!";
         }
+
+        public static class Genre
+        {
+            public const string GenreNameRequired = "Genre name is required.";
+            public const string GenreNameLength = "Genre name must be between {2} and {1} characters.";
+
+            public const string GenreAlreadyExists = "A genre with this name already exists.";
+
+            public const string ServiceCreateError =
+                "Fatal error occurred while creating the genre! Please try again later!";
+        }
     }
 }

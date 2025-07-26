@@ -15,9 +15,6 @@
         {
             public const int NameMinLength = 2;
             public const int NameMaxLength = 50;
-
-            public const int DescriptionMinLength = 10;
-            public const int DescriptionMaxLength = 500;
         }
 
         public static class Playlist

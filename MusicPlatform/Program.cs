@@ -3,7 +3,6 @@ namespace MusicPlatform.Web
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
-
     using MusicPlatform.Data;
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository;
@@ -12,6 +11,8 @@ namespace MusicPlatform.Web
     using MusicPlatform.Data.Seeding.Interfaces;
     using MusicPlatform.GCommon;
     using MusicPlatform.Services.Core;
+    using MusicPlatform.Services.Core.Admin;
+    using MusicPlatform.Services.Core.Admin.Interfaces;
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.Infrastructure.Extensions;
 
@@ -58,6 +59,7 @@ namespace MusicPlatform.Web
             builder.Services.AddScoped<IGenreService, GenreService>();
             builder.Services.AddScoped<IFavoritesService, FavoritesService>();
             builder.Services.AddScoped<IPlaylistTracksService, PlaylistTracksService>();
+            builder.Services.AddScoped<IGenreManagementService, GenreManagementService>();
 
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
