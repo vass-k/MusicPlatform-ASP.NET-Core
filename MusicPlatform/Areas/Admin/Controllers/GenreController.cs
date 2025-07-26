@@ -61,5 +61,58 @@
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                GenreEditViewModel? model = await this.genreManagementService
+                    .GetGenreForEditAsync(id);
+                if (model == null)
+                {
+                    // TODO: Add TempData error message
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                // TODO: Log error and Add TempData error message
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(GenreEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                bool success = await this.genreManagementService
+                    .EditGenreAsync(model);
+                if (!success)
+                {
+                    ModelState.AddModelError(string.Empty, GenreAlreadyExists);
+                    return View(model);
+                }
+
+                // TODO: Add TempData success message
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                // TODO: Log error and Add TempData error message
+                ModelState.AddModelError(string.Empty, ServiceEditError);
+
+                return View(model);
+            }
+        }
     }
 }

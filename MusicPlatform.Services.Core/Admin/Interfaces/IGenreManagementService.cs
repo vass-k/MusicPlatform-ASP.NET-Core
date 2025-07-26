@@ -5,5 +5,9 @@
     public interface IGenreManagementService
     {
         Task<bool> AddGenreAsync(GenreManagementAddViewModel model);
+
+        Task<GenreEditViewModel?> GetGenreForEditAsync(Guid publicId);
+
+        Task<bool> EditGenreAsync(GenreEditViewModel model);
     }
 }
