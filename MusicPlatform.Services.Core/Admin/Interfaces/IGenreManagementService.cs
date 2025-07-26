@@ -1,6 +1,6 @@
 ﻿namespace MusicPlatform.Services.Core.Admin.Interfaces
 {
-    using MusicPlatform.Web.ViewModels.Genre;
+    using MusicPlatform.Web.ViewModels.Admin.GenreManagement;
 
     public interface IGenreManagementService
     {

@@ -3,15 +3,15 @@
     using Microsoft.AspNetCore.Mvc;
 
     using MusicPlatform.Services.Core.Admin.Interfaces;
-    using MusicPlatform.Web.ViewModels.Genre;
+    using MusicPlatform.Web.ViewModels.Admin.GenreManagement;
 
     using static MusicPlatform.Web.ViewModels.ValidationMessages.Genre;
 
-    public class GenreController : BaseAdminController
+    public class GenreManagementController : BaseAdminController
     {
         private readonly IGenreManagementService genreManagementService;
 
-        public GenreController(IGenreManagementService genreManagementService)
+        public GenreManagementController(IGenreManagementService genreManagementService)
         {
             this.genreManagementService = genreManagementService;
         }

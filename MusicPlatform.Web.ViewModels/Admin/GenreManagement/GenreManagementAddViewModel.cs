@@ -1,4 +1,4 @@
-﻿namespace MusicPlatform.Web.ViewModels.Genre
+﻿namespace MusicPlatform.Web.ViewModels.Admin.GenreManagement
 {
     using System.ComponentModel.DataAnnotations;
 

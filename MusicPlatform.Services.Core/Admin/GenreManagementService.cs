@@ -5,7 +5,7 @@
     using MusicPlatform.Data.Models;
     using MusicPlatform.Data.Repository.Interfaces;
     using MusicPlatform.Services.Core.Admin.Interfaces;
-    using MusicPlatform.Web.ViewModels.Genre;
+    using MusicPlatform.Web.ViewModels.Admin.GenreManagement;
 
     public class GenreManagementService : IGenreManagementService
     {
@@ -102,7 +102,6 @@
             bool result = false;
             bool isRestored = false;
 
-            // Use the repository and crucially call IgnoreQueryFilters() to find a soft-deleted entity.
             Genre? genre = await this.genreRepository
                 .GetAllAsQueryable()
                 .IgnoreQueryFilters()
@@ -110,17 +109,14 @@
 
             if (genre != null)
             {
-                // Check the state BEFORE toggling it.
                 if (genre.IsDeleted)
                 {
                     isRestored = true;
                 }
 
-                // Toggle the soft-delete flag.
                 genre.IsDeleted = !genre.IsDeleted;
-                genre.DeletedOn = genre.IsDeleted ? DateTime.UtcNow : null; // Update timestamp
+                genre.DeletedOn = genre.IsDeleted ? DateTime.UtcNow : null;
 
-                // The UpdateAsync method from our BaseRepository will save the changes.
                 result = await this.genreRepository.UpdateAsync(genre);
             }
 
