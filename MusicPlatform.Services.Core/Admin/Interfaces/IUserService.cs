@@ -5,5 +5,7 @@
     public interface IUserService
     {
         Task<IEnumerable<UserManagementIndexViewModel>> GetUserManagementBoardDataAsync(string userId);
+
+        Task<bool> MakeUserAdminAsync(string userId);
     }
 }

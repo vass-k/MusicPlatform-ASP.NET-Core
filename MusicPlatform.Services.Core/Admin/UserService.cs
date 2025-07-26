@@ -2,9 +2,12 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+
     using MusicPlatform.Data.Models;
     using MusicPlatform.Services.Core.Admin.Interfaces;
     using MusicPlatform.Web.ViewModels.Admin.UserManagement;
+
+    using static MusicPlatform.GCommon.ApplicationConstants;
 
     public class UserService : IUserService
     {
@@ -31,6 +34,26 @@
                 .ToArrayAsync();
 
             return users;
+        }
+
+        public async Task<bool> MakeUserAdminAsync(string userId)
+        {
+            AppUser? user = await this.userManager
+                .FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ArgumentException("User does not exist!");
+            }
+
+            if (await this.userManager.IsInRoleAsync(user, UserRoleName))
+            {
+                await this.userManager.RemoveFromRoleAsync(user, UserRoleName);
+            }
+
+            IdentityResult result = await this.userManager
+                .AddToRoleAsync(user, AdminRoleName);
+
+            return result.Succeeded;
         }
     }
 }

@@ -102,7 +102,7 @@
                         @if (user.Roles.Contains(UserRoleName))
                         {
                             <!-- Show "Make Admin" button only if they are not already an admin -->
-                            <form method="post" asp-action="MakeAdmin" asp-controller="UserManagement" asp-area="Admin">
+                            <form method="post" asp-controller="UserManagement" asp-action="MakeAdmin" asp-area="Admin">
                                 <input type="hidden" name="userId" value="@user.Id" />
                                 <button type="submit" class="btn btn-sm btn-primary">Make Admin</button>
                             </form>
@@ -111,7 +111,7 @@
                         @if (user.Roles.Contains(AdminRoleName))
                         {
                             <!-- Show "Remove Admin" button only if they are an admin -->
-                            <form method="post" asp-action="RemoveAdmin" asp-controller="UserManagement" asp-area="Admin">
+                            <form method="post" asp-controller="UserManagement" asp-action="RemoveAdmin" asp-area="Admin">
                                 <input type="hidden" name="userId" value="@user.Id" />
                                 <button type="submit" class="btn btn-sm btn-warning">Remove Admin</button>
                             </form>
