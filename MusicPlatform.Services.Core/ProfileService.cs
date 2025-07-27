@@ -68,7 +68,11 @@
 
         private async Task<PagedResult<ProfileTrackViewModel>> GetUserUploadedTracksAsync(AppUser user, int pageNumber, int pageSize)
         {
-            var tracksQuery = this.trackRepository.GetAllAsQueryable().Where(t => t.UploaderId == user.Id);
+            var tracksQuery = this.trackRepository
+                .GetAllAsQueryable()
+                .AsNoTracking()
+                .Where(t => t.UploaderId == user.Id);
+
             var totalTracks = await tracksQuery.CountAsync();
 
             var pagedTracks = await tracksQuery
