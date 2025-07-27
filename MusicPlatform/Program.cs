@@ -6,14 +6,10 @@ namespace MusicPlatform.Web
 
     using MusicPlatform.Data;
     using MusicPlatform.Data.Models;
-    using MusicPlatform.Data.Repository;
     using MusicPlatform.Data.Repository.Interfaces;
     using MusicPlatform.Data.Seeding;
     using MusicPlatform.Data.Seeding.Interfaces;
     using MusicPlatform.Services.Common.Interfaces;
-    using MusicPlatform.Services.Core;
-    using MusicPlatform.Services.Core.Admin;
-    using MusicPlatform.Services.Core.Admin.Interfaces;
     using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.Infrastructure.Configuration;
     using MusicPlatform.Web.Infrastructure.Extensions;
@@ -45,25 +41,12 @@ namespace MusicPlatform.Web
 
             builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
 
-            builder.Services.AddScoped<ITrackRepository, TrackRepository>();
-            builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
-            builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserFavoriteRepository, UserFavoriteRepository>();
-            builder.Services.AddScoped<IPlaylistTrackRepository, PlaylistTrackRepository>();
+            builder.Services.AddRepositories(typeof(ITrackRepository).Assembly);
 
-            builder.Services.AddScoped<ITrackService, TrackService>();
+            builder.Services.AddUserDefinedServices(typeof(ITrackService).Assembly);
+
+            // Infrastructure 3rd Party Services
             builder.Services.AddScoped<ICloudStorageService, CloudinaryService>();
-            builder.Services.AddScoped<ICommentService, CommentService>();
-            builder.Services.AddScoped<IProfileService, ProfileService>();
-            builder.Services.AddScoped<IPlaylistService, PlaylistService>();
-            builder.Services.AddScoped<IGenreService, GenreService>();
-            builder.Services.AddScoped<IFavoritesService, FavoritesService>();
-            builder.Services.AddScoped<IPlaylistTracksService, PlaylistTracksService>();
-            builder.Services.AddScoped<IGenreManagementService, GenreManagementService>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IDashboardService, DashboardService>();
 
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
