@@ -10,7 +10,7 @@
 <!-- For production, move this to your site's main CSS file -->
 <style>
     body {
-        background-color: #f2f2f2; /* A light grey background to make cards pop */
+        background-color: #f2f2f2;
     }
 
     #tracks-section {
@@ -19,7 +19,7 @@
 
     .section-heading {
         text-align: center;
-        margin-bottom: 60px;
+        margin-bottom: 40px;
     }
 
         .section-heading h2 {
@@ -30,12 +30,49 @@
 
             .section-heading h2 em {
                 font-style: normal;
-                color: #ff5500; /* Use our theme's primary orange */
+                color: #ff5500;
+            }
+
+    .search-form-container {
+        margin-bottom: 60px;
+    }
+
+        .search-form-container .input-group {
+            border-radius: 50px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border: 1px solid #fff;
+            overflow: hidden;
+        }
+
+        .search-form-container .form-control {
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            height: auto;
+        }
+
+            .search-form-container .form-control:focus {
+                box-shadow: none;
+                z-index: 1;
+            }
+
+        .search-form-container .btn-search {
+            background-color: #ff5500;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+            .search-form-container .btn-search:hover {
+                background-color: #e64a00;
             }
 
     .track-grid {
         display: grid;
-        /* This creates a responsive grid that shows as many columns as fit */
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 30px;
     }
@@ -80,7 +117,7 @@
         opacity: 0;
         transition: opacity 0.3s ease, transform 0.3s ease;
         text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        pointer-events: none; /* Let clicks go through to the artwork link if needed */
+        pointer-events: none;
     }
 
     .track-card:hover .play-button-overlay {
@@ -133,21 +170,23 @@
     }
 
         .track-meta span i {
-            margin-right: 5px; /* Space between icon and number */
+            margin-right: 5px;
         }
 
-        .pagination-container {
+    .pagination-container {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 40px;
     }
+
     .pagination {
         display: flex;
         list-style: none;
         padding: 0;
         gap: 5px;
     }
+
     .page-item .page-link {
         padding: 10px 15px;
         border: 1px solid #ddd;
@@ -156,16 +195,19 @@
         border-radius: 5px;
         transition: all 0.2s ease;
     }
+
     .page-item.active .page-link {
         background-color: #ff5500;
         color: #fff;
         border-color: #ff5500;
     }
+
     .page-item.disabled .page-link {
         color: #aaa;
         pointer-events: none;
         background-color: #f7f7f7;
     }
+
     .page-item:not(.disabled) .page-link:hover {
         background-color: #f0f0f0;
     }
@@ -187,23 +229,20 @@
                     <form asp-controller="Track" asp-action="Index" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search by track or artist..." name="searchString" value="@Model.SearchString">
-                            <button class="btn btn-primary" type="submit">Search</button>
+                            <button class="btn btn-search" type="submit">Search</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- This is where the track cards will be dynamically loaded -->
         <div class="track-grid">
             @if (Model.PagedTracks.Items.Any())
             {
                 @foreach (var track in Model.PagedTracks.Items)
                 {
-                    <!-- Single Dynamic Track Card -->
                     <div class="track-card">
                         <div class="track-artwork-container">
-                            <!-- This link now points to the track's details page -->
                             <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
                                 <img src="@track.ImageUrl" alt="Artwork for @track.Title" class="track-artwork">
                                 <div class="play-button-overlay">
@@ -216,19 +255,16 @@
                                 <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">@track.Title</a>
                             </h4>
                             <p class="track-artist">
-                                <!-- TODO: This could link to an artist's page in the future -->
                                 <a href="#">@track.ArtistName</a>
                             </p>
                             <div class="track-progress-bar"></div>
                             <div class="track-meta">
-                                <!-- Using ToString("N0") formats numbers with commas (e.g., 1,402) -->
                                 <span><i class="fa fa-play"></i>@track.Plays.ToString("N0")</span>
                                 <span><i class="fa fa-heart"></i>@track.FavoritesCount.ToString("N0")</span>
                             </div>
                         </div>
                     </div>
-                    <!-- End of Track Card -->
-            }
+                }
             }
             else
             {
