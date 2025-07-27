@@ -7,7 +7,7 @@
     using MusicPlatform.Web.ViewModels;
     using MusicPlatform.Web.ViewModels.Track;
 
-    using static GCommon.ApplicationConstants;
+    using static MusicPlatform.GCommon.ApplicationConstants;
 
     public class TrackController : BaseController
     {
@@ -33,7 +33,9 @@
             }
             catch (Exception)
             {
-                return this.RedirectToAction("Index", "Home");
+                TempData[ErrorMessageKey] = "Could not load tracks at this time. Please try again later.";
+
+                return this.RedirectToAction(nameof(Index), "Home");
             }
         }
 
@@ -49,19 +51,21 @@
             try
             {
                 var currentUserId = this.GetUserId();
-                TrackDetailsViewModel? trackDetails = await this.trackService.GetTrackDetailsAsync(id, currentUserId);
+                TrackDetailsViewModel? trackDetails = await this.trackService
+                    .GetTrackDetailsAsync(id, currentUserId);
 
                 if (trackDetails == null)
                 {
-                    // TODO: A proper 404 Not Found response.
-                    return this.RedirectToAction(nameof(Index));
+                    TempData[ErrorMessageKey] = "The track you were looking for could not be found.";
+
+                    return NotFound();
                 }
 
                 return this.View(trackDetails);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = "An unexpected error occurred while loading the track details.";
 
                 return this.RedirectToAction(nameof(Index));
             }
@@ -70,7 +74,8 @@
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var model = await this.trackService.GetTrackAddViewModelAsync();
+            var model = await this.trackService
+                .GetTrackAddViewModelAsync();
 
             return this.View(model);
         }
@@ -87,16 +92,15 @@
             }
 
             var userId = this.GetUserId();
-            if (userId == null)
-            {
-                return this.RedirectToAction("Index", "Home");
-            }
+            if (userId == null) return Unauthorized();
 
             try
             {
-                await this.trackService.AddTrackAsync(model, userId);
+                await this.trackService
+                    .AddTrackAsync(model, userId);
 
-                // TODO: Add a TempData success message
+                TempData[SuccessMessageKey] = $"Track '{model.Title}' was successfully uploaded!";
+
                 return this.RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
@@ -126,9 +130,12 @@
 
             try
             {
-                var model = await this.trackService.GetTrackForEditAsync(id, userId);
+                var model = await this.trackService
+                    .GetTrackForEditAsync(id, userId);
                 if (model == null)
                 {
+                    TempData[ErrorMessageKey] = "Track not found.";
+
                     return NotFound();
                 }
 
@@ -136,8 +143,9 @@
             }
             catch
             {
-                // Log error
-                return RedirectToAction("Index", "Home");
+                TempData[ErrorMessageKey] = "An unexpected error occurred.";
+
+                return RedirectToAction(nameof(Index), "Home");
             }
         }
 
@@ -159,8 +167,12 @@
                 bool success = await this.trackService.UpdateTrackAsync(model, userId);
                 if (!success)
                 {
+                    TempData[ErrorMessageKey] = "Track not found or failed to update.";
+
                     return NotFound();
                 }
+
+                TempData[SuccessMessageKey] = $"Track '{model.Title}' was updated successfully!";
 
                 return RedirectToAction(nameof(Details), new { id = model.PublicId });
             }
@@ -187,15 +199,18 @@
                 TrackDeleteViewModel? model = await this.trackService.GetTrackForDeleteAsync(id, userId);
                 if (model == null)
                 {
-                    return this.RedirectToAction("Index", "Home");
+                    TempData[ErrorMessageKey] = "Track not found.";
+
+                    return this.RedirectToAction(nameof(Index), "Home");
                 }
 
                 return this.View(model);
             }
             catch (Exception)
             {
-                // Log error
-                return this.RedirectToAction("Index", "Home");
+                TempData[ErrorMessageKey] = "An unexpected error occurred.";
+
+                return this.RedirectToAction(nameof(Index), "Home");
             }
         }
 
@@ -204,10 +219,7 @@
         public async Task<IActionResult> Delete(TrackDeleteViewModel model)
         {
             var userId = this.GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             try
             {
@@ -216,15 +228,20 @@
 
                 if (!success)
                 {
-                    return this.RedirectToAction("Index", "Home");
+                    TempData[ErrorMessageKey] = "Track could not be deleted.";
+
+                    return this.RedirectToAction(nameof(Index), "Home");
                 }
 
-                return this.RedirectToAction("Index", "Profile", new { username = this.User.Identity!.Name });
+                TempData[SuccessMessageKey] = $"Track '{model.Title}' was deleted successfully.";
+
+                return this.RedirectToAction(nameof(Index), "Profile", new { username = this.User.Identity!.Name });
             }
             catch (Exception)
             {
-                // Log error
-                return this.RedirectToAction("Index", "Home");
+                TempData[ErrorMessageKey] = "An unexpected error occurred while deleting the track.";
+
+                return this.RedirectToAction(nameof(Index), "Home");
             }
         }
     }

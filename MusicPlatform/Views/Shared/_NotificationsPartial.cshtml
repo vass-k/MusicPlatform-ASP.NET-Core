@@ -1,0 +1,18 @@
+﻿@using static MusicPlatform.GCommon.ApplicationConstants
+
+@if (TempData[InfoMessageKey] != null)
+{
+    <script>toastr.info("@Html.Raw(TempData[InfoMessageKey])")</script>
+}
+@if (TempData[SuccessMessageKey] != null)
+{
+    <script>toastr.success("@Html.Raw(TempData[SuccessMessageKey])")</script>
+}
+@if (TempData[WarningMessageKey] != null)
+{
+    <script>toastr.warning("@Html.Raw(TempData[WarningMessageKey])")</script>
+}
+@if (TempData[ErrorMessageKey] != null)
+{
+    <script>toastr.error("@Html.Raw(TempData[ErrorMessageKey])")</script>
+}

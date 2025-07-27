@@ -1,10 +1,10 @@
 ﻿namespace MusicPlatform.Web.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-
     using MusicPlatform.Services.Core.Admin.Interfaces;
     using MusicPlatform.Web.ViewModels.Admin.GenreManagement;
 
+    using static MusicPlatform.GCommon.ApplicationConstants;
     using static MusicPlatform.Web.ViewModels.ValidationMessages.Genre;
 
     public class GenreManagementController : BaseAdminController
@@ -50,6 +50,8 @@
                     return View(model);
                 }
 
+                TempData[SuccessMessageKey] = $"Genre '{model.Name}' created successfully!";
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception)
@@ -68,7 +70,8 @@
                     .GetGenreForEditAsync(id);
                 if (model == null)
                 {
-                    // TODO: Add TempData error message
+                    TempData[ErrorMessageKey] = "The selected genre could not be found.";
+
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -76,7 +79,8 @@
             }
             catch (Exception)
             {
-                // TODO: Log error and Add TempData error message
+                TempData[ErrorMessageKey] = "An unexpected error occurred while processing the genre.";
+
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -100,7 +104,8 @@
                     return View(model);
                 }
 
-                // TODO: Add TempData success message
+                TempData[SuccessMessageKey] = $"Genre '{model.Name}' updated successfully!";
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception)
@@ -125,19 +130,18 @@
 
                 if (!success)
                 {
-                    // TODO: Add TempData error message.
+                    TempData[ErrorMessageKey] = "Genre could not be found and was not updated.";
                 }
                 else
                 {
-                    // TODO: Add TempData success message
-                    // string operation = isRestored ? "restored" : "deleted";
-                    // TempData[SuccessMessageKey] = $"Genre {operation} successfully!";
+                    string operation = isRestored ? "restored" : "deleted";
+
+                    TempData[SuccessMessageKey] = $"Genre was {operation} successfully!";
                 }
             }
             catch (Exception)
             {
-                // Log error
-                // TODO: Add TempData error message
+                TempData[ErrorMessageKey] = "An unexpected error occurred during the operation.";
             }
 
             return RedirectToAction(nameof(Index));

@@ -20,13 +20,14 @@
         {
             if (string.IsNullOrEmpty(username))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Index), "Home");
             }
 
             if (page < 1) page = 1;
 
             var currentUserId = this.GetUserId();
-            var model = await this.profileService.GetUserProfileAsync(username, tab, page, ItemsPerPage, currentUserId);
+            var model = await this.profileService
+                .GetUserProfileAsync(username, tab, page, ItemsPerPage, currentUserId);
 
             if (model == null)
             {

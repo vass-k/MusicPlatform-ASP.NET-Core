@@ -15,6 +15,11 @@
         public const string CloudStorageAudioFolder = "music-platform/audio";
         public const string CloudStorageImageFolder = "music-platform/images";
 
+        public const string InfoMessageKey = "info";
+        public const string WarningMessageKey = "warning";
+        public const string ErrorMessageKey = "error";
+        public const string SuccessMessageKey = "success";
+
         public static class FileValidationConstants
         {
             public const int MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB for request body

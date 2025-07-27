@@ -1,8 +1,11 @@
 ﻿namespace MusicPlatform.Web.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+
     using MusicPlatform.Services.Core.Admin.Interfaces;
     using MusicPlatform.Web.ViewModels.Admin.UserManagement;
+
+    using static MusicPlatform.GCommon.ApplicationConstants;
 
     public class UserManagementController : BaseAdminController
     {
@@ -36,13 +39,19 @@
                     .MakeUserAdminAsync(userId);
                 if (!success)
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData[ErrorMessageKey] = "User could not be found or failed to be promoted.";
+                }
+                else
+                {
+                    TempData[SuccessMessageKey] = "User was successfully promoted to Admin.";
                 }
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
+                TempData[ErrorMessageKey] = "An unexpected error occurred while promoting the user.";
+
                 return RedirectToAction(nameof(Index));
             }
         }
