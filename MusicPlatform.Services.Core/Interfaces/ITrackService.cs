@@ -9,6 +9,8 @@
     {
         Task<PagedResult<TrackIndexViewModel>> GetAllTracksForIndexAsync(int pageNumber, int pageSize);
 
+        Task<TrackIndexPageViewModel> GetTracksForIndexPageAsync(string? searchString, int pageNumber, int pageSize);
+
         Task<TrackAddViewModel> GetTrackAddViewModelAsync();
 
         Task AddTrackAsync(TrackAddViewModel model, string uploaderId);

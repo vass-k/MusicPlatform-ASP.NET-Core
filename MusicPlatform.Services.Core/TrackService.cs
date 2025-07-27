@@ -70,6 +70,52 @@
             return pagedResult;
         }
 
+        public async Task<TrackIndexPageViewModel> GetTracksForIndexPageAsync(string? searchString, int pageNumber, int pageSize)
+        {
+            var trackQuery = this.trackRepository
+                .GetAllAsQueryable()
+                .AsNoTracking();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                trackQuery = trackQuery.Where(t => t.Title.Contains(searchString) ||
+                                                   t.ArtistName.Contains(searchString));
+            }
+
+            int totalCount = await trackQuery.CountAsync();
+
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            List<TrackIndexViewModel> trackViewModels = await trackQuery
+                .OrderByDescending(t => t.CreatedOn)
+                .ThenBy(t => t.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(t => new TrackIndexViewModel()
+                {
+                    PublicId = t.PublicId,
+                    Title = t.Title,
+                    ArtistName = t.ArtistName,
+                    ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                    Plays = t.Plays,
+                    FavoritesCount = t.UserFavorites.Count
+                })
+                .ToListAsync();
+
+            TrackIndexPageViewModel pageViewModel = new TrackIndexPageViewModel
+            {
+                SearchString = searchString,
+                PagedTracks = new PagedResult<TrackIndexViewModel>
+                {
+                    Items = trackViewModels,
+                    PageNumber = pageNumber,
+                    TotalPages = totalPages
+                }
+            };
+
+            return pageViewModel;
+        }
+
         public async Task<TrackAddViewModel> GetTrackAddViewModelAsync()
         {
             return new TrackAddViewModel

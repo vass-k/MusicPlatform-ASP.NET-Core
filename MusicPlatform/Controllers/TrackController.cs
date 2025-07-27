@@ -20,16 +20,16 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(string? searchString, int page = 1)
         {
             if (page < 1) page = 1;
 
             try
             {
-                var pagedResult = await this.trackService
-                    .GetAllTracksForIndexAsync(page, ItemsPerPage);
+                var trackModel = await this.trackService
+                    .GetTracksForIndexPageAsync(searchString, page, ItemsPerPage);
 
-                return this.View(pagedResult);
+                return this.View(trackModel);
             }
             catch (Exception)
             {
