@@ -1,0 +1,237 @@
+﻿@model MusicPlatform.Web.ViewModels.Admin.Dashboard.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    /* Page Header styles (from Genre pages) */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 10px;
+        }
+
+            .page-header h1 span {
+                background-color: #ff5500; /* Theme Orange */
+                color: #fff;
+                padding: 2px 12px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+        .page-header p {
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+    /* Glassmorphism Panel Style */
+    .content-panel, .stat-card {
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    a.stat-card-link {
+        text-decoration: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        a.stat-card-link:hover .stat-card {
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+        }
+
+    .stat-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
+        padding: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .stat-card-icon {
+        font-size: 2.5rem;
+        padding: 20px;
+        border-radius: 50%;
+        margin-right: 20px;
+        color: #fff;
+    }
+
+        .stat-card-icon.icon-tracks {
+            background-color: #ff5500;
+        }
+
+        .stat-card-icon.icon-users {
+            background-color: #f1556a;
+        }
+
+        .stat-card-icon.icon-playlists {
+            background-color: #28a745;
+        }
+
+    .stat-card-info h4 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-card-info p {
+        margin: 0;
+        color: #666;
+    }
+
+    .content-panel {
+        padding: 30px;
+        margin-bottom: 40px;
+    }
+
+    .content-panel-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+        .content-panel-header h3 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #1e1e1e;
+        }
+</style>
+
+<div class="page-header">
+    <h1>Admin <span>Dashboard</span></h1>
+    <p class="text-muted">A general summary of your platform's activity.</p>
+</div>
+
+<div class="stat-cards-grid">
+    <a href="#" class="stat-card-link">
+        <!-- TODO: Link to Track Management page -->
+        <div class="stat-card">
+            <div class="stat-card-icon icon-tracks"><i class="fa fa-headphones"></i></div>
+            <div class="stat-card-info">
+                <h4>@Model.TotalTracksCount.ToString("N0")</h4>
+                <p>Total Tracks</p>
+            </div>
+        </div>
+    </a>
+
+    <a asp-area="Admin" asp-controller="UserManagement" asp-action="Index" class="stat-card-link">
+        <div class="stat-card">
+            <div class="stat-card-icon icon-users"><i class="fa fa-users"></i></div>
+            <div class="stat-card-info">
+                <h4>@Model.TotalUsersCount.ToString("N0")</h4>
+                <p>Total Users</p>
+            </div>
+        </div>
+    </a>
+
+    <a href="#" class="stat-card-link">
+        <!-- TODO: Link to Playlist Management page -->
+        <div class="stat-card">
+            <div class="stat-card-icon icon-playlists"><i class="fa fa-list-ul"></i></div>
+            <div class="stat-card-info">
+                <h4>@Model.TotalPlaylistsCount.ToString("N0")</h4>
+                <p>Total Playlists</p>
+            </div>
+        </div>
+    </a>
+</div>
+
+<div class="content-panel">
+    <div class="content-panel-header">
+        <h3>Monthly Track Uploads</h3>
+    </div>
+    <div>
+        <canvas id="tracksChart"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('tracksChart').getContext('2d');
+
+            const monthLabels = @Json.Serialize(Model.ChartData.MonthLabels);
+            const trackUploadData = @Json.Serialize(Model.ChartData.TrackCounts);
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(255, 85, 0, 0.4)');
+            gradient.addColorStop(1, 'rgba(255, 85, 0, 0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: 'Tracks Uploaded',
+                        data: trackUploadData,
+                        backgroundColor: gradient,
+                        borderColor: '#ff5500',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#ff5500',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e1e1e',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            cornerRadius: 6,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            },
+                            ticks: {
+                                color: '#666'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                             ticks: {
+                                color: '#666'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

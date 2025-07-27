@@ -64,7 +64,7 @@
                                         <li><a asp-controller="Profile" asp-action="Index" asp-route-username="@UserManager.GetUserName(User)">My Profile</a></li>
                                         @if (User.IsInRole(AdminRoleName))
                                         {
-                                            <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                            <li><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
                                         }
                                         <li><a asp-controller="Track" asp-action="Add">Upload</a></li>
                                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
