@@ -5,11 +5,6 @@
     Layout = "_Layout";
 }
 
-<!-- FilePond CSS for the uploaders -->
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
-<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-
-
 <!-- Custom CSS for the Upload Page -->
 <style>
     .upload-page-container {
@@ -108,7 +103,7 @@
     }
 
     .filepond--root {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Yeezy', 'Poppins', sans-serif;
     }
 
     .filepond--drop-label {
@@ -179,7 +174,6 @@
             <button id="submit-button" type="submit" class="main-button">Upload Track</button>
         </div>
 
-        <!-- NEW: Progress Bar HTML -->
         <div id="progress-container" class="progress-container">
             <p class="progress-bar-label">Uploading, please wait...</p>
             <div class="progress-bar-wrapper">
@@ -190,63 +184,9 @@
 </div>
 
 @section Scripts {
-    <!-- FilePond and its plugins -->
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
-    <script>
-        // Register the plugins
-        FilePond.registerPlugin(
-            FilePondPluginFileValidateType,
-            FilePondPluginImagePreview
-        );
-
-        // Get the ASP.NET generated input elements
-        const audioInputElement = document.querySelector('input[name="AudioFile"]');
-        const imageInputElement = document.querySelector('input[name="ImageFile"]');
-                
-        // Initialize the audio uploader
-        const audioPond = FilePond.create(audioInputElement, {
-            labelIdle: `Drag & Drop your Audio File or <span class="filepond--label-action">Browse</span>`,
-            acceptedFileTypes: ['audio/mpeg', 'audio/mp3', 'audio/wav'],
-            storeAsFile: true
-        });
-
-        // Initialize the image uploader
-        const imagePond = FilePond.create(imageInputElement, {
-            labelIdle: `Drag & Drop your Artwork or <span class="filepond--label-action">Browse</span>`,
-            acceptedFileTypes: ['image/jpeg', 'image/png'],
-            storeAsFile: true
-        });
-
-        // --- CORRECTED FORM SUBMISSION LOGIC ---
-        const uploadForm = document.getElementById('upload-form');
-        const submitButton = document.getElementById('submit-button');
-        const progressContainer = document.getElementById('progress-container');
-        const progressBarInner = document.getElementById('progress-bar-inner');
-        const uploadActions = document.querySelector('.upload-actions');
-
-        uploadForm.addEventListener('submit', function(e) {
-            // 1. Prevent the form from submitting immediately
-            e.preventDefault();
-
-            // 2. Disable the button and show the progress bar
-            submitButton.disabled = true;
-            uploadActions.style.display = 'none';
-            progressContainer.style.display = 'block';
-
-            // 3. Start the progress bar animation
-            // We use a tiny timeout to ensure the browser has rendered the progress bar before the animation starts.
-            setTimeout(function() {
-                progressBarInner.style.width = '95%';
-            }, 100);
-
-            // 4. After a short delay to ensure the animation is visible, programmatically submit the form.
-            // This is the key part that was missing.
-            setTimeout(function() {
-                uploadForm.submit();
-            }, 500); // 500ms delay gives the user time to see the animation
-        });
-    </script>
+    <script src="~/js/upload-track.js" asp-append-version="true" defer></script>
 }

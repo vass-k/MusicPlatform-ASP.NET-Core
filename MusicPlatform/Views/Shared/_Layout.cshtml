@@ -2,12 +2,10 @@
 @using MusicPlatform.Data.Models
 @using static MusicPlatform.GCommon.ApplicationConstants
 
-@* Inject the services needed for checking login status and user details *@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
 @{
-    // This C# logic gets the name of the current controller to help with active link highlighting.
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Home";
 }
 
@@ -26,6 +24,14 @@
     <link rel="icon" type="image/x-icon" href="~/favicon.ico">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="stylesheet" href="~/css/global-player.css" />
+
+    <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
+    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
 </head>
 <body class="@(currentController == "Home" ? "is-homepage" : "is-subpage")">
     <!-- ***** Preloader Start ***** -->
@@ -36,8 +42,6 @@
             <div></div>
         </div>
     </div>
-    <!-- ***** Preloader End ***** -->
-    <!-- ***** Header Area Start - UPDATED AND FUNCTIONAL ***** -->
     <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
@@ -64,9 +68,9 @@
                                         <li><a asp-controller="Profile" asp-action="Index" asp-route-username="@UserManager.GetUserName(User)">My Profile</a></li>
                                         @if (User.IsInRole(AdminRoleName))
                                         {
-                                            <li><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                                            <li><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" data-turbo="false">>Dashboard</a></li>
                                         }
-                                        <li><a asp-controller="Track" asp-action="Add">Upload</a></li>
+                                        <li><a asp-controller="Track" asp-action="Add" data-turbo="false">Upload</a></li>
                                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
                                         <li>
                                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -92,11 +96,12 @@
         </div>
     </header>
 
-    <main class="main-content">
+    <main id="main-content" class="main-content">
         @RenderBody()
     </main>
 
-    <!-- Footer remains the same -->
+    <partial name="_GlobalPlayerPartial" />
+
     <footer class="site-footer">
         <div class="container">
             <div class="footer-top">
@@ -140,6 +145,13 @@
     </script>
 
     <partial name="_NotificationsPartial" />
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script src="~/js/global-player.js" asp-append-version="true"></script>
+
+    <script src="~/js/comment-actions.js" asp-append-version="true"></script>
+    <script src="~/js/like-track.js" asp-append-version="true"></script>
+    <script src="~/js/playlist-tracks.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

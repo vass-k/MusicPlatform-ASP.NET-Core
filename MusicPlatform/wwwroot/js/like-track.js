@@ -1,73 +1,80 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿function initializeLikeButton() {
     const likeButton = document.getElementById('like-button');
-    if (!likeButton) return;
-
-    likeButton.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        const button = e.target.closest('a');
-        const likeText = document.getElementById('like-text');
-        const likeCountDisplay = document.getElementById('like-count-display');
-        const likeForm = document.getElementById('like-form');
-        const tokenInput = likeForm.querySelector('input[name="__RequestVerificationToken"]');
-
-        if (!tokenInput) {
-            console.error('Anti-forgery token not found.');
+    if (likeButton) {
+        if (likeButton.dataset.listenerAttached === 'true') {
             return;
         }
-        const token = tokenInput.value;
-        let isCurrentlyLiked = button.classList.contains('liked');
 
-        const actionUrl = isCurrentlyLiked ? button.dataset.unlikeUrl : button.dataset.likeUrl;
+        likeButton.addEventListener('click', function (e) {
+            e.preventDefault();
 
-        // We are doing an optimistic UI Update
-        let currentLikes = parseInt(likeCountDisplay.innerText.replace(/,/g, ''));
-        isCurrentlyLiked = !isCurrentlyLiked;
+            const button = e.target.closest('a');
+            const likeText = document.getElementById('like-text');
+            const likeCountDisplay = document.getElementById('like-count-display');
+            const likeForm = document.getElementById('like-form');
+            const tokenInput = likeForm.querySelector('input[name="__RequestVerificationToken"]');
 
-        button.classList.toggle('liked');
-        if (isCurrentlyLiked) {
-            likeText.textContent = 'Liked';
-            likeCountDisplay.innerText = (currentLikes + 1).toLocaleString();
-        } else {
-            likeText.textContent = 'Like';
-            likeCountDisplay.innerText = (currentLikes - 1).toLocaleString();
-        }
-
-        fetch(actionUrl, {
-            method: 'POST',
-            headers: {
-                'RequestVerificationToken': token
+            if (!tokenInput) {
+                console.error('Anti-forgery token not found.');
+                return;
             }
-        })
-            .then(response => {
-                if (response.status === 204) {
-                    return null;
+            const token = tokenInput.value;
+            let isCurrentlyLiked = button.classList.contains('liked');
+
+            const actionUrl = isCurrentlyLiked ? button.dataset.unlikeUrl : button.dataset.likeUrl;
+
+            // We are doing an optimistic UI Update
+            let currentLikes = parseInt(likeCountDisplay.innerText.replace(/,/g, ''));
+            isCurrentlyLiked = !isCurrentlyLiked;
+
+            button.classList.toggle('liked');
+            if (isCurrentlyLiked) {
+                likeText.textContent = 'Liked';
+                likeCountDisplay.innerText = (currentLikes + 1).toLocaleString();
+            } else {
+                likeText.textContent = 'Like';
+                likeCountDisplay.innerText = (currentLikes - 1).toLocaleString();
+            }
+
+            fetch(actionUrl, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': token
                 }
-                if (!response.ok) {
-                    return response.json().then(err => Promise.reject(err));
-                }
-                return response.json();
             })
-            .then(data => {
-                if (data && data.newLikeCount !== undefined) {
-                    likeCountDisplay.innerText = data.newLikeCount.toLocaleString();
-                }
-            })
-            .catch(error => {
-                console.error('Error toggling like status:', error.message || 'An unknown error occurred.');
+                .then(response => {
+                    if (response.status === 204) {
+                        return null;
+                    }
+                    if (!response.ok) {
+                        return response.json().then(err => Promise.reject(err));
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.newLikeCount !== undefined) {
+                        likeCountDisplay.innerText = data.newLikeCount.toLocaleString();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling like status:', error.message || 'An unknown error occurred.');
 
-                isCurrentlyLiked = !isCurrentlyLiked;
-                button.classList.toggle('liked');
+                    isCurrentlyLiked = !isCurrentlyLiked;
+                    button.classList.toggle('liked');
 
-                if (isCurrentlyLiked) {
-                    likeText.textContent = 'Liked';
-                    likeCountDisplay.innerText = (currentLikes + 1).toLocaleString();
-                } else {
-                    likeText.textContent = 'Like';
-                    likeCountDisplay.innerText = currentLikes.toLocaleString();
-                }
+                    if (isCurrentlyLiked) {
+                        likeText.textContent = 'Liked';
+                        likeCountDisplay.innerText = (currentLikes + 1).toLocaleString();
+                    } else {
+                        likeText.textContent = 'Like';
+                        likeCountDisplay.innerText = currentLikes.toLocaleString();
+                    }
 
-                alert("There was an error updating the like status. Please try again.");
-            });
-    });
-});
+                    alert("There was an error updating the like status. Please try again.");
+                });
+        });
+        likeButton.dataset.listenerAttached = 'true';
+    }
+}
+
+document.addEventListener('turbo:load', initializeLikeButton);

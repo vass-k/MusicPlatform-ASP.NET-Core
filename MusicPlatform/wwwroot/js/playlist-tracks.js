@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿function initializePlaylistFunctionality() {
     const addToPlaylistBtn = document.getElementById('add-to-playlist-btn');
     const modalElement = document.getElementById('addToPlaylistModal');
     let modal;
@@ -9,21 +9,27 @@
     const modalErrorDisplay = document.getElementById('playlist-modal-error');
 
     if (addToPlaylistBtn) {
-        addToPlaylistBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            openModalAndFetchPlaylists();
-        });
+        if (addToPlaylistBtn.dataset.listenerAttached !== 'true') {
+            addToPlaylistBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                openModalAndFetchPlaylists();
+            });
+            addToPlaylistBtn.dataset.listenerAttached = 'true';
+        }
     }
 
-    document.body.addEventListener('click', function (e) {
-        const removeButton = e.target.closest('.remove-from-playlist-btn');
-        if (removeButton) {
-            e.preventDefault();
-            const trackId = removeButton.dataset.trackId;
-            const playlistId = removeButton.dataset.playlistId;
-            removeTrackFromPlaylist(trackId, playlistId);
-        }
-    });
+    if (document.body.dataset.removePlaylistListener !== 'true') {
+        document.body.addEventListener('click', function (e) {
+            const removeButton = e.target.closest('.remove-from-playlist-btn');
+            if (removeButton) {
+                e.preventDefault();
+                const trackId = removeButton.dataset.trackId;
+                const playlistId = removeButton.dataset.playlistId;
+                removeTrackFromPlaylist(trackId, playlistId);
+            }
+        });
+        document.body.dataset.removePlaylistListener = 'true';
+    }
 
     function openModalAndFetchPlaylists() {
         const trackId = addToPlaylistBtn.dataset.trackId;
@@ -159,4 +165,6 @@
         }
         return response.json();
     }
-});
+}
+
+document.addEventListener('turbo:load', initializePlaylistFunctionality);

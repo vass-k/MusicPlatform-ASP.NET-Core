@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿function initializeCommentSection() {
     const commentForm = document.getElementById('comment-form');
     const commentList = document.querySelector('.comment-list');
     const errorDisplay = document.getElementById('comment-error');
@@ -41,80 +41,91 @@
     }
 
     if (commentForm) {
-        commentForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+        if (commentForm.dataset.listenerAttached !== 'true') {
+            commentForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-            if (errorDisplay) errorDisplay.textContent = '';
+                if (errorDisplay) errorDisplay.textContent = '';
 
-            const formData = new FormData(commentForm);
+                const formData = new FormData(commentForm);
 
-            fetch('/api/commentsapi', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'RequestVerificationToken': getAntiForgeryToken()
-                }
-            })
-                .then(res => {
-                    if (res.ok) return res.json();
-                    return res.json().then(err => {
-                        let msg = err.message || 'Failed to post comment.';
-                        if (err.errors && err.errors.Content) {
-                            msg = err.errors.Content[0];
-                        }
-                        throw new Error(msg);
-                    });
-                })
-                .then(newComment => {
-                    commentList.insertAdjacentHTML('afterbegin', createCommentHtml(newComment));
-                    commentForm.querySelector('textarea').value = '';
-                })
-                .catch(err => {
-                    console.error('Error posting comment:', err);
-                    if (errorDisplay) {
-                        errorDisplay.textContent = err.message;
-                    } else {
-                        alert(err.message);
+                fetch('/api/commentsapi', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': getAntiForgeryToken()
                     }
-                });
-        });
+                })
+                    .then(res => {
+                        if (res.ok) return res.json();
+                        return res.json().then(err => {
+                            let msg = err.message || 'Failed to post comment.';
+                            if (err.errors && err.errors.Content) {
+                                msg = err.errors.Content[0];
+                            }
+                            throw new Error(msg);
+                        });
+                    })
+                    .then(newComment => {
+                        commentList.insertAdjacentHTML('afterbegin', createCommentHtml(newComment));
+                        commentForm.querySelector('textarea').value = '';
+                    })
+                    .catch(err => {
+                        console.error('Error posting comment:', err);
+                        if (errorDisplay) {
+                            errorDisplay.textContent = err.message;
+                        } else {
+                            alert(err.message);
+                        }
+                    });
+            });
+
+            commentForm.dataset.listenerAttached = 'true';
+        }
     }
 
     if (commentList) {
-        commentList.addEventListener('click', function (e) {
-            const btn = e.target.closest('.comment-delete-btn');
-            if (!btn) return;
+        if (commentList.dataset.listenerAttached !== 'true') {
+            commentList.addEventListener('click', function (e) {
+                const btn = e.target.closest('.comment-delete-btn');
+                if (!btn) return;
 
-            const item = btn.closest('.comment-item');
-            const id = item?.getAttribute('data-comment-id');
-            if (!id) {
-                console.error('No comment-id found on .comment-item');
-                return;
-            }
-
-            if (!confirm('Are you sure you want to delete this comment?')) {
-                return;
-            }
-
-            fetch(`/api/commentsapi/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'RequestVerificationToken': getAntiForgeryToken(),
-                    'Content-Type': 'application/json'
+                const item = btn.closest('.comment-item');
+                const id = item?.getAttribute('data-comment-id');
+                if (!id) {
+                    console.error('No comment-id found on .comment-item');
+                    return;
                 }
-            })
-                .then(res => {
-                    if (res.ok) {
-                        item.remove();
-                    } else {
-                        return res.json()
-                            .then(err => { throw new Error(err.message || 'Could not delete.'); });
+
+                if (!confirm('Are you sure you want to delete this comment?')) {
+                    return;
+                }
+
+                fetch(`/api/commentsapi/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'RequestVerificationToken': getAntiForgeryToken(),
+                        'Content-Type': 'application/json'
                     }
                 })
-                .catch(err => {
-                    console.error('Error deleting comment:', err);
-                    alert(err.message || 'Failed to delete comment.');
-                });
-        });
+                    .then(res => {
+                        if (res.ok) {
+                            item.remove();
+                        } else {
+                            return res.json()
+                                .then(err => { throw new Error(err.message || 'Could not delete.'); });
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error deleting comment:', err);
+                        alert(err.message || 'Failed to delete comment.');
+                    });
+            });
+
+            commentList.dataset.listenerAttached = 'true';
+        }
     }
-});
+}
+
+document.addEventListener('turbo:load', initializeCommentSection);
+

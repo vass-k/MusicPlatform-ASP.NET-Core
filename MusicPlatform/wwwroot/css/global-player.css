@@ -1,0 +1,92 @@
+﻿#global-audio-player-container {
+    position: fixed;
+    /* Centering the player horizontally */
+    left: 50%;
+    transform: translateX(-50%) translateY(150%); /* Start hidden and centered */
+    /* Sizing and positioning */
+    bottom: 20px; /* Float above the bottom edge */
+    width: calc(100% - 40px); /* Full width with some padding on small screens */
+    max-width: 900px; /* Max width on larger screens */
+    height: 75px; /* A bit taller for a more premium feel */
+    z-index: 999;
+    /* The Glassmorphism Effect */
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    /* The Pill Shape */
+    border-radius: 9999px;
+    /* Layout for items inside the player */
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    /* Smooth slide-up animation */
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+    #global-audio-player-container.visible {
+        transform: translateX(-50%) translateY(0);
+    }
+
+.player-artwork-container {
+    flex-shrink: 0;
+}
+
+#player-artwork {
+    width: 55px;
+    height: 55px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.player-info {
+    flex-shrink: 0;
+    margin-left: 15px;
+    color: #1e1e1e; 
+}
+
+#player-title {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#player-artist {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.player-controls-container {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+:root {
+    --plyr-color-main: #ff5500;
+}
+
+.plyr--audio .plyr__controls button,
+.plyr__time {
+    color: #333 !important;
+}
+
+.plyr--audio .plyr__progress input[type=range] {
+    color: #ff5500;
+}
+
+.plyr--audio .plyr__volume input[type=range] {
+    color: #ff5500;
+}
+
+.plyr--full-ui {
+    background: transparent !important; 
+    border-radius: inherit !important; 
+    box-shadow: none !important; 
+}
+
+#global-audio-player-container .plyr__controls {
+    background-color: transparent !important;
+}
+

@@ -385,8 +385,14 @@
     <div class="track-details-header">
         <div id="artwork-container" class="artwork-container">
             <img src="@Model.ImageUrl" alt="Artwork for @Model.Title" class="track-details-artwork">
-            <div id="play-pause-overlay" class="play-button-overlay">
-                <i id="play-pause-icon" class="fa fa-play-circle"></i>
+
+            <div id="play-track-button"
+                 class="play-button-overlay"
+                 data-src="@Model.AudioUrl"
+                 data-title="@Model.Title"
+                 data-artist="@Model.ArtistName"
+                 data-artwork="@Model.ImageUrl">
+                <i class="fa fa-play-circle"></i>
             </div>
         </div>
         <div class="track-details-info">
@@ -453,8 +459,6 @@
                 </div>
             </div>
         </div>
-
-        <audio id="track-audio" src="@Model.AudioUrl" preload="metadata"></audio>
     </div>
 
     <div class="track-layout">
@@ -528,72 +532,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const audio = document.getElementById('track-audio');
-            const artworkContainer = document.getElementById('artwork-container');
-            const playPauseIcon = document.getElementById('play-pause-icon');
-            const playPauseOverlay = document.getElementById('play-pause-overlay');
-
-            const progressBar = document.getElementById('progress-bar-filled');
-            const progressContainer = document.getElementById('progress-bar-container');
-            const currentTimeEl = document.getElementById('current-time');
-            const durationEl = document.getElementById('duration');
-
-            // Toggle play/pause by clicking the artwork
-            artworkContainer.addEventListener('click', () => {
-                if (audio.paused) {
-                    audio.play();
-                } else {
-                    audio.pause();
-                }
-            });
-
-            // Update icon and overlay visibility
-            audio.onplay = () => {
-                playPauseIcon.className = 'fa fa-pause-circle';
-                playPauseOverlay.classList.add('playing');
-            };
-            audio.onpause = () => {
-                playPauseIcon.className = 'fa fa-play-circle';
-                playPauseOverlay.classList.remove('playing');
-            };
-
-            // Update progress bar as audio plays
-            audio.addEventListener('timeupdate', () => {
-                if (audio.duration) {
-                    const progressPercent = (audio.currentTime / audio.duration) * 100;
-                    progressBar.style.width = `${progressPercent}%`;
-                    currentTimeEl.textContent = formatTime(audio.currentTime);
-                }
-            });
-
-            // Set duration once audio metadata is loaded
-            audio.addEventListener('loadedmetadata', () => {
-                if(audio.duration){
-                    durationEl.textContent = formatTime(audio.duration);
-                }
-            });
-
-            // Allow seeking by clicking on progress bar
-            progressContainer.addEventListener('click', (e) => {
-                if(audio.duration){
-                    const width = progressContainer.clientWidth;
-                    const clickX = e.offsetX;
-                    audio.currentTime = (clickX / width) * audio.duration;
-                }
-            });
-
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-            }
-        });
-    </script>
-    <script src="~/js/comment-actions.js"></script>
-    <script src="~/js/like-track.js" asp-append-version="true"></script>
-    <script src="~/js/playlist-tracks.js" asp-append-version="true"></script>
-}
