@@ -260,6 +260,12 @@
             return await this.trackRepository.DeleteAsync(track);
         }
 
+        public async Task IncrementdPlayCountAsync(Guid trackPublicId)
+        {
+            await this.trackRepository
+                .IncrementPlayCountAsync(trackPublicId);
+        }
+
         public async Task<IEnumerable<SelectListItem>> GetGenresForSelectAsync(int? selectedGenreId = null)
         {
             var genres = await this.genreRepository.GetAllAsync();

@@ -25,6 +25,8 @@
 
         Task<bool> DeleteTrackAsync(Guid publicId, string currentUserId);
 
+        Task IncrementdPlayCountAsync(Guid trackPublicId);
+
         Task<IEnumerable<SelectListItem>> GetGenresForSelectAsync(int? selectedGenreId = null);
     }
 }

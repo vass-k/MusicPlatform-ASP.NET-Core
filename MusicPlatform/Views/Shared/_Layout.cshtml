@@ -55,10 +55,9 @@
                         <!-- Navigation -->
                         <ul class="nav">
                             <li><a href="/" class="@(currentController == "Home" ? "active" : "")">Home</a></li>
-                            <li><a asp-controller="Track" asp-action="Index" class="@(currentController == "Track" ? "active" : "")">Tracks</a></li>
-                            <li><a asp-controller="Genre" asp-action="Index" class="@(currentController == "Genre" ? "active" : "")">Genres</a></li>
+                            <li><a asp-area="" asp-controller="Track" asp-action="Index" class="@(currentController == "Track" ? "active" : "")">Tracks</a></li>
+                            <li><a asp-area="" asp-controller="Genre" asp-action="Index" class="@(currentController == "Genre" ? "active" : "")">Genres</a></li>
 
-                            <!-- This is the new dynamic dropdown menu -->
                             <li class="submenu">
                                 <a href="javascript:;">Profile</a>
                                 <ul>
@@ -73,7 +72,7 @@
                                         <li><a asp-controller="Track" asp-action="Add" data-turbo="false">Upload</a></li>
                                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
                                         <li>
-                                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" data-turbo="false">
                                                 <button type="submit" class="logout-button">Logout</button>
                                             </form>
                                         </li>
@@ -81,8 +80,8 @@
                                     else
                                     {
                                         <!-- Show these links if the user IS NOT logged in -->
-                                        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
-                                        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                                        <li><a asp-area="Identity" asp-page="/Account/Login" data-turbo="false">Login</a></li>
+                                        <li><a asp-area="Identity" asp-page="/Account/Register" data-turbo="false">Register</a></li>
                                     }
                                 </ul>
                             </li>
@@ -101,6 +100,8 @@
     </main>
 
     <partial name="_GlobalPlayerPartial" />
+
+    <form id="global-anti-forgery-form" class="d-none">@Html.AntiForgeryToken()</form>
 
     <footer class="site-footer">
         <div class="container">

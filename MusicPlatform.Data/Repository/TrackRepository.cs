@@ -34,5 +34,13 @@
                 .Include(t => t.UserFavorites)
                 .ToListAsync();
         }
+
+        public async Task<int> IncrementPlayCountAsync(Guid publicId)
+        {
+            return await this.DbSet
+                .Where(t => t.PublicId == publicId)
+                .ExecuteUpdateAsync(p => p.SetProperty(t => t.Plays,
+                                                       t => t.Plays + 1));
+        }
     }
 }

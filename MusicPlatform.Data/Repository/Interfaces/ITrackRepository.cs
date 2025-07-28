@@ -9,5 +9,7 @@
         Task<IEnumerable<Track>> GetMostPlayedTracksAsync(int count);
 
         Task<IEnumerable<Track>> GetAllWithFavoritesAsync();
+
+        Task<int> IncrementPlayCountAsync(Guid publicId);
     }
 }
