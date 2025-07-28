@@ -1,8 +1,8 @@
 ﻿# 🎵 MusicPlatform - C# Web - May 2025
 
-This is a full-stack ASP.NET Core MVC web application for sharing and discovering music, built with a clean, decoupled architecture. The project is inspired by platforms like **SoundCloud**, this project is a comprehensive demonstration of building a feature-rich web application using modern .NET technologies. It was developed with a focus on clean architecture, maintainability, and production-ready patterns, including the Repository and Service patterns, role-based authorization, and dynamic frontend interactions. The platform allows users to register, upload their own tracks, create and manage playlists, and interact with other users' content through likes and comments.
+This is a full-stack ASP.NET Core MVC web application for sharing and discovering music, inspired by platforms like **SoundCloud**.
 
-### 🛠️ Technology Stack
+## 🛠️ Technology Stack
 
 This project is built on a robust and modern technology stack:
 
@@ -51,33 +51,38 @@ To get a local copy up and running, follow these simple steps.
     git clone https://github.com/vass-k/MusicPlatform-ASP.NET-Core.git
     ```
 
-2.  **Configure your secrets:**
-    Open `MusicPlatform.Web/appsettings.Development.json` and fill in your configuration details. This file is NOT committed to source control and is safe for your secrets.
+2.  **Configure your secrets using the .NET Secret Manager:**
+    For better security during development, it is highly recommended to store your sensitive credentials (like database connection strings and API keys) outside of the project directory. The .NET Secret Manager is designed for exactly this purpose.
 
-    *   **Database Connection String:**
-        ```json
-        "ConnectionStrings": {
-          "DefaultConnection": "Server=.\\SQLEXPRESS;Database=MusicPlatform;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-        },
-        ```
+    *   **If you are using Visual Studio:**
+        1.  In the Solution Explorer, right-click on the **`MusicPlatform.Web`** project.
+        2.  Select **"Manage User Secrets"** from the context menu.
+        3.  A `secrets.json` file will open. This file is stored securely on your local machine, not in the project folder.
 
-    *   **Cloudinary Credentials:**
+    *   **If you are using the .NET CLI (e.g., with VS Code):**
+        1.  Navigate to the `MusicPlatform.Web` project directory in your terminal.
+        2.  Run the command: `dotnet user-secrets init`
+
+    *   **Once `secrets.json` is open, paste the following structure into it and fill in your values:**
         ```json
-        "ConnectionStrings": {
-          "DefaultConnection": "Server=.\\SQLEXPRESS;Database=MusicPlatform;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-        },
-        "CloudinarySettings": {
-          "CloudName": "YOUR_CLOUD_NAME",
-          "ApiKey": "YOUR_API_KEY",
-          "ApiSecret": "YOUR_API_SECRET"
-        },
+        {
+          "ConnectionStrings": {
+            "DefaultConnection": "Server=.\\SQLEXPRESS;Database=MusicPlatform;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+          },
+          "CloudinarySettings": {
+            "CloudName": "YOUR_CLOUD_NAME",
+            "ApiKey": "YOUR_API_KEY",
+            "ApiSecret": "YOUR_API_SECRET"
+          }
+        }
         ```
+    *The application is already configured to read from `secrets.json` automatically during development.*
 
     *   **Default Test and Admin User (Optional):**
         The application will seed a default test and admin user.
         ```json
-        User: user@music.com 123
-        Admin: admin@music.com 123
+        User: user@music.com / 123
+        Admin: admin@music.com / 123
         ```
 
 3.  **Apply Database Migrations:**
