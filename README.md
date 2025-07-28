@@ -1,14 +1,8 @@
-﻿# 🎵 MusicPlatform
+﻿# 🎵 MusicPlatform - C# Web - May 2025
 
-This is a full-stack ASP.NET Core MVC web application for sharing and discovering music, built with a clean, decoupled architecture.
+This is a full-stack ASP.NET Core MVC web application for sharing and discovering music, built with a clean, decoupled architecture. The project is inspired by platforms like **SoundCloud**, this project is a comprehensive demonstration of building a feature-rich web application using modern .NET technologies. It was developed with a focus on clean architecture, maintainability, and production-ready patterns, including the Repository and Service patterns, role-based authorization, and dynamic frontend interactions. The platform allows users to register, upload their own tracks, create and manage playlists, and interact with other users' content through likes and comments.
 
-## About The Project
-
-The project is inspired by platforms like **SoundCloud**, this project is a comprehensive demonstration of building a feature-rich web application using modern .NET technologies. It was developed with a focus on clean architecture, maintainability, and production-ready patterns, including the Repository and Service patterns, role-based authorization, and dynamic frontend interactions.
-
-The platform allows users to register, upload their own tracks, create and manage playlists, and interact with other users' content through likes and comments.
-
-### Built With
+### 🛠️ Technology Stack
 
 This project is built on a robust and modern technology stack:
 
@@ -24,7 +18,7 @@ This project is built on a robust and modern technology stack:
     *   Decoupled Service Layer
     *   Admin Area with Role-Based Authorization
 
-## Features
+## ✨ Features
 
 *   **User Accounts:** Secure registration and login system.
 *   **Admin Dashboard:** A dedicated area for administrators to manage users and site content like genres.
@@ -38,11 +32,11 @@ This project is built on a robust and modern technology stack:
 *   **Discovery:** Paginated and searchable track listings.
 *   **User Profiles:** View a user's uploaded tracks, public playlists, and favorited songs.
 
-## Getting Started
+## ▶️ Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
-### Prerequisites
+### 📋 Prerequisites
 
 *   .NET 8 SDK or later.
 *   SQL Server Express or another edition of SQL Server.
@@ -50,7 +44,7 @@ To get a local copy up and running, follow these simple steps.
 *   A free **Cloudinary** account to get your API credentials.
   * - [Sign up for Cloudinary](https://cloudinary.com/users/register_free) to get your API credentials.
 
-### Project Setup
+### 🚀 Project Setup
 
 1.  **Clone the repository:**
     ```sh
@@ -79,15 +73,11 @@ To get a local copy up and running, follow these simple steps.
         },
         ```
 
-    *   **Default Admin User (Optional):**
-        The application will seed a default admin user. You can change the credentials here if you wish.
+    *   **Default Test and Admin User (Optional):**
+        The application will seed a default test and admin user.
         ```json
-        "UserSeed": {
-          "TestAdmin": {
-            "Email": "admin@music.com",
-            "Password": "123"
-          }
-        }
+        User: user@music.com 123
+        Admin: admin@music.com 123
         ```
 
 3.  **Apply Database Migrations:**
