@@ -13,6 +13,7 @@
             this.dashboardService = dashboardService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var model = await this.dashboardService

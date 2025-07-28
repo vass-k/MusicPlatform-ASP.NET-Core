@@ -25,7 +25,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeAdmin(string userId)
         {
             if (string.IsNullOrEmpty(userId))

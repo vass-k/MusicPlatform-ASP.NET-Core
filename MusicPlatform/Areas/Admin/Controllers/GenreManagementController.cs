@@ -32,7 +32,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(GenreManagementAddViewModel model)
         {
             if (!ModelState.IsValid)
@@ -86,7 +85,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(GenreEditViewModel model)
         {
             if (!ModelState.IsValid)

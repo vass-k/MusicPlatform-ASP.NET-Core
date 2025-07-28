@@ -8,6 +8,7 @@
     using static MusicPlatform.GCommon.ApplicationConstants;
 
     [Area(AdminRoleName)]
+    [AutoValidateAntiforgeryToken]
     [Authorize(Roles = AdminRoleName)]
     public abstract class BaseAdminController : Controller
     {

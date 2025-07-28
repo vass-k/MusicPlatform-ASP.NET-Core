@@ -8,6 +8,7 @@
     using static MusicPlatform.GCommon.ApplicationConstants;
 
     [Authorize]
+    [AutoValidateAntiforgeryToken]
     public abstract class BaseController : Controller
     {
         protected const int ItemsPerPage = ItemsPerPageConstant;

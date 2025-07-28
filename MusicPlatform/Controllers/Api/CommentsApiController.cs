@@ -18,7 +18,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommentViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -43,7 +42,6 @@
         }
 
         [HttpDelete("{id:int}")]
-        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

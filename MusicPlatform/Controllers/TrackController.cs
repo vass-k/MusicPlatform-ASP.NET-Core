@@ -81,7 +81,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [RequestSizeLimit(FileValidationConstants.MaxRequestBodySize)]
         public async Task<IActionResult> Add(TrackAddViewModel model)
         {
@@ -150,7 +149,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TrackEditViewModel model)
         {
             var userId = this.GetUserId();
@@ -215,7 +213,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(TrackDeleteViewModel model)
         {
             var userId = this.GetUserId();

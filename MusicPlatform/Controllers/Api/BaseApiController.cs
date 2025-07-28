@@ -8,6 +8,7 @@
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
+    [AutoValidateAntiforgeryToken]
     public abstract class BaseApiController : ControllerBase
     {
         protected bool IsUserAuthenticated()

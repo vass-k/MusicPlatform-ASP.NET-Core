@@ -24,7 +24,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(PlaylistCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -84,7 +83,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PlaylistEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -145,7 +143,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(PlaylistDeleteViewModel model)
         {
             var userId = this.GetUserId();

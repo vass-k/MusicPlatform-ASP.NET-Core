@@ -16,9 +16,8 @@
             this.trackService = trackService;
         }
 
-        [HttpPost("increment-play")]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost("increment-play")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> IncrementPlayCount([FromBody] TrackPlayCountViewModel request)
