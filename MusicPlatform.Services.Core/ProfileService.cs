@@ -85,6 +85,7 @@
                     Title = t.Title,
                     ArtistName = t.ArtistName,
                     ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                    AudioUrl = t.AudioUrl
                 })
                 .ToListAsync();
 
@@ -135,6 +136,7 @@
                     Title = t.Title,
                     ArtistName = t.ArtistName,
                     ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                    AudioUrl = t.AudioUrl
                 })
                 .ToListAsync();
 

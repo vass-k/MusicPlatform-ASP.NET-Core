@@ -193,6 +193,31 @@
             color: #fff;
         }
 
+    .track-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        color: #555;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .track-action-btn:hover {
+            background-color: #ff5500;
+            color: #fff;
+            border-color: #ff5500;
+        }
+
+        .track-action-btn.track-action-delete:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+
     .track-list-artwork {
         width: 45px;
         height: 45px;
@@ -454,15 +479,27 @@
                                 <div class="track-actions">
                                     @if (Model.IsCurrentUserProfile)
                                     {
-                                        <a asp-controller="Track" asp-action="Edit" asp-route-id="@track.PublicId" class="track-play-btn" aria-label="Edit @track.Title" title="Edit">
+                                        <a asp-controller="Track" asp-action="Edit" asp-route-id="@track.PublicId"
+                                           class="track-action-btn"
+                                           aria-label="Edit @track.Title" title="Edit" data-turbo="false">
                                             <i class="fa fa-pencil"></i>
                                         </a>
 
-                                        <a asp-controller="Track" asp-action="Delete" asp-route-id="@track.PublicId" class="track-play-btn track-action-delete" aria-label="Delete @track.Title" title="Delete">
+                                        <a asp-controller="Track" asp-action="Delete" asp-route-id="@track.PublicId"
+                                           class="track-action-btn track-action-delete"
+                                           aria-label="Delete @track.Title" title="Delete" data-turbo="false">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     }
-                                    <a href="#" class="track-play-btn" aria-label="Play @track.Title">
+
+                                    <a href="#"
+                                       class="track-action-btn track-play-btn"
+                                       aria-label="Play @track.Title"
+                                       data-track-id="@track.PublicId"
+                                       data-src="@track.AudioUrl"
+                                       data-title="@track.Title"
+                                       data-artist="@track.ArtistName"
+                                       data-artwork="@track.ImageUrl">
                                         <i class="fa fa-play"></i>
                                     </a>
                                 </div>
@@ -590,7 +627,14 @@
                                     </div>
                                 </div>
                                 <div class="track-actions">
-                                    <a href="#" class="track-play-btn" aria-label="Play @track.Title">
+                                    <a href="#"
+                                       class="track-play-btn"
+                                       aria-label="Play @track.Title"
+                                       data-track-id="@track.PublicId"
+                                       data-src="@track.AudioUrl"
+                                       data-title="@track.Title"
+                                       data-artist="@track.ArtistName"
+                                       data-artwork="@track.ImageUrl">
                                         <i class="fa fa-play"></i>
                                     </a>
                                 </div>

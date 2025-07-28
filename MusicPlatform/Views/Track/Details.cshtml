@@ -383,16 +383,17 @@
 
 <div class="container track-details-container">
     <div class="track-details-header">
-        <div id="artwork-container" class="artwork-container">
+        <div id="artwork-container"
+             class="artwork-container track-play-btn"
+             data-track-id="@Model.PublicId"
+             data-src="@Model.AudioUrl"
+             data-title="@Model.Title"
+             data-artist="@Model.ArtistName"
+             data-artwork="@Model.ImageUrl">
+
             <img src="@Model.ImageUrl" alt="Artwork for @Model.Title" class="track-details-artwork">
 
-            <div id="play-track-button"
-                 class="play-button-overlay"
-                 data-track-id="@Model.PublicId"
-                 data-src="@Model.AudioUrl"
-                 data-title="@Model.Title"
-                 data-artist="@Model.ArtistName"
-                 data-artwork="@Model.ImageUrl">
+            <div class="play-button-overlay">
                 <i class="fa fa-play-circle"></i>
             </div>
         </div>
@@ -445,13 +446,15 @@
                     {
                         <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path"
                            class="action-btn disabled"
-                           title="You must be logged in to like a track">
+                           title="You must be logged in to like a track"
+                           data-turbo="false">
                             <i class="fa fa-heart"></i>
                             <span>Like</span>
                         </a>
                         <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path"
                            class="action-btn disabled"
-                           title="You must be logged in to add to a playlist">
+                           title="You must be logged in to add to a playlist"
+                           data-turbo="false">
                             <i class="fa fa-plus"></i> Add to Playlist
                         </a>
                     }
@@ -481,7 +484,7 @@
                 }
                 else
                 {
-                    <p>You must be <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">logged in</a> to post a comment.</p>
+                    <p>You must be <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path" data-turbo="false">logged in</a> to post a comment.</p>
                 }
 
                 <hr style="margin: 30px 0;">

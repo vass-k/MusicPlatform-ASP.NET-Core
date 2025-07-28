@@ -33,43 +33,6 @@
             this.cloudStorageService = cloudStorageService;
         }
 
-        public async Task<PagedResult<TrackIndexViewModel>> GetAllTracksForIndexAsync(int pageNumber, int pageSize)
-        {
-            var totalCount = await this.trackRepository
-                .GetAllAsQueryable()
-                .AsNoTracking()
-                .CountAsync();
-
-            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-
-            List<TrackIndexViewModel> trackViewModels = await this.trackRepository
-                .GetAllAsQueryable()
-                .AsNoTracking()
-                .OrderByDescending(t => t.CreatedOn)
-                .ThenBy(t => t.Id)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(t => new TrackIndexViewModel()
-                {
-                    PublicId = t.PublicId,
-                    Title = t.Title,
-                    ArtistName = t.ArtistName,
-                    ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
-                    Plays = t.Plays,
-                    FavoritesCount = t.UserFavorites.Count
-                })
-                .ToListAsync();
-
-            PagedResult<TrackIndexViewModel> pagedResult = new PagedResult<TrackIndexViewModel>
-            {
-                Items = trackViewModels,
-                PageNumber = pageNumber,
-                TotalPages = totalPages
-            };
-
-            return pagedResult;
-        }
-
         public async Task<TrackIndexPageViewModel> GetTracksForIndexPageAsync(string? searchString, int pageNumber, int pageSize)
         {
             var trackQuery = this.trackRepository
@@ -98,7 +61,8 @@
                     ArtistName = t.ArtistName,
                     ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
                     Plays = t.Plays,
-                    FavoritesCount = t.UserFavorites.Count
+                    FavoritesCount = t.UserFavorites.Count,
+                    AudioUrl = t.AudioUrl
                 })
                 .ToListAsync();
 

@@ -13,5 +13,7 @@
         public int Plays { get; set; }
 
         public int FavoritesCount { get; set; }
+
+        public string AudioUrl { get; set; } = null!;
     }
 }

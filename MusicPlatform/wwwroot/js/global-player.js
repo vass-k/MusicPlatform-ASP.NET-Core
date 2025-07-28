@@ -36,25 +36,27 @@
         }
     }
 
-    const playButton = document.getElementById('play-track-button');
-    if (playButton) {
-        if (playButton.dataset.listenerAttached !== 'true') {
-            playButton.addEventListener('click', function () {
-                const trackData = {
-                    id: this.dataset.trackId,
-                    src: this.dataset.src,
-                    title: this.dataset.title,
-                    artist: this.dataset.artist,
-                    artwork: this.dataset.artwork
-                };
-                if (window.playTrack) {
-                    window.playTrack(trackData);
-                }
-            });
-
-            playButton.dataset.listenerAttached = 'true';
+    document.querySelectorAll('.track-play-btn').forEach(button => {
+        if (button.dataset.listenerAttached === 'true') {
+            return;
         }
-    }
+
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            const trackData = {
+                id: this.dataset.trackId,
+                src: this.dataset.src,
+                title: this.dataset.title,
+                artist: this.dataset.artist,
+                artwork: this.dataset.artwork
+            };
+            if (window.playTrack) {
+                window.playTrack(trackData);
+            }
+        });
+
+        button.dataset.listenerAttached = 'true';
+    });
 }
 
 /**
@@ -65,8 +67,7 @@ function recordPlay(trackId) {
     if (!trackId) {
         return;
     }
-
-    const tokenInput = document.querySelector('form input[name="__RequestVerificationToken"]');
+    const tokenInput = document.querySelector('#global-anti-forgery-form input[name="__RequestVerificationToken"]');
     if (!tokenInput) {
         console.error('Anti-forgery token not found on the page.');
         return;
@@ -86,3 +87,4 @@ function recordPlay(trackId) {
 }
 
 document.addEventListener('turbo:load', initializeGlobalPlayerAndButtons);
+document.addEventListener('turbo:render', initializeGlobalPlayerAndButtons);

@@ -9,5 +9,7 @@
         public string ArtistName { get; set; } = null!;
 
         public string? ImageUrl { get; set; }
+
+        public string AudioUrl { get; set; } = null!;
     }
 }

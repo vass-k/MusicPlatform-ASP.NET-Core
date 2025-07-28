@@ -27,9 +27,6 @@
 
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <link rel="stylesheet" href="~/css/global-player.css" />
-
-    <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
-    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
     
     <script type="module" src="https://cdn.jsdelivr.net/npm/@@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
 </head>
@@ -67,7 +64,7 @@
                                         <li><a asp-controller="Profile" asp-action="Index" asp-route-username="@UserManager.GetUserName(User)">My Profile</a></li>
                                         @if (User.IsInRole(AdminRoleName))
                                         {
-                                            <li><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" data-turbo="false">>Dashboard</a></li>
+                                            <li><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" data-turbo="false">Dashboard</a></li>
                                         }
                                         <li><a asp-controller="Track" asp-action="Add" data-turbo="false">Upload</a></li>
                                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a></li>
@@ -132,6 +129,7 @@
     <script src="~/js/owl-carousel.js"></script>
     <script src="~/js/scrollreveal.min.js"></script>
     <script src="~/js/custom.js"></script>
+    <script src="~/js/turbo-init.js" asp-append-version="true"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 

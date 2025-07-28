@@ -120,6 +120,17 @@
         pointer-events: none;
     }
 
+    .track-play-btn {
+        cursor: pointer;
+    }
+
+    .track-artwork-container {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        cursor: pointer;
+    }
+
     .track-card:hover .play-button-overlay {
         opacity: 1;
     }
@@ -242,13 +253,18 @@
                 @foreach (var track in Model.PagedTracks.Items)
                 {
                     <div class="track-card">
-                        <div class="track-artwork-container">
-                            <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
-                                <img src="@track.ImageUrl" alt="Artwork for @track.Title" class="track-artwork">
-                                <div class="play-button-overlay">
-                                    <i class="fa fa-play-circle"></i>
-                                </div>
-                            </a>
+                        <div class="track-artwork-container track-play-btn"
+                             id="play-track-button"
+                             data-track-id="@track.PublicId"
+                             data-src="@track.AudioUrl"
+                             data-title="@track.Title"
+                             data-artist="@track.ArtistName"
+                             data-artwork="@track.ImageUrl">
+
+                            <img src="@track.ImageUrl" alt="Artwork for @track.Title" class="track-artwork">
+                            <div class="play-button-overlay">
+                                <i class="fa fa-play-circle"></i>
+                            </div>
                         </div>
                         <div class="track-details">
                             <h4 class="track-title">
