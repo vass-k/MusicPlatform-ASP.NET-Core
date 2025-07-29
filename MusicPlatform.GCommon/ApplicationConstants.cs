@@ -6,7 +6,7 @@
 
         public const string DefaultTrackImageUrl = "/images/default-track-image.png";
 
-        public const int ItemsPerPageConstant = 12;
+        public const int ItemsPerPageConstant = 9;
 
         public const string UserRoleName = "User";
         public const string AdminRoleName = "Admin";

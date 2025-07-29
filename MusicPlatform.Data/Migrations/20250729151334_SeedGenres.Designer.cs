@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicPlatform.Data;
 
@@ -11,9 +12,11 @@ using MusicPlatform.Data;
 namespace MusicPlatform.Data.Migrations
 {
     [DbContext(typeof(MusicPlatformDbContext))]
-    partial class MusicPlatformDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729151334_SeedGenres")]
+    partial class SeedGenres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,24 +228,6 @@ namespace MusicPlatform.Data.Migrations
                         {
                             t.HasComment("This entity is a user of the application, extending the default IdentityUser.");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "693da562-ddf1-4c65-8149-1cfb8222748c",
-                            Email = "default@music.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "DEFAULT@MUSIC.COM",
-                            NormalizedUserName = "DEFAULT@MUSIC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPbvz3hUaf/q7G77Gmyk3Ha5nIzbd23lrVLVgO4iClRwqJt/GJtQducTsWrddTom3Q==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "QTQXHOC5V5FS6EVBCHVWL2EMYYO3MSRA",
-                            TwoFactorEnabled = false,
-                            UserName = "default@music.com"
-                        });
                 });
 
             modelBuilder.Entity("MusicPlatform.Data.Models.Comment", b =>
@@ -287,7 +272,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("MusicPlatform.Data.Models.Genre", b =>
@@ -319,7 +304,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", null, t =>
+                    b.ToTable("Genres", t =>
                         {
                             t.HasComment("This entity represents a category for music tracks.");
                         });
@@ -435,7 +420,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Playlists", null, t =>
+                    b.ToTable("Playlists", t =>
                         {
                             t.HasComment("This entity represents a playlist of tracks created by user.");
                         });
@@ -459,7 +444,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("PlaylistTracks", null, t =>
+                    b.ToTable("PlaylistTracks", t =>
                         {
                             t.HasComment("This entity is a join table for the many-to-many relationship between playlists and tracks.");
                         });
@@ -534,179 +519,9 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("UploaderId");
 
-                    b.ToTable("Tracks", null, t =>
+                    b.ToTable("Tracks", t =>
                         {
                             t.HasComment("This entity represents a single music track in the system.");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ArtistName = "BoDleasons",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805872/zaharibaharov-track_z6wshx.mp3",
-                            CreatedOn = new DateTime(2025, 1, 15, 10, 30, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 122,
-                            GenreId = 7,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef"),
-                            Title = "Lofi Chill",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ArtistName = "AlexiAction",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805884/garniertaip-track_jovkcj.mp3",
-                            CreatedOn = new DateTime(2025, 2, 20, 14, 0, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 183,
-                            GenreId = 1,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("b2c3d4e5-f6a7-8901-2345-67890abcdef1"),
-                            Title = "Midnight Drive",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ArtistName = "AlexGrohl",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805887/happy-track_kdyndk.mp3",
-                            CreatedOn = new DateTime(2025, 3, 1, 18, 45, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 130,
-                            GenreId = 3,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("c3d4e5f6-a7b8-9012-3456-7890abcdef12"),
-                            Title = "The Power of Rock",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ArtistName = "Sun Chasers",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805890/some-track_wbnomn.mp3",
-                            CreatedOn = new DateTime(2025, 3, 5, 11, 0, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 145,
-                            GenreId = 4,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("d4e5f6a7-b8c9-0123-4567-890abcdef123"),
-                            Title = "Summer Glow",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ArtistName = "Celestial Sound",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805892/RnB-track_xba7dj.mp3",
-                            CreatedOn = new DateTime(2025, 3, 10, 22, 15, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 195,
-                            GenreId = 8,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("e5f6a7b8-c9d0-1234-5678-90abcdef1234"),
-                            Title = "Stardust Echoes",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ArtistName = "Beat Architect",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805893/kitara-track_ekkqbm.mp3",
-                            CreatedOn = new DateTime(2025, 3, 12, 9, 5, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 110,
-                            GenreId = 2,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("f6a7b8c9-d0e1-2345-6789-0abcdef12345"),
-                            Title = "Urban Canvas",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ArtistName = "The Midnight Trio",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805896/house-track_tdretg.mp3",
-                            CreatedOn = new DateTime(2025, 3, 18, 23, 0, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 155,
-                            GenreId = 6,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("a7b8c9d0-e1f2-3456-7890-bcdef1234567"),
-                            Title = "Smoky Lounge",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ArtistName = "Serene Strings",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805898/hiphop-track_uaboy6.mp3",
-                            CreatedOn = new DateTime(2025, 3, 25, 7, 30, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 210,
-                            GenreId = 5,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("b8c9d0e1-f2a3-4567-8901-cdef12345678"),
-                            Title = "Default Image Track",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ArtistName = "Cozy Beats",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805902/lofi-track_ydkbqj.mp3",
-                            CreatedOn = new DateTime(2025, 4, 2, 16, 20, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 140,
-                            GenreId = 7,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("c9d0e1f2-a3b4-5678-9012-def123456789"),
-                            Title = "Rainy Afternoon",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ArtistName = "Studio 54",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805908/midnight-track_kcrawr.mp3",
-                            CreatedOn = new DateTime(2025, 4, 8, 19, 0, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 172,
-                            GenreId = 1,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("d0e1f2a3-b4c5-6789-0123-ef1234567890"),
-                            Title = "Deep Down",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ArtistName = "Neon Bloom",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805944/50-track_xfmmbx.wav",
-                            CreatedOn = new DateTime(2025, 4, 15, 12, 10, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 160,
-                            GenreId = 4,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("e1f2a3b4-c5d6-7890-1234-f12345678901"),
-                            Title = "Electric Dreams",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ArtistName = "Stone Temple",
-                            AudioUrl = "https://res.cloudinary.com/dx9py9gkr/video/upload/v1753805989/wheezy-track_gdccms.wav",
-                            CreatedOn = new DateTime(2025, 4, 22, 17, 55, 0, 0, DateTimeKind.Utc),
-                            DurationInSeconds = 205,
-                            GenreId = 3,
-                            IsDeleted = false,
-                            Plays = 0,
-                            PublicId = new Guid("f2a3b4c5-d6e7-8901-2345-123456789012"),
-                            Title = "Mountain King",
-                            UploaderId = "ef6eeff1-af06-48e3-8c83-703cf53d5ba9"
                         });
                 });
 
@@ -724,7 +539,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("UserFavorites", null, t =>
+                    b.ToTable("UserFavorites", t =>
                         {
                             t.HasComment("This entity is a join table representing the many-to-many relationship between users and their favorite tracks.");
                         });

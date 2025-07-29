@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicPlatform.Data;
 
@@ -11,9 +12,11 @@ using MusicPlatform.Data;
 namespace MusicPlatform.Data.Migrations
 {
     [DbContext(typeof(MusicPlatformDbContext))]
-    partial class MusicPlatformDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729190711_SeedTracks")]
+    partial class SeedTracks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,7 +290,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("MusicPlatform.Data.Models.Genre", b =>
@@ -319,7 +322,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", null, t =>
+                    b.ToTable("Genres", t =>
                         {
                             t.HasComment("This entity represents a category for music tracks.");
                         });
@@ -435,7 +438,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Playlists", null, t =>
+                    b.ToTable("Playlists", t =>
                         {
                             t.HasComment("This entity represents a playlist of tracks created by user.");
                         });
@@ -459,7 +462,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("PlaylistTracks", null, t =>
+                    b.ToTable("PlaylistTracks", t =>
                         {
                             t.HasComment("This entity is a join table for the many-to-many relationship between playlists and tracks.");
                         });
@@ -534,7 +537,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("UploaderId");
 
-                    b.ToTable("Tracks", null, t =>
+                    b.ToTable("Tracks", t =>
                         {
                             t.HasComment("This entity represents a single music track in the system.");
                         });
@@ -724,7 +727,7 @@ namespace MusicPlatform.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("UserFavorites", null, t =>
+                    b.ToTable("UserFavorites", t =>
                         {
                             t.HasComment("This entity is a join table representing the many-to-many relationship between users and their favorite tracks.");
                         });
