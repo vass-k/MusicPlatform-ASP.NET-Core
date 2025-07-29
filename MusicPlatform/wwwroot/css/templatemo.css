@@ -463,204 +463,204 @@ welcome
     }
 }
 
-@media (max-width: 1320px) {
-    .welcome-area .header-text .left-text {
-        margin-top: 50%;
-    }
-
-    .welcome-area .header-text {
-        width: 50%;
-        margin-left: 5%;
+@media (max-width: 1440px) {
+    .welcome-area {
+        background-position: -250% top;
     }
 }
 
-@media (max-width: 1140px) {
+@media (max-width: 1200px) {
     .welcome-area {
-        height: auto;
+        background-position: -25% -20%;
     }
+     .header-text {
+        margin-top: -38%
+    }
+}
 
-        .welcome-area .header-text {
-            width: 92%;
-            padding-top: 793px;
+    @media (max-width: 1140px) {
+        .welcome-area {
+            height: auto;
         }
 
-            .welcome-area .header-text .left-text {
-                margin-top: 5%;
-                transform: none !important;
+            .welcome-area .header-text {
+                width: 92%;
+                padding-top: 793px;
             }
-}
 
-@media (max-width: 810px) {
-    .welcome-area {
-        background-size: contain;
+                .welcome-area .header-text .left-text {
+                    margin-top: 5%;
+                    transform: none !important;
+                }
     }
 
-        .welcome-area .header-text {
-            padding-top: 100%;
-            margin-left: 0;
+    @media (max-width: 810px) {
+        .welcome-area {
+            background-position: -25% -20%;
         }
 
-    .container-fluid .col-md-12 {
-        margin-right: 0px;
-        padding-right: 0px;
+        .header-text {
+        }
+
+        .container-fluid .col-md-12 {
+            margin-right: 0px;
+            padding-right: 0px;
+        }
     }
-}
 
-/* ... (rest of the CSS is the same) ... */
-.site-footer {
-    background-color: #191a20; /* Dark background for the footer */
-    padding: 40px 0;
-    color: rgba(255, 255, 255, 0.7);
-    font-family: 'Poppins', sans-serif; /* Use Poppins for a cleaner look in the footer */
-}
+    /* ... (rest of the CSS is the same) ... */
+    .site-footer {
+        background-color: #191a20; /* Dark background for the footer */
+        padding: 40px 0;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: 'Poppins', sans-serif; /* Use Poppins for a cleaner look in the footer */
+    }
 
-.site-footer .footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Allows items to stack on small screens */
-    padding-bottom: 20px;
-}
+        .site-footer .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allows items to stack on small screens */
+            padding-bottom: 20px;
+        }
 
-.site-footer .footer-logo a {
-    color: #fff;
-    font-size: 24px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-family: 'Yeezy', 'Poppins', sans-serif; /* Keep the brand font here */
-}
+        .site-footer .footer-logo a {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Yeezy', 'Poppins', sans-serif; /* Keep the brand font here */
+        }
 
-.site-footer .footer-logo a:hover {
-    color: #ff5500; /* SoundCloud Orange on hover */
-    text-decoration: none;
-}
+            .site-footer .footer-logo a:hover {
+                color: #ff5500; /* SoundCloud Orange on hover */
+                text-decoration: none;
+            }
 
-.site-footer .footer-nav ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        .site-footer .footer-nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-.site-footer .footer-nav li:not(:last-child) {
-    margin-right: 25px;
-}
+        .site-footer .footer-nav li:not(:last-child) {
+            margin-right: 25px;
+        }
 
-.site-footer .footer-nav a {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+        .site-footer .footer-nav a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-.site-footer .footer-nav a:hover {
-    color: #fff;
-    text-decoration: underline;
-}
+            .site-footer .footer-nav a:hover {
+                color: #fff;
+                text-decoration: underline;
+            }
 
-.site-footer hr {
-    border: none;
-    height: 1px;
-    background-color: rgba(255, 255, 255, 0.1);
-    margin: 20px 0;
-}
+        .site-footer hr {
+            border: none;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+        }
 
-.site-footer .footer-bottom {
-    text-align: center;
-    padding-top: 20px;
-}
+        .site-footer .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+        }
 
-.site-footer .footer-bottom span {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.5);
-}
+            .site-footer .footer-bottom span {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+            }
 
-/*
+    /*
 ---------------------------------------------
 Secondary Button & Welcome Buttons
 ---------------------------------------------
 */
-.welcome-buttons {
-    display: flex;
-    align-items: center;
-}
-
-a.secondary-button-slider {
-    font-size: 14px;
-    border-radius: 25px;
-    padding: 13px 25px; /* Slightly smaller padding to account for border */
-    background-color: transparent;
-    border: 2px solid #ff5500; /* SoundCloud Orange */
-    text-transform: uppercase;
-    color: #ff5500;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-left: 15px;
-    transition: all 0.3s ease 0s;
-}
-
-    a.secondary-button-slider:hover {
-        background-color: #ff5500;
-        color: #fff;
-        text-decoration: none;
+    .welcome-buttons {
+        display: flex;
+        align-items: center;
     }
 
+    a.secondary-button-slider {
+        font-size: 14px;
+        border-radius: 25px;
+        padding: 13px 25px; /* Slightly smaller padding to account for border */
+        background-color: transparent;
+        border: 2px solid #ff5500; /* SoundCloud Orange */
+        text-transform: uppercase;
+        color: #ff5500;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-left: 15px;
+        transition: all 0.3s ease 0s;
+    }
 
-/*
+        a.secondary-button-slider:hover {
+            background-color: #ff5500;
+            color: #fff;
+            text-decoration: none;
+        }
+
+
+    /*
 ---------------------------------------------
 Top Tracks Section
 ---------------------------------------------
 */
-.top-tracks-section {
-    padding: 100px 0;
+    .top-tracks-section {
+        padding: 100px 0;
+    }
 
-}
+    .track-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-.track-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        .track-list li {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
 
-.track-list li {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    padding: 15px 20px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
+            .track-list li:hover {
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
 
-.track-list li:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
+    .track-number {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ccc;
+        margin-right: 20px;
+    }
 
-.track-number {
-    font-size: 18px;
-    font-weight: 600;
-    color: #ccc;
-    margin-right: 20px;
-}
+    .track-name {
+        flex-grow: 1; /* Allows name to take up available space */
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+    }
 
-.track-name {
-    flex-grow: 1; /* Allows name to take up available space */
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-}
+    .track-play-button {
+        font-size: 16px;
+        color: #ff5500;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
 
-.track-play-button {
-    font-size: 16px;
-    color: #ff5500;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.track-play-button:hover {
-    transform: scale(1.2);
-}
+        .track-play-button:hover {
+            transform: scale(1.2);
+        }
