@@ -28,10 +28,13 @@
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Track>> GetAllWithFavoritesAsync()
+        public async Task<IEnumerable<Track>> GetMostFavoritesTracksAsync(int count)
         {
             return await this.DbSet
+                .AsNoTracking()
                 .Include(t => t.UserFavorites)
+                .OrderByDescending(t => t.UserFavorites.Count)
+                .Take(count)
                 .ToListAsync();
         }
 

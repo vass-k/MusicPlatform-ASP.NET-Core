@@ -640,6 +640,18 @@ Top Tracks Section
                 box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             }
 
+    .track-list-meta {
+        display: flex;
+        gap: 15px;
+        font-size: 0.85em;
+        color: #aaa;
+        margin-right: 20px; /* Space between stats and play button */
+    }
+
+        .track-list-meta span i {
+            margin-right: 5px;
+        }
+
     .track-number {
         font-size: 18px;
         font-weight: 600;

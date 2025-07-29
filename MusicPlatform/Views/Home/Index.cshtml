@@ -1,6 +1,9 @@
-﻿@{
+﻿@model IEnumerable<MusicPlatform.Web.ViewModels.Track.TrackIndexViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+
 
 <!-- ***** Welcome Area Start ***** -->
 <div class="welcome-area" id="welcome">
@@ -38,15 +41,39 @@
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
                 <ol class="track-list">
-                    @for (int i = 1; i <= 10; i++)
+                    @if (Model.Any())
                     {
-                        <li>
-                            <div class="track-number">@i.ToString("D2")</div>
-                            <div class="track-name">Placeholder Track Name - Artist @i</div>
-                            <div class="track-play-button">
-                                <i class="fa fa-play"></i>
-                            </div>
-                        </li>
+                        @foreach (var (track, index) in Model.Select((value, i) => (value, i)))
+                        {
+                            <li>
+                                <div class="track-number">@(index + 1)</div>
+                                <div class="track-name">
+                                    <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
+                                        @track.Title - @track.ArtistName
+                                    </a>
+                                </div>
+
+                                <!-- THE FIX: Add a new div for the stats -->
+                                <div class="track-list-meta">
+                                    <span><i class="fa fa-play"></i> @track.Plays.ToString("N0")</span>
+                                    <span><i class="fa fa-heart"></i> @track.FavoritesCount.ToString("N0")</span>
+                                </div>
+
+                                <div class="track-play-button track-play-btn"
+                                     aria-label="Play @track.Title"
+                                     data-track-id="@track.PublicId"
+                                     data-src="@track.AudioUrl"
+                                     data-title="@track.Title"
+                                     data-artist="@track.ArtistName"
+                                     data-artwork="@track.ImageUrl">
+                                    <i class="fa fa-play"></i>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center text-muted">No tracks available to display yet.</p>
                     }
                 </ol>
             </div>

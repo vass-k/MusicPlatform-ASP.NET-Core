@@ -3,6 +3,7 @@ namespace MusicPlatform.Web.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using MusicPlatform.Services.Core.Interfaces;
     using MusicPlatform.Web.ViewModels;
 
     using System.Diagnostics;
@@ -10,16 +11,21 @@ namespace MusicPlatform.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ITrackService trackService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITrackService trackService)
         {
             _logger = logger;
+            this.trackService = trackService;
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await this.trackService
+                .GetTopTracksAsync(10);
+
+            return View(model);
         }
 
         [AllowAnonymous]

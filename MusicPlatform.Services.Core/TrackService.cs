@@ -242,6 +242,23 @@
             });
         }
 
+        public async Task<IEnumerable<TrackIndexViewModel>> GetTopTracksAsync(int count)
+        {
+            IEnumerable<Track> topTracks = await this.trackRepository
+                .GetMostFavoritesTracksAsync(count);
+
+            return topTracks.Select(t => new TrackIndexViewModel
+            {
+                PublicId = t.PublicId,
+                Title = t.Title,
+                ArtistName = t.ArtistName,
+                AudioUrl = t.AudioUrl,
+                ImageUrl = t.ImageUrl ?? DefaultTrackImageUrl,
+                Plays = t.Plays,
+                FavoritesCount = t.UserFavorites.Count()
+            });
+        }
+
         private async Task<Track?> FindTrackByPublicIdAsync(Guid publicId)
         {
             return await this.trackRepository

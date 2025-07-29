@@ -24,5 +24,7 @@
         Task IncrementdPlayCountAsync(Guid trackPublicId);
 
         Task<IEnumerable<SelectListItem>> GetGenresForSelectAsync(int? selectedGenreId = null);
+
+        Task<IEnumerable<TrackIndexViewModel>> GetTopTracksAsync(int count);
     }
 }
