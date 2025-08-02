@@ -4,11 +4,97 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .top-tracks-section {
+        padding: 100px 0;
+    }
 
-<!-- ***** Welcome Area Start ***** -->
+    .track-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .track-list-item {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        padding: 15px 20px;
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+        .track-list-item:not(:last-child) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .track-list-item:hover {
+            background-color: #f5f5f5;
+        }
+
+    .track-number-container {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #aaa;
+        margin-right: 20px;
+        width: 30px;
+        text-align: center;
+        position: relative;
+    }
+
+    .track-play-icon {
+        display: none;
+        color: #ff5500;
+        font-size: 1.5rem;
+    }
+
+    .track-list-item:hover .track-number {
+        display: none;
+    }
+
+    .track-list-item:hover .track-play-icon {
+        display: block;
+    }
+
+    .track-info {
+        flex-grow: 1;
+    }
+
+    .track-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        text-decoration: none;
+        display: block;
+    }
+
+        .track-title:hover {
+            color: #ff5500;
+        }
+
+    .track-artist {
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    .track-list-meta {
+        display: flex;
+        gap: 20px;
+        font-size: 0.9rem;
+        color: #aaa;
+        margin-left: auto;
+        padding-right: 20px;
+    }
+
+        .track-list-meta span i {
+            margin-right: 6px;
+        }
+</style>
+
 <div class="welcome-area" id="welcome">
-
-    <!-- ***** Header Text Start ***** -->
     <div class="header-text">
         <div class="container">
             <div class="row">
@@ -24,10 +110,8 @@
     </div>
 </div>
 <div class="left-image-decor"></div>
-
 <div class="right-image-decor"></div>
 
-<!-- ***** Top Tracks Section Start ***** -->
 <section class="top-tracks-section" id="top-tracks">
     <div class="container">
         <div class="row">
@@ -40,42 +124,41 @@
         </div>
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
-                <ol class="track-list">
+                <div class="track-list">
                     @if (Model.Any())
                     {
                         @foreach (var (track, index) in Model.Select((value, i) => (value, i)))
                         {
-                            <li>
-                                <div class="track-number">@(index + 1)</div>
-                                <div class="track-name">
-                                    <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId">
-                                        @track.Title - @track.ArtistName
-                                    </a>
-                                </div>
+                            <div class="track-list-item track-play-btn"
+                                 id="play-track-button"
+                                 data-track-id="@track.PublicId"
+                                 data-src="@track.AudioUrl"
+                                 data-title="@track.Title"
+                                 data-artist="@track.ArtistName"
+                                 data-artwork="@track.ImageUrl">
 
-                                <!-- THE FIX: Add a new div for the stats -->
+                                <div class="track-number-container">
+                                    <span class="track-number">@(index + 1)</span>
+                                    <i class="fa fa-play track-play-icon"></i>
+                                </div>
+                                <div class="track-info">
+                                    <a asp-controller="Track" asp-action="Details" asp-route-id="@track.PublicId" class="track-title">
+                                        @track.Title
+                                    </a>
+                                    <div class="track-artist">@track.ArtistName</div>
+                                </div>
                                 <div class="track-list-meta">
                                     <span><i class="fa fa-play"></i> @track.Plays.ToString("N0")</span>
                                     <span><i class="fa fa-heart"></i> @track.FavoritesCount.ToString("N0")</span>
                                 </div>
-
-                                <div class="track-play-button track-play-btn"
-                                     aria-label="Play @track.Title"
-                                     data-track-id="@track.PublicId"
-                                     data-src="@track.AudioUrl"
-                                     data-title="@track.Title"
-                                     data-artist="@track.ArtistName"
-                                     data-artwork="@track.ImageUrl">
-                                    <i class="fa fa-play"></i>
-                                </div>
-                            </li>
+                            </div>
                         }
                     }
                     else
                     {
-                        <p class="text-center text-muted">No tracks available to display yet.</p>
+                        <p class="text-center text-muted p-5">No tracks available to display yet.</p>
                     }
-                </ol>
+                </div>
             </div>
         </div>
     </div>
