@@ -136,7 +136,7 @@
                     IsLikedByCurrentUser = t.UserFavorites
                                                 .Any(f => f.UserId == currentUserId),
 
-                    ReleasedDate = t.CreatedOn.ToString("MMMM dd, yyyy"),
+                    ReleasedDate = t.CreatedOn.ToString(DateTimeReleaseFormat),
 
                     Comments = t.Comments
                                 .OrderByDescending(c => c.CreatedOn)
@@ -145,7 +145,7 @@
                                     Id = c.Id,
                                     AuthorUsername = c.User.UserName!,
                                     Content = c.Content,
-                                    PostedOn = c.CreatedOn.ToString("MMMM dd, yyyy"),
+                                    PostedOn = c.CreatedOn.ToString(DateTimeReleaseFormat),
                                     IsOwnedByCurrentUser = (c.UserId == currentUserId)
                                 })
                 })

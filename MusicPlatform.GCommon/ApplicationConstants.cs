@@ -6,6 +6,9 @@
 
         public const string DefaultTrackImageUrl = "/images/default-track-image.png";
 
+        public const string DateTimeMonthFormat = "MMMM";
+        public const string DateTimeReleaseFormat = "MMMM dd, yyyy";
+
         public const int ItemsPerPageConstant = 9;
 
         public const string UserRoleName = "User";

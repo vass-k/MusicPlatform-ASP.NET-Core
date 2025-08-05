@@ -1,6 +1,7 @@
 ﻿namespace MusicPlatform.Services.Core.Interfaces
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
+
     using MusicPlatform.Web.ViewModels.Track;
 
     public interface ITrackService
