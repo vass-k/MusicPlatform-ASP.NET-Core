@@ -10,6 +10,8 @@
 
     using System.Globalization;
 
+    using static MusicPlatform.GCommon.ApplicationConstants;
+
     public class DashboardService : IDashboardService
     {
         private readonly ITrackRepository trackRepository;
@@ -72,7 +74,7 @@
             for (int months = 2; months >= 0; months--)
             {
                 DateTime date = today.AddMonths(-months);
-                monthLabels.Add(date.ToString("MMMM", CultureInfo.InvariantCulture));
+                monthLabels.Add(date.ToString(DateTimeMonthFormat, CultureInfo.InvariantCulture));
 
                 var monthData = monthlyUploads
                     .FirstOrDefault(m => m.Year == date.Year
