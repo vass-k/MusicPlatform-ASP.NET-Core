@@ -474,7 +474,16 @@ welcome
         background-position: -25% -20%;
     }
      .header-text {
-        margin-top: -38%
+    }
+}
+
+@media (min-width: 1201px) and (max-width: 1600px) {
+    .welcome-area {
+        background-position: -650% top;
+    }
+
+    #welcome {
+        margin-top: -9.2%
     }
 }
 
