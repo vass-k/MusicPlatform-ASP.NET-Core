@@ -12,10 +12,12 @@
     public class TrackController : BaseController
     {
         private readonly ITrackService trackService;
+        private readonly ILogger<TrackController> logger;
 
-        public TrackController(ITrackService trackService)
+        public TrackController(ITrackService trackService, ILogger<TrackController> logger)
         {
             this.trackService = trackService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -31,8 +33,10 @@
 
                 return this.View(trackModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error fetching track index page with search '{SearchString}' and page {PageNumber}.", searchString, page);
+
                 TempData[ErrorMessageKey] = "Could not load tracks at this time. Please try again later.";
 
                 return this.RedirectToAction(nameof(Index), "Home");
@@ -56,15 +60,17 @@
 
                 if (trackDetails == null)
                 {
-                    TempData[ErrorMessageKey] = "The track you were looking for could not be found.";
+                    logger.LogWarning("Attempted to access non-existent track with ID {TrackId}.", id);
 
                     return NotFound();
                 }
 
                 return this.View(trackDetails);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error fetching details for track {TrackId}.", id);
+
                 TempData[ErrorMessageKey] = "An unexpected error occurred while loading the track details.";
 
                 return this.RedirectToAction(nameof(Index));
@@ -86,7 +92,9 @@
         {
             if (!this.ModelState.IsValid)
             {
-                model.Genres = await this.trackService.GetGenresForSelectAsync();
+                model.Genres = await this.trackService
+                    .GetGenresForSelectAsync();
+
                 return this.View(model);
             }
 
@@ -104,18 +112,26 @@
             }
             catch (InvalidOperationException ex)
             {
+                logger.LogWarning(ex, "User {UserId} failed to upload a track due to a validation error: {ValidationMessage}", userId, ex.Message);
+
                 this.ModelState.AddModelError(string.Empty, ex.Message);
 
-                var freshModel = await this.trackService.GetTrackAddViewModelAsync();
+                var freshModel = await this.trackService
+                    .GetTrackAddViewModelAsync();
+
                 model.Genres = freshModel.Genres;
                 return this.View(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Unexpected error occurred while user {UserId} was adding a track.", userId);
+
                 // That's for unexpected errors (e.g., Cloudinary is down).
                 this.ModelState.AddModelError(string.Empty, ValidationMessages.Track.ServiceCreateError);
 
-                var freshModel = await this.trackService.GetTrackAddViewModelAsync();
+                var freshModel = await this.trackService.
+                    GetTrackAddViewModelAsync();
+
                 model.Genres = freshModel.Genres;
                 return this.View(model);
             }
@@ -131,17 +147,20 @@
             {
                 var model = await this.trackService
                     .GetTrackForEditAsync(id, userId);
+
                 if (model == null)
                 {
-                    TempData[ErrorMessageKey] = "Track not found.";
+                    logger.LogWarning("Unauthorized attempt to edit track {TrackId} by user {UserId}.", id, userId);
 
                     return NotFound();
                 }
 
                 return View(model);
             }
-            catch
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error fetching track {TrackId} for edit by user {UserId}.", id, userId);
+
                 TempData[ErrorMessageKey] = "An unexpected error occurred.";
 
                 return RedirectToAction(nameof(Index), "Home");
@@ -156,16 +175,20 @@
 
             if (!ModelState.IsValid)
             {
-                model.Genres = await this.trackService.GetGenresForSelectAsync();
+                model.Genres = await this.trackService
+                    .GetGenresForSelectAsync();
+
                 return View(model);
             }
 
             try
             {
-                bool success = await this.trackService.UpdateTrackAsync(model, userId);
+                bool success = await this.trackService
+                    .UpdateTrackAsync(model, userId);
+
                 if (!success)
                 {
-                    TempData[ErrorMessageKey] = "Track not found or failed to update.";
+                    logger.LogWarning("Failed to update track {TrackId} by user {UserId}. It may not exist or they are not the owner.", model.PublicId, userId);
 
                     return NotFound();
                 }
@@ -174,8 +197,10 @@
 
                 return RedirectToAction(nameof(Details), new { id = model.PublicId });
             }
-            catch
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error updating track {TrackId} by user {UserId}.", model.PublicId, userId);
+
                 ModelState.AddModelError(string.Empty, ValidationMessages.Track.ServiceEditError);
 
                 model.Genres = await this.trackService.GetGenresForSelectAsync();
@@ -194,18 +219,22 @@
 
             try
             {
-                TrackDeleteViewModel? model = await this.trackService.GetTrackForDeleteAsync(id, userId);
+                TrackDeleteViewModel? model = await this.trackService
+                    .GetTrackForDeleteAsync(id, userId);
+
                 if (model == null)
                 {
-                    TempData[ErrorMessageKey] = "Track not found.";
+                    logger.LogWarning("Unauthorized attempt to get delete confirmation for track {TrackId} by user {UserId}.", id, userId);
 
-                    return this.RedirectToAction(nameof(Index), "Home");
+                    return NotFound();
                 }
 
                 return this.View(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error fetching track {TrackId} for deletion by user {UserId}.", id, userId);
+
                 TempData[ErrorMessageKey] = "An unexpected error occurred.";
 
                 return this.RedirectToAction(nameof(Index), "Home");
@@ -225,6 +254,8 @@
 
                 if (!success)
                 {
+                    logger.LogWarning("Failed to delete track {TrackId} by user {UserId}. It may not exist or they are not the owner.", model.PublicId, userId);
+
                     TempData[ErrorMessageKey] = "Track could not be deleted.";
 
                     return this.RedirectToAction(nameof(Index), "Home");
@@ -234,8 +265,10 @@
 
                 return this.RedirectToAction(nameof(Index), "Profile", new { username = this.User.Identity!.Name });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error deleting track {TrackId} by user {UserId}.", model.PublicId, userId);
+
                 TempData[ErrorMessageKey] = "An unexpected error occurred while deleting the track.";
 
                 return this.RedirectToAction(nameof(Index), "Home");

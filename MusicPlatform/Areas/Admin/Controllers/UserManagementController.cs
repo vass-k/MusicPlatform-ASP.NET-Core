@@ -29,7 +29,7 @@
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest();
+                return NotFound();
             }
 
             try

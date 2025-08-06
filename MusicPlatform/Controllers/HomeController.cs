@@ -10,12 +10,10 @@ namespace MusicPlatform.Web.Controllers
 
     public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ITrackService trackService;
 
-        public HomeController(ILogger<HomeController> logger, ITrackService trackService)
+        public HomeController(ITrackService trackService)
         {
-            _logger = logger;
             this.trackService = trackService;
         }
 

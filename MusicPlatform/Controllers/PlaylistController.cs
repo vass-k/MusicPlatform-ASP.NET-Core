@@ -11,10 +11,12 @@
     public class PlaylistController : BaseController
     {
         private readonly IPlaylistService playlistService;
+        private readonly ILogger<PlaylistController> logger;
 
-        public PlaylistController(IPlaylistService playlistService)
+        public PlaylistController(IPlaylistService playlistService, ILogger<PlaylistController> logger)
         {
             this.playlistService = playlistService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -42,9 +44,12 @@
 
                 return RedirectToAction(nameof(Details), new { id = newPlaylistId });
             }
-            catch
+            catch (Exception ex)
             {
+                logger.LogError(ex, "An error occurred while creating a new playlist for user {UserId}.", userId);
+
                 ModelState.AddModelError(string.Empty, ServiceCreateError);
+
                 return View(model);
             }
         }
@@ -100,6 +105,8 @@
 
                 if (!success)
                 {
+                    logger.LogWarning("Failed to update playlist {PlaylistId} by user {UserId}. It may not exist or they are not the owner.", model.PublicId, userId);
+
                     TempData[ErrorMessageKey] = "Playlist not found or failed to update.";
 
                     return NotFound();
@@ -109,9 +116,12 @@
 
                 return RedirectToAction(nameof(Details), new { id = model.PublicId });
             }
-            catch
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error updating playlist {PlaylistId} by user {UserId}.", model.PublicId, userId);
+
                 ModelState.AddModelError(string.Empty, ServiceEditError);
+
                 return View(model);
             }
         }
@@ -128,6 +138,8 @@
                     .GetPlaylistForDeleteAsync(id, userId);
                 if (model == null)
                 {
+                    logger.LogWarning("Unauthorized attempt to get delete confirmation for playlist {PlaylistId} by user {UserId}.", id, userId);
+
                     TempData[ErrorMessageKey] = "Playlist not found or you are not authorized to delete it.";
 
                     return RedirectToAction(nameof(Index), "Home");
@@ -135,9 +147,10 @@
 
                 return View(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log error
+                logger.LogError(ex, "Error fetching playlist {PlaylistId} for deletion by user {UserId}.", id, userId);
+
                 return RedirectToAction(nameof(Index), "Home");
             }
         }
@@ -154,6 +167,8 @@
                     .DeletePlaylistAsync(model.PublicId, userId);
                 if (!success)
                 {
+                    logger.LogWarning("Failed to delete playlist {PlaylistId} by user {UserId}. It may not exist or they are not the owner.", model.PublicId, userId);
+
                     TempData[ErrorMessageKey] = "Playlist could not be deleted.";
 
                     return RedirectToAction(nameof(Index), "Home");
@@ -163,8 +178,10 @@
 
                 return RedirectToAction(nameof(Index), "Profile", new { username = this.User.Identity!.Name, tab = "Playlists" });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error deleting playlist {PlaylistId} by user {UserId}.", model.PublicId, userId);
+
                 TempData[ErrorMessageKey] = "An unexpected error occurred while deleting the playlist.";
 
                 return RedirectToAction(nameof(Index), "Home");
